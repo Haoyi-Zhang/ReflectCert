@@ -1,0 +1,318 @@
+{
+  "schema": "pdf-visual-audit-v1",
+  "pages": 21,
+  "fonts": 16,
+  "unembedded_fonts": [],
+  "page_metrics": [
+    {
+      "page": 1,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 176,
+        "right": 94,
+        "bottom": 110
+      },
+      "ink_fraction": 0.122634,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 2,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 130,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.128195,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 3,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 129,
+        "right": 94,
+        "bottom": 108
+      },
+      "ink_fraction": 0.093321,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 4,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 95,
+        "bottom": 108
+      },
+      "ink_fraction": 0.080682,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 5,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 129,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.113405,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 6,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 94,
+        "bottom": 109
+      },
+      "ink_fraction": 0.092636,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 7,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 129,
+        "right": 94,
+        "bottom": 108
+      },
+      "ink_fraction": 0.095142,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 8,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.11372,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 9,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 129,
+        "right": 93,
+        "bottom": 109
+      },
+      "ink_fraction": 0.102969,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 10,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 130,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.109318,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 11,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 129,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.113181,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 12,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.101149,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 13,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 129,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.111042,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 14,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 94,
+        "bottom": 108
+      },
+      "ink_fraction": 0.089464,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 15,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 129,
+        "right": 94,
+        "bottom": 108
+      },
+      "ink_fraction": 0.106459,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 16,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 130,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.113728,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 17,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 41,
+        "top": 129,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.12042,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 18,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.117042,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 19,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 129,
+        "right": 93,
+        "bottom": 108
+      },
+      "ink_fraction": 0.116375,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 20,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 130,
+        "right": 94,
+        "bottom": 108
+      },
+      "ink_fraction": 0.124387,
+      "near_edge": false,
+      "near_blank": false
+    },
+    {
+      "page": 21,
+      "width": 1013,
+      "height": 1500,
+      "margins_px": {
+        "left": 42,
+        "top": 129,
+        "right": 94,
+        "bottom": 109
+      },
+      "ink_fraction": 0.091687,
+      "near_edge": false,
+      "near_blank": false
+    }
+  ],
+  "outside_words": [],
+  "high_overlap_word_candidates": [
+    {
+      "page": 4,
+      "a": "\uf8f2",
+      "b": "\uf8f4"
+    }
+  ],
+  "unresolved_markers": [],
+  "page_19_has_data_availability": true,
+  "body_pages_1_18_nonblank": true,
+  "references_present_after_body": true,
+  "all_pages_rendered": true,
+  "status": "pass",
+  "failures": [],
+  "hard_failures": []
+}

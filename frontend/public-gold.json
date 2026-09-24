@@ -1,0 +1,760 @@
+{
+  "format": "rrc-java-front-gold-v1",
+  "events": [
+    {
+      "case": "P012",
+      "app": "Reflection5",
+      "local_path": "third_party/droidra-reflection-sources/Reflection5/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection5/src/lu/uni/snt/reflection5/MainActivity.java",
+      "blob_sha1": "3cc3637fcb5d4480db75b22ecf0b601042ad1594",
+      "kind": "Class.forName",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection5.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection5.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1196,
+      "end_offset": 1249,
+      "line": 35,
+      "column": 40
+    },
+    {
+      "case": "P013",
+      "app": "Reflection5",
+      "local_path": "third_party/droidra-reflection-sources/Reflection5/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection5/src/lu/uni/snt/reflection5/MainActivity.java",
+      "blob_sha1": "3cc3637fcb5d4480db75b22ecf0b601042ad1594",
+      "kind": "Class.getConstructor",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection5.ConcreteClass",
+      "member": "<init>",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection5.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1281,
+      "end_offset": 1313,
+      "line": 36,
+      "column": 52
+    },
+    {
+      "case": "P014",
+      "app": "Reflection6",
+      "local_path": "third_party/droidra-reflection-sources/Reflection6/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection6/src/lu/uni/snt/reflection6/MainActivity.java",
+      "blob_sha1": "31dcc408714b010dce891b559aeaa9920b9292dc",
+      "kind": "Class.forName",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection6.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection6.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1262,
+      "end_offset": 1315,
+      "line": 37,
+      "column": 40
+    },
+    {
+      "case": "P015",
+      "app": "Reflection6",
+      "local_path": "third_party/droidra-reflection-sources/Reflection6/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection6/src/lu/uni/snt/reflection6/MainActivity.java",
+      "blob_sha1": "31dcc408714b010dce891b559aeaa9920b9292dc",
+      "kind": "Class.getConstructors",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection6.ConcreteClass",
+      "member": "<constructors>",
+      "signature": "[]",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection6.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<constructors>"
+      },
+      "offset": 1356,
+      "end_offset": 1377,
+      "line": 39,
+      "column": 57
+    },
+    {
+      "case": "P016",
+      "app": "Reflection7",
+      "local_path": "third_party/droidra-reflection-sources/Reflection7/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection7/src/lu/uni/snt/reflection7/MainActivity.java",
+      "blob_sha1": "637858279624eb5dd9e3308b7c18952a8edefc6d",
+      "kind": "Class.forName",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection7.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection7.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1260,
+      "end_offset": 1313,
+      "line": 37,
+      "column": 40
+    },
+    {
+      "case": "P017",
+      "app": "Reflection7",
+      "local_path": "third_party/droidra-reflection-sources/Reflection7/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection7/src/lu/uni/snt/reflection7/MainActivity.java",
+      "blob_sha1": "637858279624eb5dd9e3308b7c18952a8edefc6d",
+      "kind": "Class.getConstructor",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection7.ConcreteClass",
+      "member": "<init>",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection7.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1333,
+      "end_offset": 1365,
+      "line": 39,
+      "column": 36
+    },
+    {
+      "case": "P018",
+      "app": "Reflection7",
+      "local_path": "third_party/droidra-reflection-sources/Reflection7/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection7/src/lu/uni/snt/reflection7/MainActivity.java",
+      "blob_sha1": "637858279624eb5dd9e3308b7c18952a8edefc6d",
+      "kind": "Class.getMethod",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection7.ConcreteClass",
+      "member": "setImei",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection7.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "setImei"
+      },
+      "offset": 1401,
+      "end_offset": 1444,
+      "line": 41,
+      "column": 36
+    },
+    {
+      "case": "P019",
+      "app": "Reflection7",
+      "local_path": "third_party/droidra-reflection-sources/Reflection7/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection7/src/lu/uni/snt/reflection7/MainActivity.java",
+      "blob_sha1": "637858279624eb5dd9e3308b7c18952a8edefc6d",
+      "kind": "Class.getMethod",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection7.ConcreteClass",
+      "member": "getImei",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection7.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "getImei"
+      },
+      "offset": 1491,
+      "end_offset": 1515,
+      "line": 44,
+      "column": 37
+    },
+    {
+      "case": "P020",
+      "app": "Reflection8",
+      "local_path": "third_party/droidra-reflection-sources/Reflection8/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection8/src/lu/uni/snt/reflection8/MainActivity.java",
+      "blob_sha1": "93793b309606e4ae09c0184f89c0684496c54a84",
+      "kind": "ClassLoader.loadClass",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection8.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection8.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 911,
+      "end_offset": 982,
+      "line": 30,
+      "column": 38
+    },
+    {
+      "case": "P021",
+      "app": "Reflection8",
+      "local_path": "third_party/droidra-reflection-sources/Reflection8/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection8/src/lu/uni/snt/reflection8/MainActivity.java",
+      "blob_sha1": "93793b309606e4ae09c0184f89c0684496c54a84",
+      "kind": "Class.newInstance",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection8.ConcreteClass",
+      "member": "<init>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection8.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1014,
+      "end_offset": 1029,
+      "line": 31,
+      "column": 52
+    },
+    {
+      "case": "P022",
+      "app": "Reflection9",
+      "local_path": "third_party/droidra-reflection-sources/Reflection9/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection9/src/lu/uni/snt/reflection9/MainActivity.java",
+      "blob_sha1": "a135998b103c496d08ed1af7fccbbd2694d8297f",
+      "kind": "ClassLoader.loadClass",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection9.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection9.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1272,
+      "end_offset": 1343,
+      "line": 38,
+      "column": 38
+    },
+    {
+      "case": "P023",
+      "app": "Reflection9",
+      "local_path": "third_party/droidra-reflection-sources/Reflection9/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection9/src/lu/uni/snt/reflection9/MainActivity.java",
+      "blob_sha1": "a135998b103c496d08ed1af7fccbbd2694d8297f",
+      "kind": "Class.newInstance",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection9.ConcreteClass",
+      "member": "<init>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection9.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1360,
+      "end_offset": 1375,
+      "line": 39,
+      "column": 37
+    },
+    {
+      "case": "P024",
+      "app": "Reflection9",
+      "local_path": "third_party/droidra-reflection-sources/Reflection9/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection9/src/lu/uni/snt/reflection9/MainActivity.java",
+      "blob_sha1": "a135998b103c496d08ed1af7fccbbd2694d8297f",
+      "kind": "Class.getField",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection9.ConcreteClass",
+      "member": "imei",
+      "signature": "field",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection9.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "imei"
+      },
+      "offset": 1394,
+      "end_offset": 1412,
+      "line": 41,
+      "column": 35
+    },
+    {
+      "case": "P025",
+      "app": "Reflection9",
+      "local_path": "third_party/droidra-reflection-sources/Reflection9/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection9/src/lu/uni/snt/reflection9/MainActivity.java",
+      "blob_sha1": "a135998b103c496d08ed1af7fccbbd2694d8297f",
+      "kind": "Class.getMethod",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection9.ConcreteClass",
+      "member": "getImei",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection9.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "getImei"
+      },
+      "offset": 1455,
+      "end_offset": 1493,
+      "line": 44,
+      "column": 36
+    },
+    {
+      "case": "P026",
+      "app": "Reflection10",
+      "local_path": "third_party/droidra-reflection-sources/Reflection10/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection10/src/lu/uni/snt/reflection10/MainActivity.java",
+      "blob_sha1": "66465d88d8b3fe933f7e5a269ae3b270b092c4d1",
+      "kind": "ClassLoader.loadClass",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection10.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection10.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1239,
+      "end_offset": 1311,
+      "line": 37,
+      "column": 38
+    },
+    {
+      "case": "P027",
+      "app": "Reflection10",
+      "local_path": "third_party/droidra-reflection-sources/Reflection10/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection10/src/lu/uni/snt/reflection10/MainActivity.java",
+      "blob_sha1": "66465d88d8b3fe933f7e5a269ae3b270b092c4d1",
+      "kind": "Class.getConstructor",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection10.ConcreteClass",
+      "member": "<init>",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection10.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1331,
+      "end_offset": 1361,
+      "line": 39,
+      "column": 36
+    },
+    {
+      "case": "P028",
+      "app": "Reflection10",
+      "local_path": "third_party/droidra-reflection-sources/Reflection10/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection10/src/lu/uni/snt/reflection10/MainActivity.java",
+      "blob_sha1": "66465d88d8b3fe933f7e5a269ae3b270b092c4d1",
+      "kind": "Class.getField",
+      "loader": "app",
+      "class": "lu.uni.snt.reflection10.ConcreteClass",
+      "member": "imei",
+      "signature": "field",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection10.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "imei"
+      },
+      "offset": 1402,
+      "end_offset": 1420,
+      "line": 41,
+      "column": 35
+    },
+    {
+      "case": "P029",
+      "app": "Reflection11",
+      "local_path": "third_party/droidra-reflection-sources/Reflection11/InFlowActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection11/src/lu/uni/snt/reflection11/InFlowActivity.java",
+      "blob_sha1": "7f6e104166f3f860dfdc98e0c7a79d7f1dc8ef46",
+      "kind": "Class.forName",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection11.ReflectiveClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection11.ReflectiveClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 603,
+      "end_offset": 659,
+      "line": 23,
+      "column": 35
+    },
+    {
+      "case": "P030",
+      "app": "Reflection11",
+      "local_path": "third_party/droidra-reflection-sources/Reflection11/InFlowActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection11/src/lu/uni/snt/reflection11/InFlowActivity.java",
+      "blob_sha1": "7f6e104166f3f860dfdc98e0c7a79d7f1dc8ef46",
+      "kind": "Class.newInstance",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection11.ReflectiveClass",
+      "member": "<init>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection11.ReflectiveClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 675,
+      "end_offset": 690,
+      "line": 24,
+      "column": 36
+    },
+    {
+      "case": "P031",
+      "app": "Reflection11",
+      "local_path": "third_party/droidra-reflection-sources/Reflection11/InFlowActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection11/src/lu/uni/snt/reflection11/InFlowActivity.java",
+      "blob_sha1": "7f6e104166f3f860dfdc98e0c7a79d7f1dc8ef46",
+      "kind": "Class.getMethod",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection11.ReflectiveClass",
+      "member": "setImei",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection11.ReflectiveClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "setImei"
+      },
+      "offset": 706,
+      "end_offset": 747,
+      "line": 25,
+      "column": 36
+    },
+    {
+      "case": "P032",
+      "app": "Reflection11",
+      "local_path": "third_party/droidra-reflection-sources/Reflection11/InFlowActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection11/src/lu/uni/snt/reflection11/InFlowActivity.java",
+      "blob_sha1": "7f6e104166f3f860dfdc98e0c7a79d7f1dc8ef46",
+      "kind": "Class.getMethod",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection11.ReflectiveClass",
+      "member": "getImei",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection11.ReflectiveClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "getImei"
+      },
+      "offset": 790,
+      "end_offset": 812,
+      "line": 28,
+      "column": 37
+    },
+    {
+      "case": "P033",
+      "app": "Reflection12",
+      "local_path": "third_party/droidra-reflection-sources/Reflection12/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection12/src/lu/uni/snt/reflection12/MainActivity.java",
+      "blob_sha1": "7466d42a589fff30cf12ffaeeee6c90bbfda985d",
+      "kind": "Class.forName",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection12.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection12.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1350,
+      "end_offset": 1404,
+      "line": 37,
+      "column": 40
+    },
+    {
+      "case": "P034",
+      "app": "Reflection12",
+      "local_path": "third_party/droidra-reflection-sources/Reflection12/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection12/src/lu/uni/snt/reflection12/MainActivity.java",
+      "blob_sha1": "7466d42a589fff30cf12ffaeeee6c90bbfda985d",
+      "kind": "Class.getConstructor",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection12.ConcreteClass",
+      "member": "<init>",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection12.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1424,
+      "end_offset": 1456,
+      "line": 39,
+      "column": 36
+    },
+    {
+      "case": "P035",
+      "app": "Reflection12",
+      "local_path": "third_party/droidra-reflection-sources/Reflection12/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection12/src/lu/uni/snt/reflection12/MainActivity.java",
+      "blob_sha1": "7466d42a589fff30cf12ffaeeee6c90bbfda985d",
+      "kind": "Class.getField",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection12.ConcreteClass",
+      "member": "imei",
+      "signature": "field",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection12.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "imei"
+      },
+      "offset": 1491,
+      "end_offset": 1511,
+      "line": 41,
+      "column": 35
+    },
+    {
+      "case": "P036",
+      "app": "Reflection12",
+      "local_path": "third_party/droidra-reflection-sources/Reflection12/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection12/src/lu/uni/snt/reflection12/MainActivity.java",
+      "blob_sha1": "7466d42a589fff30cf12ffaeeee6c90bbfda985d",
+      "kind": "Class.getField",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection12.ConcreteClass",
+      "member": "imei",
+      "signature": "field",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection12.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "imei"
+      },
+      "offset": 1554,
+      "end_offset": 1574,
+      "line": 44,
+      "column": 36
+    },
+    {
+      "case": "P037",
+      "app": "Reflection13",
+      "local_path": "third_party/droidra-reflection-sources/Reflection13/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection13/src/lu/uni/snt/reflection13/MainActivity.java",
+      "blob_sha1": "a00c927dbc826681e515443d8d5a550b82fd4ed3",
+      "kind": "Class.forName",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection13.ConcreteClass",
+      "member": "<class>",
+      "signature": "()",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection13.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<class>"
+      },
+      "offset": 1360,
+      "end_offset": 1414,
+      "line": 38,
+      "column": 40
+    },
+    {
+      "case": "P038",
+      "app": "Reflection13",
+      "local_path": "third_party/droidra-reflection-sources/Reflection13/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection13/src/lu/uni/snt/reflection13/MainActivity.java",
+      "blob_sha1": "a00c927dbc826681e515443d8d5a550b82fd4ed3",
+      "kind": "Class.getConstructor",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection13.ConcreteClass",
+      "member": "<init>",
+      "signature": "(String)",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection13.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<init>"
+      },
+      "offset": 1434,
+      "end_offset": 1466,
+      "line": 40,
+      "column": 36
+    },
+    {
+      "case": "P039",
+      "app": "Reflection13",
+      "local_path": "third_party/droidra-reflection-sources/Reflection13/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection13/src/lu/uni/snt/reflection13/MainActivity.java",
+      "blob_sha1": "a00c927dbc826681e515443d8d5a550b82fd4ed3",
+      "kind": "Class.getFields",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection13.ConcreteClass",
+      "member": "<fields>",
+      "signature": "fields[]",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection13.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "<fields>"
+      },
+      "offset": 1504,
+      "end_offset": 1519,
+      "line": 42,
+      "column": 38
+    },
+    {
+      "case": "P040",
+      "app": "Reflection13",
+      "local_path": "third_party/droidra-reflection-sources/Reflection13/MainActivity.java",
+      "repository": "serval-snt-uni-lu/DroidRA",
+      "commit": "b766a32a23178a54d095fb0a473e6ec77aad2166",
+      "upstream_path": "benchmark-apps/eclipse-projects/Reflection_Reflection13/src/lu/uni/snt/reflection13/MainActivity.java",
+      "blob_sha1": "a00c927dbc826681e515443d8d5a550b82fd4ed3",
+      "kind": "Class.getField",
+      "loader": "default",
+      "class": "lu.uni.snt.reflection13.ConcreteClass",
+      "member": "imei",
+      "signature": "field",
+      "class_expr": {
+        "op": "lit",
+        "value": "lu.uni.snt.reflection13.ConcreteClass"
+      },
+      "member_expr": {
+        "op": "lit",
+        "value": "imei"
+      },
+      "offset": 1660,
+      "end_offset": 1680,
+      "line": 53,
+      "column": 36
+    }
+  ],
+  "scope": "Human-audited event order and finite identity for the nine redistributed DroidRA reflection sources; exact blobs are checked before extraction."
+}

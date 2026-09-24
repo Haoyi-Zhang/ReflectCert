@@ -1,0 +1,107 @@
+{
+  "schema": "rrc-release-audit-v1",
+  "overall_status": "fail",
+  "artifact_root": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact",
+  "checks": [
+    {
+      "name": "required:README.md",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/README.md"
+    },
+    {
+      "name": "required:verify_inputs.py",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/verify_inputs.py"
+    },
+    {
+      "name": "required:reproduce.py",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/reproduce.py"
+    },
+    {
+      "name": "required:compare_results.py",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/compare_results.py"
+    },
+    {
+      "name": "required:tests",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/tests"
+    },
+    {
+      "name": "required:results/measured",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/results/measured"
+    },
+    {
+      "name": "python-syntax",
+      "status": "pass",
+      "detail": "all parsed"
+    },
+    {
+      "name": "checker-import-independence",
+      "status": "pass",
+      "detail": "no forbidden imports"
+    },
+    {
+      "name": "package-hygiene",
+      "status": "fail",
+      "detail": "__pycache__; __pycache__/release_gate.cpython-313.pyc"
+    },
+    {
+      "name": "no-manual-public-projections",
+      "status": "pass",
+      "detail": "5 provenance files scanned"
+    },
+    {
+      "name": "measured-results-present",
+      "status": "pass",
+      "detail": "674 files"
+    },
+    {
+      "name": "paper-source-present",
+      "status": "pass",
+      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/paper"
+    },
+    {
+      "name": "reference-count",
+      "status": "pass",
+      "detail": "59 bibliography entries"
+    },
+    {
+      "name": "citation-keys-present",
+      "status": "fail",
+      "detail": "['acmnumeric']"
+    },
+    {
+      "name": "all-bibliography-cited",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "name": "duplicate-doi",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "name": "anonymous-review-options",
+      "status": "pass",
+      "detail": "document class/options inspected"
+    },
+    {
+      "name": "no-page-limit-formatting-cheats",
+      "status": "pass",
+      "detail": "[]"
+    },
+    {
+      "name": "pdf-page-range",
+      "status": "pass",
+      "detail": "21 physical pages"
+    },
+    {
+      "name": "pdf-fonts-embedded",
+      "status": "pass",
+      "detail": "16 fonts"
+    }
+  ]
+}

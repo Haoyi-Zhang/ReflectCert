@@ -1,0 +1,1 @@
+{"label":"constant lookup","program":{"choices":[],"external":[],"feasible":0,"nodes":[{"op":"lit","value":true},{"op":"lit","value":"L"},{"op":"lit","value":"A"},{"op":"lit","value":"B"},{"op":"lit","value":"f"},{"op":"lit","value":"()"}],"sites":[{"class":2,"guard":0,"loader":1,"method":4,"signature":5}],"table":[["L","A","f","()"],["L","B","f","()"]]}}
