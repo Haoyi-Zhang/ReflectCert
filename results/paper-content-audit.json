@@ -1,25 +1,20 @@
 {
-  "schema": "paper-content-audit-v1",
+  "schema": "paper-content-audit",
+  "status": "pass",
   "checks": {
-    "bounded_scope": true,
-    "checker_independence": true,
-    "tcb": true,
-    "inclusion_minimal": true,
-    "not_cardinality_minimum": true,
-    "direct_dispatch_boundary": true,
-    "public_source_frontend": true,
-    "upstream_log_or_jvm": true,
-    "variable_order": true,
-    "cross_root_ablation": false,
-    "negative_compression_cases": true,
-    "external_validity": true,
-    "no_sota_superiority_claim": true,
-    "data_availability": true,
-    "ai_disclosure": true,
-    "artifact_commands": true
-  },
-  "missing": [
-    "cross_root_ablation"
-  ],
-  "status": "review"
+    "restricted_java_source_bridge": true,
+    "string_reference_equality_rejected": true,
+    "compound_assignment_rejected": true,
+    "switch_state_merge_rejected": true,
+    "api_identity_audited": true,
+    "frontend_theorem_scoped": true,
+    "fixture_gold_independent": true,
+    "different_cardinality_counterexample": true,
+    "witness_q_definition": true,
+    "witness_counts": true,
+    "public_witness_counts": true,
+    "not_actual_analyzer_misses": true,
+    "public_split": true,
+    "negative_compression_results": true
+  }
 }

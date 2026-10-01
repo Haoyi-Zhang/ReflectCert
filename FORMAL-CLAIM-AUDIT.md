@@ -23,7 +23,10 @@ For a baseline world `w`, target `t`, and retained coordinate set `S`, the check
 
 **Consequence.** `S` is sufficient and no strict subset obtained by removing any retained coordinate is sufficient; by monotonicity of agreement constraints, `S` is inclusion-minimal.
 
-**Not implied.** Uniqueness or minimum cardinality. Counterexamples and alternate deletion orders are preserved as first-class results.
+**Not implied.** Uniqueness or minimum cardinality. One explicit table has incomparable
+single-coordinate minima; another has minima `{0}` and `{1,2}`, and the two checked deletion
+orders return the different cardinalities. These counterexamples are preserved as first-class
+results.
 
 ## Direct-dispatch theorem
 

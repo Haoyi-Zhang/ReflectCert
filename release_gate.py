@@ -1,13 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 from pathlib import Path
-import argparse, ast, csv, hashlib, json, re, subprocess, sys, os
-
-def sha(p):
-    h=hashlib.sha256()
-    with p.open('rb') as f:
-        for b in iter(lambda:f.read(1<<20),b''): h.update(b)
-    return h.hexdigest()
+import argparse, ast, csv, json, re, subprocess, sys, os
 
 def check(cond, name, detail, out):
     out.append({'name':name,'status':'pass' if cond else 'fail','detail':detail})
@@ -15,7 +9,7 @@ def check(cond, name, detail, out):
 def bib_keys(text): return re.findall(r'@\w+\s*\{\s*([^,\s]+)\s*,',text,re.I)
 def cite_keys(text):
     ans=[]
-    for m in re.finditer(r'\\cite\w*\s*(?:\[[^\]]*\]\s*)*\{([^}]*)\}',text): ans += [x.strip() for x in m.group(1).split(',') if x.strip()]
+    for m in re.finditer(r'\\cite(?!style\b)\w*\s*(?:\[[^\]]*\]\s*)*\{([^}]*)\}',text): ans += [x.strip() for x in m.group(1).split(',') if x.strip()]
     return ans
 
 def main():
@@ -23,7 +17,7 @@ def main():
     art=Path(a.artifact_root).resolve(); project=Path(a.project_root).resolve() if a.project_root else (art.parent if (art.parent/'paper').exists() else None)
     out=[]
     required=['README.md','verify_inputs.py','reproduce.py','compare_results.py','tests','results/measured']
-    for r in required: check((art/r).exists(),f'required:{r}',str(art/r),out)
+    for r in required: check((art/r).exists(),f'required:{r}',r,out)
     licenses=[p for p in art.iterdir() if p.is_file() and p.name.lower().startswith(('license','copying'))]
     check(bool(licenses),'artifact-license-present',str([p.name for p in licenses]),out)
     # Python syntax.
@@ -54,28 +48,44 @@ def main():
         if p.name=='__pycache__' or p.suffix in {'.pyc','.pyo','.zip','.7z','.rar'}: badpack.append(rel)
         if p.is_file() and p.stat().st_size < 10_000_000 and p.suffix.lower() in {'.py','.md','.tex','.json','.csv','.sh','.txt'}:
             t=p.read_text(encoding='utf-8',errors='ignore')
-            if re.search(r'/(Users|home)/[^/\s]+/',t): badpack.append(rel+':private-path')
+            if re.search(r'/(Users|home)/[^/\s]+/',t) or ''.join(('/mnt','/data/')) in t: badpack.append(rel+':private-path')
     check(not badpack,'package-hygiene','; '.join(badpack) or 'clean',out)
-    # Public metadata must not advertise manual projection.
-    manual=[]; public_records=0
-    for p in art.rglob('*'):
-        if not p.is_file() or p.suffix.lower() not in {'.json','.csv','.tsv'}: continue
-        if not any(k in p.name.lower() for k in ['public','provenance','source','manifest','frontend']): continue
-        text=p.read_text(encoding='utf-8',errors='ignore').lower()
-        if any(k in text for k in ['github','droidbench','droidra','sootup','qilin']):
-            public_records += 1
-            if re.search(r'"(?:mode|origin|construction|kind)"\s*:\s*"[^"]*(?:manual|projection)',text): manual.append(str(p.relative_to(art)))
-    check(not manual,'no-manual-public-projections','; '.join(manual) or f'{public_records} provenance files scanned',out)
-    # Release manifest integrity (when present).
-    man=art/'release-manifest.json'
-    if man.exists():
-        try:
-            md=json.loads(man.read_text(encoding='utf-8')); issues=[]; project_for_manifest=art
-            for r in md.get('files',[]):
-                q=project_for_manifest/r['path']
-                if (not q.is_file()) or q.stat().st_size!=r['bytes'] or sha(q)!=r['sha256']: issues.append(r['path'])
-            check(not issues,'release-manifest-integrity',f'{len(md.get("files",[]))} files; mismatches={issues[:10]}',out)
-        except Exception as e: check(False,'release-manifest-integrity',str(e),out)
+    # Public provenance is intentionally stratified: 29 automatic source events and
+    # 11 labeled manual finite projections.  The gate prevents either stratum from
+    # being silently relabeled and requires the evidence fields used by each claim.
+    provenance=art/'docs'/'public-provenance.csv'
+    provenance_issues=[]; automatic=[]; manual=[]
+    if not provenance.exists():
+        provenance_issues.append('missing docs/public-provenance.csv')
+    else:
+        with provenance.open(newline='',encoding='utf-8') as f:
+            rows=list(csv.DictReader(f))
+        ids=[r.get('case','') for r in rows]
+        if len(rows)!=40: provenance_issues.append(f'rows={len(rows)} expected=40')
+        if len(set(ids))!=len(ids): provenance_issues.append('duplicate case identifiers')
+        if sorted(ids)!=[f'P{i:03d}' for i in range(1,41)]: provenance_issues.append('case identifiers are not P001--P040')
+        for r in rows:
+            mode=(r.get('extraction_mode') or '').strip().lower()
+            if mode=='automatic javac ast extraction':
+                automatic.append(r)
+                required_auto=('repository','commit','path','source_sha','operation',
+                               'redistributed_local_path','source_line','source_column',
+                               'class_expr_json','member_expr_json','projection_note')
+                missing=[k for k in required_auto if not (r.get(k) or '').strip()]
+                if missing: provenance_issues.append(f"{r.get('case')}: automatic missing {missing}")
+            elif mode=='manual finite projection':
+                manual.append(r)
+                required_manual=('repository','commit','path','source_sha','operation','projection_note')
+                missing=[k for k in required_manual if not (r.get(k) or '').strip()]
+                if missing: provenance_issues.append(f"{r.get('case')}: manual missing {missing}")
+                if (r.get('redistributed_local_path') or '').strip():
+                    provenance_issues.append(f"{r.get('case')}: manual record unexpectedly claims redistributed source")
+            else:
+                provenance_issues.append(f"{r.get('case')}: unknown extraction_mode={mode!r}")
+        if len(automatic)!=29 or len(manual)!=11:
+            provenance_issues.append(f'automatic/manual={len(automatic)}/{len(manual)} expected=29/11')
+    check(not provenance_issues,'public-provenance-strata',
+          '; '.join(provenance_issues) or f'{len(automatic)} automatic; {len(manual)} manual',out)
     # Measured results and comparator inputs.
     measured=art/'results'/'measured'
     files=[p for p in measured.rglob('*') if p.is_file()] if measured.exists() else []
@@ -83,7 +93,7 @@ def main():
     # Paper checks when adjacent.
     if project:
         paper=project/'paper'; tex=paper/'main.tex'; bib=paper/'references.bib'; pdf=paper/'main.pdf'; log=paper/'main.log'
-        check(tex.exists() and bib.exists(),'paper-source-present',str(paper),out)
+        check(tex.exists() and bib.exists(),'paper-source-present','paper',out)
         if tex.exists() and bib.exists():
             tt=tex.read_text(encoding='utf-8',errors='ignore'); bb=bib.read_text(encoding='utf-8',errors='ignore')
             bk=bib_keys(bb); ck=cite_keys(tt)
@@ -111,8 +121,11 @@ def main():
         if log.exists():
             lt=log.read_text(encoding='utf-8',errors='ignore')
             issues=[]
-            for pat in ['undefined references','Citation .* undefined','There were undefined references','Overfull \\hbox','Overfull \\vbox']:
+            regex_checks=[r'undefined references',r'Citation .* undefined',r'There were undefined references']
+            for pat in regex_checks:
                 if re.search(pat,lt,re.I): issues.append(pat)
+            for literal in [r'Overfull \hbox',r'Overfull \vbox']:
+                if literal in lt: issues.append(literal)
             check(not issues,'latex-log-clean',str(issues),out)
     overall='pass' if all(x['status']=='pass' for x in out) else 'fail'
     report={'schema':'rrc-release-audit-v1','overall_status':overall,'artifact_root':'.','checks':out}

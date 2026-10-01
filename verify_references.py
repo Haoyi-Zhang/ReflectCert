@@ -1,21 +1,27 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import argparse,re,json,urllib.request,urllib.parse,time,unicodedata
+from verify_bibliography import parse_bib as parse_bib_file, citation_keys
 
-def parse_bib(text):
-    starts=list(re.finditer(r'@(\w+)\s*\{\s*([^,\s]+)\s*,',text,re.I)); out=[]
-    for i,m in enumerate(starts):
-        block=text[m.start():(starts[i+1].start() if i+1<len(starts) else len(text))]
-        def fld(n):
-            q=re.search(r'\b'+re.escape(n)+r'\s*=\s*(?:\{((?:[^{}]|\{[^{}]*\})*)\}|"([^"]*)")',block,re.I|re.S)
-            return re.sub(r'\s+',' ',(q.group(1) or q.group(2) or '')).strip() if q else ''
-        out.append({'type':m.group(1),'key':m.group(2),'title':fld('title'),'author':fld('author'),'year':fld('year'),'venue':fld('booktitle') or fld('journal'),'doi':fld('doi').lower().strip(),'url':fld('url')})
-    return out
-
-def cites(tex):
+def parse_bib(path: Path):
+    parsed = parse_bib_file(path)
     out=[]
-    for m in re.finditer(r'\\cite\w*\s*(?:\[[^\]]*\]\s*)*\{([^}]*)\}',tex): out += [x.strip() for x in m.group(1).split(',') if x.strip()]
+    for key, fields in parsed.items():
+        out.append({
+            'type': fields.get('entry_type',''),
+            'key': key,
+            'title': fields.get('title',''),
+            'author': fields.get('author',''),
+            'year': fields.get('year',''),
+            'venue': fields.get('booktitle') or fields.get('journal',''),
+            'doi': fields.get('doi','').lower().strip(),
+            'url': fields.get('url','').strip(),
+            'pages': fields.get('pages','').strip(),
+        })
     return out
+
+def cites(tex_path: Path):
+    return sorted(citation_keys(tex_path))
 
 def tokens(s):
     s=unicodedata.normalize('NFKD',re.sub(r'[{}\\$]',' ',s.lower()))
@@ -38,7 +44,7 @@ def head_ok(url,timeout=12):
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--paper-root',default='../paper'); ap.add_argument('--output',default='results/reference-audit.json'); ap.add_argument('--online',action='store_true'); ap.add_argument('--strict-online',action='store_true'); a=ap.parse_args()
-    paper=Path(a.paper_root).resolve(); entries=parse_bib((paper/'references.bib').read_text(encoding='utf-8')); ck=cites((paper/'main.tex').read_text(encoding='utf-8'))
+    paper=Path(a.paper_root).resolve(); entries=parse_bib(paper/'references.bib'); ck=cites(paper/'main.tex')
     keys=[e['key'] for e in entries]; dois=[e['doi'] for e in entries if e['doi']]
     issues=[]
     if len(entries)<55: issues.append(f'only {len(entries)} entries')
@@ -55,7 +61,7 @@ def main():
         if not e['title'] or not e['author'] or not e['year']: local.append('missing core field')
         if e['type'].lower() in {'article','inproceedings','conference','incollection'} and not e['venue']: local.append('missing venue')
         if e['year'] and not re.fullmatch(r'(19|20)\d{2}',e['year']): local.append('implausible year')
-        if not e['doi'] and not e['url']: local.append('no DOI or URL')
+        r['identifier_status']='doi' if e['doi'] else ('url' if e['url'] else 'bibliographic-record')
         r['structural_issues']=local
         if local: r['structural_status']='fail'; issues += [e['key']+': '+x for x in local]
         if a.online or a.strict_online:

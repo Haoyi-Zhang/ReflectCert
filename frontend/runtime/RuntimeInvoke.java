@@ -12,7 +12,7 @@ final class RuntimeInvoke {
     static String reflect(boolean h, boolean k, String value) throws Exception {
         boolean chooseA = h && !k;
         String className = "RuntimeInvoke$".concat(chooseA ? "A" : "B");
-        Class<?> owner = Class.forName(className);
+        java.lang.Class<?> owner = java.lang.Class.forName(className);
         String memberName = h ? "run" : "stop";
         Object receiver = owner.getConstructor().newInstance();
         java.lang.reflect.Method method = owner.getMethod(memberName, String.class);

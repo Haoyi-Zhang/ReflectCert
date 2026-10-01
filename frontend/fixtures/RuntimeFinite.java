@@ -12,7 +12,7 @@ final class RuntimeFinite {
     static String resolve(boolean h, boolean k) throws Exception {
         boolean chooseA = h && !k;
         String className = "RuntimeFinite$".concat(chooseA ? "A" : "B");
-        Class<?> owner = Class.forName(className);
+        java.lang.Class<?> owner = java.lang.Class.forName(className);
         String memberName = h ? "run" : "stop";
         java.lang.reflect.Method method = owner.getMethod(memberName, String.class);
         return owner.getName() + "\t" + method.getName() + "\t" + method.getParameterTypes()[0].getName();

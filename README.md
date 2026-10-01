@@ -20,7 +20,7 @@ The frozen campaign contains exactly 664 cases:
 
 | Population | Cases | Role |
 |---|---:|---|
-| Boundary fixtures | 24 | Semantics, counterexamples, stress, and fault controls |
+| Boundary fixtures | 24 | Semantics, counterexamples, stress, and an independent closed-form row oracle |
 | Deterministic generated programs | 600 | Structured aliases, conditionals, choices, and lookups |
 | Manual pinned-source projections | 11 | DroidBench operations whose source is not redistributed here |
 | Java-source-extracted cases | 29 | Events extracted from nine exact DroidRA Java files |
@@ -32,8 +32,9 @@ The final measured results are:
 - 1,389,323 direct-dispatch bytes, 11,019 total dispatch nodes, and 66 nodes at maximum;
 - 78,705 independently replayed site actions: 49,891 invocations, 3,019 lookup errors,
   9,362 skipped sites, and 16,433 infeasible sites;
-- 1,826 accepted missing-target witnesses containing 3,555 selected coordinates, with maximum
-  width five and 346 forward/reverse alternative pairs;
+- 1,826 checked witness records for 913 selected target/base pairs; within-case canonical
+  deduplication leaves 1,259 distinct records and 567 duplicates, with 3,555 selected coordinates,
+  maximum width five, and 346 forward/reverse alternative pairs;
 - 511 cases smaller and 153 larger under factorization; median flat/factorized ratio 1.794,
   geometric mean 1.959, and maximum 27.324;
 - 1,105 additional string-set targets and 3,976 additional constant-only targets, with no exact
@@ -41,7 +42,7 @@ The final measured results are:
 - 7,186 exhaustive oracle tables, 36,992 feasible anchors, 213,952 deletion orders, and zero
   disagreement with the independent characterization;
 - five seeded certificate/dispatch/witness faults rejected, plus an invoke-all counterexample;
-- 56 unit-test methods passing.
+- 60 unit-test methods passing.
 
 The Java bridge adds bounded source evidence:
 
@@ -52,8 +53,11 @@ The Java bridge adds bounded source evidence:
   Boolean worlds (eight class/member comparisons);
 - a generated direct-call method and the reflective method return the same result for four worlds
   and three payloads (12 invocation comparisons);
-- seven unsupported-source controls fail closed, while one ordinary class whose methods merely
-  have reflection-like names emits no event.
+- seven original unsupported-source controls fail closed, while one ordinary class whose methods
+  merely have reflection-like names emits no event;
+- four adversarial Java sources execute in nine JVM runs and expose string reference equality,
+  compound/switch state updates, and shadowed/custom API identity; all seven implicated
+  reflection-looking events are rejected.
 
 These are bounded results. They do not prove that the finite table covers a JVM classpath, that
 arbitrary Java/Android reflection is handled, or that direct-call replacement generally preserves
@@ -81,9 +85,10 @@ python reproduce.py --output results/reproduced
 python compare_results.py results/measured results/reproduced
 ```
 
-`verify_inputs.py` reconstructs all 664 inputs, reruns the Java frontend, verifies source blobs and
-public provenance, runs the lookup and direct-call probes, and checks the 59-entry bibliography
-audit. `reproduce.py` runs the complete finite campaign, frontend controls, Java probes, oracle,
+`verify_inputs.py` reconstructs all 664 inputs, compares all 24 boundary fixtures against a
+closed-form oracle that imports neither the fixture builder nor producer/checker code, reruns the
+Java frontend and bridge-risk programs, verifies source blobs and public provenance, runs the
+lookup/direct-call probes, and checks the 59-entry bibliography audit. `reproduce.py` runs the complete finite campaign, frontend controls, Java probes, oracle,
 fault controls, and bibliography check. It writes each completed case atomically; an interrupted
 campaign may resume with:
 
@@ -93,8 +98,8 @@ python reproduce.py --output results/reproduced --resume
 
 `compare_results.py` excludes host-dependent time and RSS but requires equality of deterministic
 case/summary, bibliography, frontend, negative-control and oracle records, plus all 664 complete
-evidence bundles. The retained uninterrupted measured run used 41.91 cumulative user+system CPU
-seconds for the driver and completed Java children, 30.56 wall seconds, and 140,712 KiB maximum
+evidence bundles. The retained uninterrupted measured run used 36.30 cumulative user+system CPU
+seconds for the driver and completed Java children, 26.12 wall seconds, and 140,912 KiB maximum
 resident set.
 
 ## Inspect the Java-source bridge
@@ -155,8 +160,7 @@ checks all 59 manuscript citation keys and byte equality with the canonical stan
 - `frontend/`: javac extractor, audited inventory, positive/negative controls, and runtime pilots;
 - `third_party/droidra-reflection-sources/`: nine exact upstream Java files and LGPL 2.1 notice;
 - `inputs/`: 24 fixtures, 600 generated inputs, and 40 pinned-source cases;
-- `tests/`: 56 unit-test methods, including mutation, bibliography, frontend, runtime, and direct
-  dispatch controls;
+- `tests/`: 60 unit-test methods, including mutation, independent fixture gold, bibliography, frontend, runtime, bridge-risk, and direct-dispatch controls;
 - `results/measured/`: frozen measured records and 664 checked evidence bundles;
 - `docs/model.md`, `docs/proofs.md`, `docs/frontend.md`, and `docs/dispatch.md`: schema,
   arguments, source bridge, and dispatch contract;
@@ -170,8 +174,9 @@ checks all 59 manuscript citation keys and byte equality with the canonical stan
 
 The finite source validator and two independent checkers, Python runtime, javac/JVM, and host are
 trusted. Certificate/direct-dispatch/witness producers, case generator, analyzer claim, and public
-mapping are not. The Java parser/extractor and source-to-model assumptions form an additional
-frontend boundary; the finite checkers do not validate general Java typing or classpath coverage.
+mapping are not. The Java parser/extractor and any recorded pinned-source API-identity premises form an additional
+frontend boundary; the finite checkers do not validate general Java typing, source name resolution,
+or classpath coverage.
 
 The finite language admits at most eight external bits, four internal-choice bits, 64 expression
 nodes, eight sites, 256 four-string target identities, and 48-byte ASCII strings. Source records
@@ -200,4 +205,4 @@ review that directory before redistribution or modification.
 
 ## Release gate
 
-`python release_gate.py --artifact-root .` performs structural, provenance, checker-independence, bibliography-inventory (when the paper is adjacent), result, and packaging checks and writes `results/release-audit.json`. See `ARTIFACT-EVALUATION.md`, `REVIEWER-RISK-AUDIT.md`, `TRUSTED-COMPUTING-BASE.md`, and `REPRODUCIBILITY.md` before interpreting a passing result.
+`python release_gate.py --artifact-root .` performs structural, provenance, checker-independence, bibliography-inventory (when the paper is adjacent), result, and packaging checks and writes `results/release-audit.json`. See `ARTIFACT-EVALUATION.md`, `EXPERIMENT-DESIGN-AUDIT.md`, `TRUSTED-COMPUTING-BASE.md`, and `REPRODUCIBILITY.md` before interpreting a passing result.

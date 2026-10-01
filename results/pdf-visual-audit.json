@@ -1,318 +1,155 @@
 {
-  "schema": "pdf-visual-audit-v1",
+  "schema": "pdf-visual-audit",
+  "status": "pass",
+  "pdf": "paper/main.pdf",
   "pages": 21,
-  "fonts": 16,
-  "unembedded_fonts": [],
-  "page_metrics": [
+  "render_dpi": 160,
+  "all_pages_rendered": true,
+  "uniform_page_dimensions": true,
+  "near_blank_pages": [],
+  "page_stats": [
     {
       "page": 1,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 176,
-        "right": 94,
-        "bottom": 110
-      },
-      "ink_fraction": 0.122634,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12407754629629629
     },
     {
       "page": 2,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 130,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.128195,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12784490740740742
     },
     {
       "page": 3,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 129,
-        "right": 94,
-        "bottom": 108
-      },
-      "ink_fraction": 0.093321,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.11396990740740741
     },
     {
       "page": 4,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 95,
-        "bottom": 108
-      },
-      "ink_fraction": 0.080682,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.06985416666666666
     },
     {
       "page": 5,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 129,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.113405,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.11938425925925926
     },
     {
       "page": 6,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 94,
-        "bottom": 109
-      },
-      "ink_fraction": 0.092636,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.11348842592592592
     },
     {
       "page": 7,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 129,
-        "right": 94,
-        "bottom": 108
-      },
-      "ink_fraction": 0.095142,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.09551331018518519
     },
     {
       "page": 8,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.11372,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12309722222222222
     },
     {
       "page": 9,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 129,
-        "right": 93,
-        "bottom": 109
-      },
-      "ink_fraction": 0.102969,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.10944791666666667
     },
     {
       "page": 10,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 130,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.109318,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.117484375
     },
     {
       "page": 11,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 129,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.113181,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.1256232638888889
     },
     {
       "page": 12,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.101149,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.10577835648148148
     },
     {
       "page": 13,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 129,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.111042,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12374652777777778
     },
     {
       "page": 14,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 94,
-        "bottom": 108
-      },
-      "ink_fraction": 0.089464,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.08322337962962963
     },
     {
       "page": 15,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 129,
-        "right": 94,
-        "bottom": 108
-      },
-      "ink_fraction": 0.106459,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.11760706018518519
     },
     {
       "page": 16,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 130,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.113728,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12765104166666666
     },
     {
       "page": 17,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 41,
-        "top": 129,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.12042,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12605555555555556
     },
     {
       "page": 18,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.117042,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12761284722222221
     },
     {
       "page": 19,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 129,
-        "right": 93,
-        "bottom": 108
-      },
-      "ink_fraction": 0.116375,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12042708333333334
     },
     {
       "page": 20,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 130,
-        "right": 94,
-        "bottom": 108
-      },
-      "ink_fraction": 0.124387,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.12563483796296296
     },
     {
       "page": 21,
-      "width": 1013,
-      "height": 1500,
-      "margins_px": {
-        "left": 42,
-        "top": 129,
-        "right": 94,
-        "bottom": 109
-      },
-      "ink_fraction": 0.091687,
-      "near_edge": false,
-      "near_blank": false
+      "width_px": 1080,
+      "height_px": 1600,
+      "nonwhite_fraction": 0.09239988425925925
     }
   ],
-  "outside_words": [],
-  "high_overlap_word_candidates": [
-    {
-      "page": 4,
-      "a": "\uf8f2",
-      "b": "\uf8f4"
-    }
-  ],
-  "unresolved_markers": [],
-  "page_19_has_data_availability": true,
-  "body_pages_1_18_nonblank": true,
-  "references_present_after_body": true,
-  "all_pages_rendered": true,
-  "status": "pass",
-  "failures": [],
-  "hard_failures": []
+  "data_availability_on_page_19": true,
+  "references_begin_on_page_19": true,
+  "fonts_embedded": true,
+  "manual_visual_review": {
+    "contact_sheet_pages": "1-21 (generated during final review; not retained)",
+    "detailed_pages": [
+      2,
+      10,
+      15,
+      19
+    ],
+    "observed_defects": [],
+    "figure_1_source_binding_and_long_routes_clear": true,
+    "figure_2_and_cardinality_counterexample_clear": true,
+    "figure_3_ratio_one_boundary_and_annotation_clear": true,
+    "data_availability_boundary_clear": true
+  }
 }

@@ -272,6 +272,17 @@ class CertificateTests(unittest.TestCase):
                 actual = [{"feasible": row["feasible"], "outcomes": row["outcomes"]} for row in rows]
                 self.assertEqual(actual, expected)
 
+    def test_all_authored_fixture_rows_match_independent_closed_form_gold(self):
+        from rrc.fixture_gold import all_fixture_expectations
+        expected = all_fixture_expectations()
+        self.assertEqual(set(expected), set(FIXTURES))
+        for name, program in FIXTURES.items():
+            with self.subTest(name=name):
+                rows = produce(program)["rows"]
+                actual = [{"feasible": row["feasible"], "outcomes": row["outcomes"]}
+                          for row in rows]
+                self.assertEqual(actual, expected[name])
+
     def test_generated_witnesses_include_conjunctions_and_alternatives(self):
         from rrc.generated import all_generated
         from rrc.missing_witness import produce_missing_target_witness
@@ -294,5 +305,13 @@ class CertificateTests(unittest.TestCase):
         forward = produce_missing_target_witness(alternative_summary, 0, guarded, [], all_true)
         reverse = produce_missing_target_witness(alternative_summary, 0, guarded, [], all_true, reverse=True)
         self.assertEqual({tuple(forward["selected"]), tuple(reverse["selected"])}, {(0, 1), (2, 3)})
+
+    def test_greedy_retention_witness_need_not_have_minimum_cardinality(self):
+        from rrc.witness_counterexamples import minimum_cardinality_counterexample
+        result = minimum_cardinality_counterexample()
+        self.assertEqual(result["retention_minimal_sets"], [[0], [1, 2]])
+        self.assertEqual(result["forward_selected"], [1, 2])
+        self.assertEqual(result["reverse_selected"], [0])
+        self.assertEqual(result["minimum_cardinality"], 1)
 
 if __name__ == "__main__": unittest.main()

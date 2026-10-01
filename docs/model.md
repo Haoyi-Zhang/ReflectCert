@@ -2,8 +2,12 @@
 
 ## Source record
 
-Each input JSON document is an object with `label` and `program`. Deterministic generated and public-case records additionally contain `expected_rows`,
-an independently constructed truth table used only by the campaign. P012--P040 are
+Each input JSON document is an object with `label` and `program`. Deterministic generated and
+public-case records additionally contain `expected_rows`, an independently constructed truth table
+used only by the campaign. The 24 boundary inputs deliberately do not embed their gold rows: an
+independent closed-form oracle in `rrc/fixture_gold.py` imports neither the fixture builder nor any
+producer/checker and is compared exactly during input verification, unit tests, and reproduction.
+P012--P040 are
 regenerated from exact Java-source frontend events; P001--P011 are labeled manual finite
 projections. Source records are limited to 128 KiB
 before parsing, duplicate JSON keys are rejected, and JSON booleans are distinguished
@@ -25,7 +29,8 @@ and `sites`.
 
 Names and literal strings are bounded ASCII. Expression operations are Boolean/string
 literals, inputs, aliases, negation, conjunction, disjunction, equal-sort equality,
-concatenation, and typed conditionals. References must point backward. Static string
+concatenation, and typed conditionals. This equality is an operator of the already-declared finite
+DSL; it is not a translation of Java `String ==`, which the source bridge rejects. References must point backward. Static string
 width is at most 48 bytes. Unsupported operations fail closed.
 
 ## Quantifier order

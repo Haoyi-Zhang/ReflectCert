@@ -1,6 +1,6 @@
 final class UnsupportedReceiver {
     void resolve() throws Exception {
-        Class<?> owner = getClass();
+        java.lang.Class<?> owner = getClass();
         owner.getMethod("run");
     }
 }

@@ -7,25 +7,37 @@ general Java/Android invocation transformation.
 
 ## P0. Restricted frontend expression and event preservation
 
-For the accepted javac expression fragment, translation is homomorphic on literals, Boolean
-parameters, straight-line aliases, negation, conjunction, disjunction, equal-sort equality,
-concatenation and conditionals. Structural induction gives equal source-fragment and finite-DAG
-values for every Boolean assignment. Loader and normalized signature are literal-preserving.
-Therefore each accepted event yields the same four-field identity in the source fragment and
-generated finite site. Unsupported names, loaders, receivers, parameter types and statement-level
-control contexts have no translation and are emitted as explicit rejections. Syntactic receiver
-typing prevents ordinary same-named methods from being treated as reflection. The detailed grammar
-and assumptions are in `docs/frontend.md`.
+The accepted javac expression fragment is homomorphic on string and Boolean literals, Boolean
+parameters, simple straight-line aliases, negation, conjunction, disjunction, **Boolean** equality,
+string concatenation, and conditionals. Java `String ==`/`!=` is reference equality, so it has no
+content-equality translation and is rejected. Compound assignments and values written through an
+`if`, loop, or `switch` join also have no translation; the extractor invalidates the binding and
+rejects any later reflection use instead of reusing a stale or last-scanned value.
 
-The executable evidence checks two accepted events over all four Boolean assignments, executes
-actual self-contained Java `Class.forName`/`getMethod` lookups over those four assignments, and
-checks seven fail-closed plus one same-name negative control. These finite checks attack the
-implementation; the theorem itself remains the structural argument above.
+Structural induction gives equal source-fragment and finite-DAG values for every Boolean
+assignment. Literals and parameters are immediate; aliases substitute a previously accepted
+binding; each remaining constructor applies the same typed operation to induction-hypothesis equal
+operands. Unsupported syntax contributes no induction case.
 
-This theorem is conditional on javac parsing and the stated syntactic fragment. It does not
-establish classpath/table completeness, access checks, initialization, invocation behavior or a
-general Java rewrite theorem. The separate direct-dispatch result below starts only after a finite
-source and target table have been fixed.
+Event identity has one additional premise. Fully qualified `java.lang.Class.forName` is
+whitelisted. Simple `Class.forName` and unqualified or `this.getClassLoader()` are accepted only
+when a pinned-source audit premise identifies the former as `java.lang.Class` and the latter as the
+application loader; that premise is written into the event. Lexical shadows, arbitrary getters, and
+custom loader variables are rejected. Under the recorded premise, loader and normalized signature
+are literal-preserving, so each accepted event yields the same four-field identity in the source
+fragment and generated finite site.
+
+The executable evidence checks two accepted events over all four Boolean assignments, eight actual
+runtime lookup identities, and 12 reflective/direct returns. Seven original exclusion controls and
+one same-name nonreflection control test fail-closed classification. Four independent adversarial
+Java programs add nine JVM executions and seven rejected reflection-looking events covering string
+reference equality, compound assignment, `switch` state, shadowed `Class.forName`, and custom
+loader getters.
+
+This theorem is conditional on javac parsing, the stated syntax, and any recorded API-identity
+premise. It does not establish classpath/table completeness, access checks, initialization,
+invocation behavior, or a general Java rewrite theorem. Rejection by the bridge does not affect the
+finite-backend theorems, which start from an already fixed finite source and target table.
 
 ## P1. Pointwise factorized-certificate exactness
 
@@ -104,6 +116,17 @@ subset-minimal. Neither contains the other, and their intersection is insufficie
 There is no unique least witness under set inclusion. The generated family and exhaustive
 oracle instantiate this counterexample.
 
+## P7b. Greedy subset-minimality does not imply minimum cardinality
+
+Use base `000` and let the target be absent exactly in worlds `101` and `110`. Relative to
+the base, their difference edges are `{0,2}` and `{0,1}`. The inclusion-minimal hitting sets,
+and therefore the inclusion-minimal retention sets, are exactly `{0}` and `{1,2}`. Forward
+deletion order `0,1,2` first removes coordinate 0 and terminates at `{1,2}`. Reverse order
+`2,1,0` removes 2 and then 1 and terminates at `{0}`. Both sets satisfy retention and have an
+explicit necessity world for every retained coordinate, but their cardinalities differ. The
+artifact enumerates every subset and checks both witnesses. Thus the greedy construction is
+correct for inclusion minimality but makes no minimum-cardinality guarantee.
+
 ## P8. Changed execution is not changed target profile
 
 Internal choices can produce different row-level outcomes while their existential union
@@ -119,14 +142,15 @@ choice are considered. The exhaustive oracle records 2,432 such model/anchor/sup
 instances. This finite count corroborates the explicit counterexample; it is not the
 proof of the distinction.
 
-## P10. Public projections and Java non-claims
+## P10. Public-source strata and Java non-claims
 
-A source file path, immutable commit, blob identifier, and manually mapped operation show
-where a finite identity originated. They do not prove that the mapping is complete or
-semantics-preserving for Java. No theorem above lifts through an unspecified frontend.
-Such a theorem would require a concrete translation relation and coverage assumptions for
-class loading, lookup, heap/string behavior, control flow, and failures. The current
-checker can only validate the finite source it is given.
+The public evidence has two distinct strata. P012--P040 are generated from 29 accepted events in
+nine exact pinned Java files under the P0 syntax and recorded API-identity premises. P001--P011 are
+explicit manual finite projections whose repository, commit, path, blob, and mapped operation give
+provenance but no source-to-model theorem. Neither stratum proves target-table or classpath
+completeness, Android behavior, or whole-application semantics. The finite checker validates only
+the source it is given; P0 adds an event-identity relation only for accepted syntax and its stated
+premises.
 ## P11. Finite direct-dispatch trace preservation
 
 For a valid finite source and accepted factorized certificate, the untrusted transformer evaluates

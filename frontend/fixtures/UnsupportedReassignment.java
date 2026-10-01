@@ -4,6 +4,6 @@ final class UnsupportedReassignment {
         if (h) {
             name = "pkg.B";
         }
-        Class.forName(name);
+        java.lang.Class.forName(name);
     }
 }

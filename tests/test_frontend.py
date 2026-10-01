@@ -10,6 +10,7 @@ from rrc.factor import produce_factorized
 from rrc.factor_checker import check_factorized
 from rrc.java_frontend import (
     ARTIFACT_ROOT,
+    bridge_risk_record,
     compile_event,
     direct_call_probe_record,
     frontend_result_record,
@@ -82,6 +83,22 @@ class JavaFrontendTests(unittest.TestCase):
         self.assertEqual(result["invocation_checks"], 12)
         self.assertTrue(all(row["matched"] for row in result["rows"]))
 
+    def test_bridge_risks_execute_in_java_and_fail_closed(self):
+        result = bridge_risk_record()
+        self.assertEqual(result["source_files"], 4)
+        self.assertEqual(result["runtime_executions"], 9)
+        self.assertEqual(result["rejected_events"], 7)
+        self.assertTrue(all(row["matched"] for row in result["runtime"]))
+        self.assertTrue(all(row["matched"] for row in result["rejections"]))
+
+    def test_public_source_acceptance_records_audited_identity_assumptions(self):
+        result = frontend_result_record()
+        assumptions = {tuple(row["assumptions"]) for row in result["comparisons"]}
+        self.assertEqual(assumptions, {
+            ("pinned-source audit: simple Class resolves to java.lang.Class",),
+            ("pinned-source audit: this.getClassLoader resolves to the application loader",),
+        })
+
     def test_fail_closed_rejection_reasons(self):
         expected = {
             "UnsupportedHeap.java": ["unsupported_class_name_expression"],
@@ -90,7 +107,7 @@ class JavaFrontendTests(unittest.TestCase):
             "UnsupportedReceiver.java": ["unresolved_class_receiver"],
             "UnsupportedParameter.java": ["unsupported_parameter_type_expression"],
             "UnsupportedControl.java": ["unsupported_control_context"],
-            "UnsupportedReassignment.java": ["unsupported_class_name_expression"],
+            "UnsupportedReassignment.java": ["unsupported_control_state_merge"],
         }
         for name, reasons in expected.items():
             with self.subTest(name=name):

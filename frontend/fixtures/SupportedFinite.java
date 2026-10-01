@@ -3,7 +3,7 @@ final class SupportedFinite {
         String prefix = "pkg.";
         boolean chooseA = h && !k;
         String className = prefix.concat(chooseA ? "A" : "B");
-        Class<?> owner = Class.forName(className);
+        java.lang.Class<?> owner = java.lang.Class.forName(className);
         owner.getMethod(h ? "run" : "stop", String.class);
     }
 }

@@ -4,7 +4,7 @@ Negative outcomes are retained because they determine how the system may be used
 
 - Factorization is not uniformly smaller. Raw per-case records retain every instance where serialization grows.
 - Cross-root sharing is not the whole compression effect; the ablation measures it separately from per-root reduction.
-- Inclusion-minimal explanations can be non-unique and need not have minimum cardinality.
+- Inclusion-minimal explanations can be non-unique; the checked greedy orders can return valid minima of cardinalities one and two on the explicit three-coordinate counterexample.
 - Different executions can resolve to different target identities while preserving the same may-target set; target-set equality is not trace equality.
 - Calling every may-target in every world is not a semantics-preserving direct-dispatch strategy.
 - A mathematically valid flat certificate can exceed the transport limit; semantic existence is not interface admissibility.

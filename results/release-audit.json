@@ -1,37 +1,42 @@
 {
   "schema": "rrc-release-audit-v1",
-  "overall_status": "fail",
-  "artifact_root": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact",
+  "overall_status": "pass",
+  "artifact_root": ".",
   "checks": [
     {
       "name": "required:README.md",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/README.md"
+      "detail": "README.md"
     },
     {
       "name": "required:verify_inputs.py",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/verify_inputs.py"
+      "detail": "verify_inputs.py"
     },
     {
       "name": "required:reproduce.py",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/reproduce.py"
+      "detail": "reproduce.py"
     },
     {
       "name": "required:compare_results.py",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/compare_results.py"
+      "detail": "compare_results.py"
     },
     {
       "name": "required:tests",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/tests"
+      "detail": "tests"
     },
     {
       "name": "required:results/measured",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/artifact/results/measured"
+      "detail": "results/measured"
+    },
+    {
+      "name": "artifact-license-present",
+      "status": "pass",
+      "detail": "['LICENSE']"
     },
     {
       "name": "python-syntax",
@@ -45,13 +50,13 @@
     },
     {
       "name": "package-hygiene",
-      "status": "fail",
-      "detail": "__pycache__; __pycache__/release_gate.cpython-313.pyc"
+      "status": "pass",
+      "detail": "clean"
     },
     {
-      "name": "no-manual-public-projections",
+      "name": "public-provenance-strata",
       "status": "pass",
-      "detail": "5 provenance files scanned"
+      "detail": "29 automatic; 11 manual"
     },
     {
       "name": "measured-results-present",
@@ -61,7 +66,7 @@
     {
       "name": "paper-source-present",
       "status": "pass",
-      "detail": "/mnt/data/final_audit_work/project/reflection-resolution-certificates-minimal-missing-target-witnesses/paper"
+      "detail": "paper"
     },
     {
       "name": "reference-count",
@@ -70,8 +75,8 @@
     },
     {
       "name": "citation-keys-present",
-      "status": "fail",
-      "detail": "['acmnumeric']"
+      "status": "pass",
+      "detail": "[]"
     },
     {
       "name": "all-bibliography-cited",
@@ -102,6 +107,11 @@
       "name": "pdf-fonts-embedded",
       "status": "pass",
       "detail": "16 fonts"
+    },
+    {
+      "name": "latex-log-clean",
+      "status": "pass",
+      "detail": "[]"
     }
   ]
 }

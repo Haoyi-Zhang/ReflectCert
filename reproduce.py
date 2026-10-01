@@ -97,10 +97,17 @@ def case_record(case: str, output: Path) -> dict[str, Any]:
 
     if not strict_equal(flat_checked["summary"], factor_checked["summary"]):
         raise AssertionError(f"flat/factor summary mismatch: {case}")
-    if "expected_rows" in record:
-        actual = [{"feasible": row["feasible"], "outcomes": row["outcomes"]} for row in flat["rows"]]
-        if not strict_equal(actual, record["expected_rows"]):
-            raise AssertionError(f"independent generated oracle mismatch: {case}")
+    actual = [{"feasible": row["feasible"], "outcomes": row["outcomes"]}
+              for row in flat["rows"]]
+    if case.startswith("F"):
+        # Closed-form fixture expectations live outside the tested inputs and
+        # import neither the fixture builder nor producer/checker modules.
+        from rrc.fixture_gold import all_fixture_expectations
+        expected_rows = all_fixture_expectations()[case]
+    else:
+        expected_rows = record.get("expected_rows")
+    if expected_rows is not None and not strict_equal(actual, expected_rows):
+        raise AssertionError(f"independent row expectation mismatch: {case}")
 
     witnesses = []
     selected_sizes: list[int] = []
@@ -145,6 +152,10 @@ def case_record(case: str, output: Path) -> dict[str, Any]:
     flat_size = compact_bytes(flat)
     factor_size = compact_bytes(factor)
     dispatch_size = compact_bytes(dispatch)
+    witness_keys = {
+        json.dumps(witness, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        for witness in witnesses
+    }
     bundle = {"format": "reflection-resolution-evidence",
               "factorized_certificate": factor, "direct_dispatch": dispatch,
               "missing_target_witnesses": witnesses}
@@ -180,6 +191,9 @@ def case_record(case: str, output: Path) -> dict[str, Any]:
         "factor_semantic_steps": factor_checked["semantic_steps"],
         "factor_diagram_steps": factor_checked["diagram_steps"],
         "missing_target_witnesses": len(witnesses),
+        "witness_target_base_pairs": len(witnesses) // 2,
+        "witness_unique_within_case": len(witness_keys),
+        "witness_duplicate_records": len(witnesses) - len(witness_keys),
         "witness_selected_total": sum(selected_sizes),
         "witness_selected_max": max(selected_sizes, default=0),
         "alternative_witness_pairs": alternative_pairs,
@@ -206,6 +220,7 @@ def controls() -> dict[str, Any]:
     from rrc.baselines import invoke_all
     from rrc.producer import produce
     from rrc.missing_witness import produce_missing_target_witness, check_missing_target_witness
+    from rrc.witness_counterexamples import minimum_cardinality_counterexample
 
     fixtures = {name: program for name, _, program in all_fixtures()}
     program = fixtures["F06"]
@@ -284,6 +299,7 @@ def controls() -> dict[str, Any]:
         raise AssertionError("factorized admission control failed")
     return {
         "seeded_faults_rejected": rejected,
+        "minimum_cardinality_counterexample": minimum_cardinality_counterexample(),
         "flat_quoted_string_lower_bound": flat_quoted_string_lower_bound,
         "factorized_bytes": serialized_bytes(large_factor),
         "certificate_byte_cap": MAX_CERT_BYTES,
@@ -421,6 +437,9 @@ def run(output: Path, *, resume: bool = False) -> dict[str, Any]:
         "frontend_runtime_identity_checks": frontend_results["controls"]["runtime_probe"]["identity_checks"],
         "frontend_direct_call_assignments": frontend_results["controls"]["direct_call_probe"]["assignments"],
         "frontend_direct_call_invocation_checks": frontend_results["controls"]["direct_call_probe"]["invocation_checks"],
+        "frontend_bridge_risk_sources": frontend_results["controls"]["bridge_risks"]["source_files"],
+        "frontend_bridge_risk_runtime_executions": frontend_results["controls"]["bridge_risks"]["runtime_executions"],
+        "frontend_bridge_risk_rejected_events": frontend_results["controls"]["bridge_risks"]["rejected_events"],
         "assignments": sum(row["assignments"] for row in records),
         "flat_checker_steps": sum(row["flat_checker_steps"] for row in records),
         "factor_semantic_steps": sum(row["factor_semantic_steps"] for row in records),
@@ -436,6 +455,13 @@ def run(output: Path, *, resume: bool = False) -> dict[str, Any]:
         "dispatch_nodes_total": sum(row["dispatch_nodes"] for row in records),
         "dispatch_nodes_max": max(row["dispatch_nodes"] for row in records),
         "missing_target_witnesses": sum(row["missing_target_witnesses"] for row in records),
+        "witness_target_base_pairs": sum(row["witness_target_base_pairs"] for row in records),
+        "witness_unique_within_case": sum(row["witness_unique_within_case"] for row in records),
+        "witness_duplicate_records": sum(row["witness_duplicate_records"] for row in records),
+        "public_witness_records": sum(row["missing_target_witnesses"] for row in records
+                                      if row["category"].startswith("public_")),
+        "public_witness_unique_within_case": sum(row["witness_unique_within_case"] for row in records
+                                                  if row["category"].startswith("public_")),
         "witness_selected_total": sum(row["witness_selected_total"] for row in records),
         "witness_selected_max": max(row["witness_selected_max"] for row in records),
         "alternative_witness_pairs": sum(row["alternative_witness_pairs"] for row in records),
@@ -466,6 +492,9 @@ def run(output: Path, *, resume: bool = False) -> dict[str, Any]:
             "runtime_identity_checks": frontend_results["controls"]["runtime_probe"]["identity_checks"],
             "direct_call_assignments": frontend_results["controls"]["direct_call_probe"]["assignments"],
             "direct_call_invocation_checks": frontend_results["controls"]["direct_call_probe"]["invocation_checks"],
+            "bridge_risk_sources": frontend_results["controls"]["bridge_risks"]["source_files"],
+            "bridge_risk_runtime_executions": frontend_results["controls"]["bridge_risks"]["runtime_executions"],
+            "bridge_risk_rejected_events": frontend_results["controls"]["bridge_risks"]["rejected_events"],
         },
         "oracle": oracle_results,
     }

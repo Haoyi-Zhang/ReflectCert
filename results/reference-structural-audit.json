@@ -1,20 +1,12 @@
 {
   "schema": "rrc-reference-audit-v2",
-  "generated_utc": "2026-09-20T16:22:54Z",
+  "generated_utc": "2026-09-26T07:22:03Z",
   "entries": 59,
-  "distinct_cited_keys": 60,
+  "distinct_cited_keys": 59,
   "doi_entries": 54,
   "no_doi_entries": 5,
-  "issues": [
-    "missing cited keys: acmnumeric",
-    "valleerai1999soot: no DOI or URL",
-    "octeau2013epicc: no DOI or URL",
-    "abdulla2015norn: missing core field",
-    "junker2004quickxplain: no DOI or URL",
-    "weiser1981slicing: no DOI or URL",
-    "tip1995survey: no DOI or URL"
-  ],
-  "status": "fail",
+  "issues": [],
+  "status": "pass",
   "records": [
     {
       "type": "inproceedings",
@@ -25,7 +17,9 @@
       "venue": "Proceedings of the 25th International Symposium on Software Testing and Analysis",
       "doi": "10.1145/2931037.2931044",
       "url": "",
+      "pages": "318--329",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -38,7 +32,9 @@
       "venue": "ACM Transactions on Software Engineering and Methodology",
       "doi": "10.1145/3440033",
       "url": "",
+      "pages": "32:1--32:36",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -51,7 +47,9 @@
       "venue": "ACM Transactions on Software Engineering and Methodology",
       "doi": "10.1145/3295739",
       "url": "",
+      "pages": "7:1--7:50",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -64,7 +62,9 @@
       "venue": "Proceedings of the 33rd International Conference on Software Engineering",
       "doi": "10.1145/1985793.1985827",
       "url": "",
+      "pages": "241--250",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -77,7 +77,9 @@
       "venue": "Programming Languages and Systems: APLAS 2005",
       "doi": "10.1007/11575467_11",
       "url": "",
+      "pages": "139--160",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -90,7 +92,9 @@
       "venue": "ECOOP 2004 -- Object-Oriented Programming",
       "doi": "10.1007/978-3-540-24851-4_5",
       "url": "",
+      "pages": "96--122",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -103,7 +107,9 @@
       "venue": "Proceedings of the Seventh ACM Conference on Data and Application Security and Privacy",
       "doi": "10.1145/3029806.3029814",
       "url": "",
+      "pages": "281--288",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -116,7 +122,9 @@
       "venue": "ECOOP 2014 -- Object-Oriented Programming",
       "doi": "10.1007/978-3-662-44202-9_2",
       "url": "",
+      "pages": "27--53",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -129,7 +137,9 @@
       "venue": "Static Analysis Symposium",
       "doi": "10.1007/978-3-662-48288-9_10",
       "url": "",
+      "pages": "162--180",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -142,7 +152,9 @@
       "venue": "IEEE International Symposium on Software Reliability Engineering",
       "doi": "10.1109/issre.2017.36",
       "url": "",
+      "pages": "12--23",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -155,7 +167,9 @@
       "venue": "Compiler Construction",
       "doi": "10.1007/3-540-36579-6_12",
       "url": "",
+      "pages": "153--169",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -168,7 +182,9 @@
       "venue": "Proceedings of the 24th ACM SIGPLAN Conference on Object-Oriented Programming Systems Languages and Applications",
       "doi": "10.1145/1640089.1640108",
       "url": "",
+      "pages": "243--262",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -181,10 +197,10 @@
       "venue": "Proceedings of CASCON 1999",
       "doi": "",
       "url": "",
-      "structural_status": "fail",
-      "structural_issues": [
-        "no DOI or URL"
-      ],
+      "pages": "",
+      "structural_status": "pass",
+      "identifier_status": "bibliographic-record",
+      "structural_issues": [],
       "online_status": "not-run"
     },
     {
@@ -196,7 +212,9 @@
       "venue": "Programming Languages and Systems: APLAS 2005",
       "doi": "10.1007/11575467_8",
       "url": "",
+      "pages": "97--118",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -209,7 +227,9 @@
       "venue": "Proceedings of the 22nd ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages",
       "doi": "10.1145/199448.199462",
       "url": "",
+      "pages": "49--61",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -222,7 +242,9 @@
       "venue": "Proceedings of the Fourth ACM Symposium on Principles of Programming Languages",
       "doi": "10.1145/512950.512973",
       "url": "",
+      "pages": "238--252",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -235,7 +257,9 @@
       "venue": "Proceedings of the First ACM Symposium on Principles of Programming Languages",
       "doi": "10.1145/512927.512945",
       "url": "",
+      "pages": "194--206",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -248,7 +272,9 @@
       "venue": "Proceedings of the 35th ACM SIGPLAN Conference on Programming Language Design and Implementation",
       "doi": "10.1145/2594291.2594299",
       "url": "",
+      "pages": "259--269",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -261,7 +287,9 @@
       "venue": "Proceedings of the 2014 ACM SIGSAC Conference on Computer and Communications Security",
       "doi": "10.1145/2660267.2660357",
       "url": "",
+      "pages": "1329--1341",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -274,7 +302,9 @@
       "venue": "Network and Distributed System Security Symposium",
       "doi": "10.14722/ndss.2015.23089",
       "url": "",
+      "pages": "",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -287,7 +317,9 @@
       "venue": "Proceedings of the 37th International Conference on Software Engineering",
       "doi": "10.1109/icse.2015.48",
       "url": "",
+      "pages": "280--291",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -300,10 +332,10 @@
       "venue": "22nd USENIX Security Symposium",
       "doi": "",
       "url": "",
-      "structural_status": "fail",
-      "structural_issues": [
-        "no DOI or URL"
-      ],
+      "pages": "543--558",
+      "structural_status": "pass",
+      "identifier_status": "bibliographic-record",
+      "structural_issues": [],
       "online_status": "not-run"
     },
     {
@@ -315,7 +347,9 @@
       "venue": "Proceedings of the 37th International Conference on Software Engineering",
       "doi": "10.1109/icse.2015.30",
       "url": "",
+      "pages": "77--88",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -328,7 +362,9 @@
       "venue": "Proceedings of the 38th International Conference on Software Engineering",
       "doi": "10.1145/2884781.2884816",
       "url": "",
+      "pages": "725--735",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -341,7 +377,9 @@
       "venue": "IEEE European Symposium on Security and Privacy",
       "doi": "10.1109/eurosp.2016.16",
       "url": "",
+      "pages": "47--62",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -354,7 +392,9 @@
       "venue": "Static Analysis Symposium",
       "doi": "10.1007/3-540-44898-5_1",
       "url": "",
+      "pages": "1--18",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -367,7 +407,9 @@
       "venue": "Proceedings of the 14th International Conference on World Wide Web",
       "doi": "10.1145/1060745.1060809",
       "url": "",
+      "pages": "432--441",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -380,7 +422,9 @@
       "venue": "Proceedings of the 28th ACM SIGPLAN Conference on Programming Language Design and Implementation",
       "doi": "10.1145/1250734.1250739",
       "url": "",
+      "pages": "32--41",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -393,7 +437,9 @@
       "venue": "Proceedings of the 18th International Symposium on Software Testing and Analysis",
       "doi": "10.1145/1572272.1572286",
       "url": "",
+      "pages": "105--116",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -406,7 +452,9 @@
       "venue": "ACM Transactions on Software Engineering and Methodology",
       "doi": "10.1145/2377656.2377662",
       "url": "",
+      "pages": "25:1--25:28",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -419,7 +467,9 @@
       "venue": "Proceedings of the 2013 9th Joint Meeting on Foundations of Software Engineering",
       "doi": "10.1145/2491411.2491456",
       "url": "",
+      "pages": "114--124",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -432,7 +482,9 @@
       "venue": "Proceedings of the 2014 ACM SIGSAC Conference on Computer and Communications Security",
       "doi": "10.1145/2660267.2660372",
       "url": "",
+      "pages": "1232--1243",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -440,15 +492,15 @@
       "type": "inproceedings",
       "key": "abdulla2015norn",
       "title": "{Norn}: An SMT Solver for String Constraints",
-      "author": "",
+      "author": "Abdulla, Parosh Aziz and Atig, Mohamed Faouzi and Chen, Yu-Fang and Hol{\\'i}k, Luk{\\'a}{\\v{s}} and Rezine, Ahmed and R{\\\"u}mmer, Philipp and Stenman, Jari",
       "year": "2015",
       "venue": "Computer Aided Verification",
       "doi": "10.1007/978-3-319-21690-4_29",
       "url": "",
-      "structural_status": "fail",
-      "structural_issues": [
-        "missing core field"
-      ],
+      "pages": "462--469",
+      "structural_status": "pass",
+      "identifier_status": "doi",
+      "structural_issues": [],
       "online_status": "not-run"
     },
     {
@@ -460,7 +512,9 @@
       "venue": "Proceedings of the ACM on Programming Languages",
       "doi": "10.1145/3290362",
       "url": "",
+      "pages": "1--30",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -473,7 +527,9 @@
       "venue": "Tools and Algorithms for the Construction and Analysis of Systems",
       "doi": "10.1007/978-3-642-12002-2_13",
       "url": "",
+      "pages": "154--157",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -486,7 +542,9 @@
       "venue": "Proceedings of the 24th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages",
       "doi": "10.1145/263699.263712",
       "url": "",
+      "pages": "106--119",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -499,7 +557,9 @@
       "venue": "Proceedings of the Second Symposium on Operating Systems Design and Implementation",
       "doi": "10.1145/238721.238781",
       "url": "",
+      "pages": "229--243",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -512,7 +572,9 @@
       "venue": "Proceedings of the 16th Annual IEEE Symposium on Logic in Computer Science",
       "doi": "10.1109/lics.2001.932501",
       "url": "",
+      "pages": "247--256",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -525,7 +587,9 @@
       "venue": "ACM Transactions on Programming Languages and Systems",
       "doi": "10.1145/319301.319345",
       "url": "",
+      "pages": "527--568",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -538,7 +602,9 @@
       "venue": "Tools and Algorithms for the Construction and Analysis of Systems",
       "doi": "10.1007/bfb0054170",
       "url": "",
+      "pages": "151--166",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -551,7 +617,9 @@
       "venue": "Proceedings of the ACM SIGPLAN 2000 Conference on Programming Language Design and Implementation",
       "doi": "10.1145/349299.349314",
       "url": "",
+      "pages": "83--94",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -564,7 +632,9 @@
       "venue": "Communications of the ACM",
       "doi": "10.1145/1538788.1538814",
       "url": "",
+      "pages": "107--115",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -577,7 +647,9 @@
       "venue": "IEEE Transactions on Computers",
       "doi": "10.1109/tc.1986.1676819",
       "url": "",
+      "pages": "677--691",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -590,7 +662,9 @@
       "venue": "Proceedings of the 27th ACM/IEEE Design Automation Conference",
       "doi": "10.1145/123186.123222",
       "url": "",
+      "pages": "40--45",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -603,7 +677,9 @@
       "venue": "Proceedings of the 1993 IEEE/ACM International Conference on Computer-Aided Design",
       "doi": "10.1109/iccad.1993.580054",
       "url": "",
+      "pages": "188--191",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -616,7 +692,9 @@
       "venue": "Artificial Intelligence",
       "doi": "10.1016/0004-3702(87)90062-2",
       "url": "",
+      "pages": "57--95",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -629,7 +707,9 @@
       "venue": "Artificial Intelligence",
       "doi": "10.1016/0004-3702(87)90063-4",
       "url": "",
+      "pages": "97--130",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -642,10 +722,10 @@
       "venue": "Proceedings of the 19th National Conference on Artificial Intelligence",
       "doi": "",
       "url": "",
-      "structural_status": "fail",
-      "structural_issues": [
-        "no DOI or URL"
-      ],
+      "pages": "167--172",
+      "structural_status": "pass",
+      "identifier_status": "bibliographic-record",
+      "structural_issues": [],
       "online_status": "not-run"
     },
     {
@@ -657,7 +737,9 @@
       "venue": "Journal of Automated Reasoning",
       "doi": "10.1007/s10817-007-9084-z",
       "url": "",
+      "pages": "1--33",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -670,7 +752,9 @@
       "venue": "Proceedings of the 33rd AAAI Conference on Artificial Intelligence",
       "doi": "10.1609/aaai.v33i01.33011511",
       "url": "",
+      "pages": "1511--1519",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -683,7 +767,9 @@
       "venue": "Proceedings of the 24th European Conference on Artificial Intelligence",
       "doi": "10.3233/faia200158",
       "url": "",
+      "pages": "712--720",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -696,7 +782,9 @@
       "venue": "IEEE Transactions on Software Engineering",
       "doi": "10.1109/32.988498",
       "url": "",
+      "pages": "183--200",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -709,10 +797,10 @@
       "venue": "Proceedings of the 5th International Conference on Software Engineering",
       "doi": "",
       "url": "",
-      "structural_status": "fail",
-      "structural_issues": [
-        "no DOI or URL"
-      ],
+      "pages": "439--449",
+      "structural_status": "pass",
+      "identifier_status": "bibliographic-record",
+      "structural_issues": [],
       "online_status": "not-run"
     },
     {
@@ -724,10 +812,10 @@
       "venue": "Journal of Programming Languages",
       "doi": "",
       "url": "",
-      "structural_status": "fail",
-      "structural_issues": [
-        "no DOI or URL"
-      ],
+      "pages": "121--189",
+      "structural_status": "pass",
+      "identifier_status": "bibliographic-record",
+      "structural_issues": [],
       "online_status": "not-run"
     },
     {
@@ -739,7 +827,9 @@
       "venue": "Database Theory -- ICDT 2001",
       "doi": "10.1007/3-540-44503-x_20",
       "url": "",
+      "pages": "316--330",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -752,7 +842,9 @@
       "venue": "Proceedings of the 26th ACM Symposium on Principles of Database Systems",
       "doi": "10.1145/1265530.1265535",
       "url": "",
+      "pages": "31--40",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -765,7 +857,9 @@
       "venue": "Proceedings of the VLDB Endowment",
       "doi": "10.14778/1880172.1880176",
       "url": "",
+      "pages": "34--45",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -778,7 +872,9 @@
       "venue": "Foundations and Trends in Databases",
       "doi": "10.1561/1900000006",
       "url": "",
+      "pages": "379--474",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     },
@@ -791,7 +887,9 @@
       "venue": "Proceedings of the 26th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering",
       "doi": "10.1145/3236024.3236041",
       "url": "",
+      "pages": "129--140",
       "structural_status": "pass",
+      "identifier_status": "doi",
       "structural_issues": [],
       "online_status": "not-run"
     }

@@ -2,7 +2,10 @@ import com.sun.source.tree.ArrayAccessTree;
 import com.sun.source.tree.AssignmentTree;
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.BlockTree;
+import com.sun.source.tree.CaseTree;
+import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
+import com.sun.source.tree.CompoundAssignmentTree;
 import com.sun.source.tree.ConditionalExpressionTree;
 import com.sun.source.tree.DoWhileLoopTree;
 import com.sun.source.tree.EnhancedForLoopTree;
@@ -17,6 +20,8 @@ import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.NewArrayTree;
 import com.sun.source.tree.ParenthesizedTree;
 import com.sun.source.tree.PrimitiveTypeTree;
+import com.sun.source.tree.SwitchExpressionTree;
+import com.sun.source.tree.SwitchTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.tree.TypeCastTree;
 import com.sun.source.tree.WhileLoopTree;
@@ -58,6 +63,10 @@ import java.util.Set;
  */
 public final class JavaReflectionExtractor {
     private static final String FORMAT = "rrc-java-front-v1";
+    private static final String SIMPLE_CLASS_ASSUMPTION =
+            "pinned-source audit: simple Class resolves to java.lang.Class";
+    private static final String APPLICATION_LOADER_ASSUMPTION =
+            "pinned-source audit: this.getClassLoader resolves to the application loader";
 
     private JavaReflectionExtractor() {}
 
@@ -111,8 +120,6 @@ public final class JavaReflectionExtractor {
             } else if (op.equals("eq")) {
                 if (left.constantBoolean != null && right.constantBoolean != null) {
                     constant = left.constantBoolean.equals(right.constantBoolean);
-                } else if (left.constantString != null && right.constantString != null) {
-                    constant = left.constantString.equals(right.constantString);
                 }
             }
             return new Expr(out, null, constant);
@@ -130,13 +137,33 @@ public final class JavaReflectionExtractor {
         }
     }
 
-    private record ClassRef(String loader, Expr className) {}
+    private record Policy(boolean auditSimpleJavaLangClass,
+                          boolean auditThisApplicationLoader) {}
+
+    private record ClassRef(String loader, Expr className, List<String> assumptions) {}
+
+    private record ApiDecision(boolean accepted, String rejection,
+                               String loader, List<String> assumptions) {
+        static ApiDecision accepted(String loader, List<String> assumptions) {
+            return new ApiDecision(true, null, loader, List.copyOf(assumptions));
+        }
+
+        static ApiDecision rejected(String reason) {
+            return new ApiDecision(false, reason, null, List.of());
+        }
+
+        static ApiDecision absent() {
+            return new ApiDecision(false, null, null, List.of());
+        }
+    }
 
     private static final class Env {
         final Map<String, Expr> strings = new HashMap<>();
         final Map<String, ClassRef> classes = new HashMap<>();
         final Map<String, Expr> booleans = new HashMap<>();
+        final Map<String, String> unsupported = new HashMap<>();
         final Set<String> classTyped = new HashSet<>();
+        final Set<String> unauditedClassTyped = new HashSet<>();
         final Set<String> loaderTyped = new HashSet<>();
 
         Env copy() {
@@ -144,16 +171,19 @@ public final class JavaReflectionExtractor {
             out.strings.putAll(strings);
             out.classes.putAll(classes);
             out.booleans.putAll(booleans);
+            out.unsupported.putAll(unsupported);
             out.classTyped.addAll(classTyped);
+            out.unauditedClassTyped.addAll(unauditedClassTyped);
             out.loaderTyped.addAll(loaderTyped);
             return out;
         }
 
-        void invalidate(Collection<String> names) {
+        void invalidate(Collection<String> names, String reason) {
             for (String name : names) {
                 strings.remove(name);
                 classes.remove(name);
                 booleans.remove(name);
+                unsupported.put(name, reason);
             }
         }
     }
@@ -174,13 +204,19 @@ public final class JavaReflectionExtractor {
 
         private final CompilationUnitTree unit;
         private final SourcePositions positions;
+        private final Policy policy;
+        private final boolean simpleClassShadowed;
+        private final boolean declaresGetClassLoader;
         private final List<Map<String, Object>> events = new ArrayList<>();
         private long sequence = 0;
         private int controlDepth = 0;
 
-        Scanner(CompilationUnitTree unit, SourcePositions positions) {
+        Scanner(CompilationUnitTree unit, SourcePositions positions, Policy policy) {
             this.unit = unit;
             this.positions = positions;
+            this.policy = policy;
+            this.simpleClassShadowed = declaresName(unit, "Class");
+            this.declaresGetClassLoader = declaresMethod(unit, "getClassLoader");
         }
 
         List<Map<String, Object>> events() {
@@ -201,8 +237,10 @@ public final class JavaReflectionExtractor {
                 if (isBooleanType(parameter.getType())) {
                     env.booleans.put(parameterName, Expr.input(parameterName));
                 }
-                if (isClassType(parameter.getType())) {
+                if (isAcceptedClassType(parameter.getType())) {
                     env.classTyped.add(parameterName);
+                } else if (isSimpleClassType(parameter.getType())) {
+                    env.unauditedClassTyped.add(parameterName);
                 }
                 if (isClassLoaderType(parameter.getType())) {
                     env.loaderTyped.add(parameterName);
@@ -222,10 +260,14 @@ public final class JavaReflectionExtractor {
             env.strings.remove(name);
             env.classes.remove(name);
             env.booleans.remove(name);
+            env.unsupported.remove(name);
             env.classTyped.remove(name);
+            env.unauditedClassTyped.remove(name);
             env.loaderTyped.remove(name);
-            if (isClassType(node.getType())) {
+            if (isAcceptedClassType(node.getType())) {
                 env.classTyped.add(name);
+            } else if (isSimpleClassType(node.getType())) {
+                env.unauditedClassTyped.add(name);
             }
             if (isClassLoaderType(node.getType())) {
                 env.loaderTyped.add(name);
@@ -249,6 +291,17 @@ public final class JavaReflectionExtractor {
         }
 
         @Override
+        public Void visitCompoundAssignment(CompoundAssignmentTree node, Env env) {
+            scan(node.getExpression(), env);
+            ExpressionTree variable = strip(node.getVariable());
+            if (variable instanceof IdentifierTree identifier) {
+                env.invalidate(List.of(identifier.getName().toString()),
+                        "unsupported_compound_assignment");
+            }
+            return null;
+        }
+
+        @Override
         public Void visitMethodInvocation(MethodInvocationTree node, Env env) {
             // Visit nested receivers/arguments first so source-level chains are emitted
             // from the innermost lookup to the outer use.
@@ -260,30 +313,41 @@ public final class JavaReflectionExtractor {
                 reject(node, reflectionKind(name), "unsupported_control_context");
                 return null;
             }
-            if (name.equals("forName") && isClassName(receiver)) {
+            if (name.equals("forName") && looksLikeClassName(receiver)) {
+                ApiDecision identity = classApiIdentity(receiver);
+                if (!identity.accepted()) {
+                    reject(node, "Class.forName", identity.rejection());
+                    return null;
+                }
                 Expr className = oneStringArgument(node, env);
                 if (className == null) {
-                    reject(node, "Class.forName", "unsupported_class_name_expression");
+                    reject(node, "Class.forName", failureReason(
+                            node.getArguments().isEmpty() ? null : node.getArguments().get(0), env,
+                            "unsupported_class_name_expression"));
                 } else {
                     accept(node, "Class.forName", "default", className,
-                            Expr.litString("<class>"), "()", null);
+                            Expr.litString("<class>"), "()", null, identity.assumptions());
                 }
                 return null;
             }
 
             if (name.equals("loadClass")) {
-                if (!isApplicationClassLoader(receiver)) {
-                    if (isLoaderTypedReceiver(receiver, env)) {
-                        reject(node, "ClassLoader.loadClass", "unsupported_loader_receiver");
-                    }
+                ApiDecision identity = loaderApiIdentity(receiver, env);
+                if (identity.rejection() != null) {
+                    reject(node, "ClassLoader.loadClass", identity.rejection());
+                    return null;
+                }
+                if (!identity.accepted()) {
                     return null;
                 }
                 Expr className = oneStringArgument(node, env);
                 if (className == null) {
-                    reject(node, "ClassLoader.loadClass", "unsupported_class_name_expression");
+                    reject(node, "ClassLoader.loadClass", failureReason(
+                            node.getArguments().isEmpty() ? null : node.getArguments().get(0), env,
+                            "unsupported_class_name_expression"));
                 } else {
-                    accept(node, "ClassLoader.loadClass", "app", className,
-                            Expr.litString("<class>"), "()", null);
+                    accept(node, "ClassLoader.loadClass", identity.loader(), className,
+                            Expr.litString("<class>"), "()", null, identity.assumptions());
                 }
                 return null;
             }
@@ -299,24 +363,26 @@ public final class JavaReflectionExtractor {
                 // class-typed receiver, however, must fail closed.
                 if (isClassTypedReceiver(receiver, env)) {
                     reject(node, kind, "unresolved_class_receiver");
+                } else if (isUnauditedClassTypedReceiver(receiver, env)) {
+                    reject(node, kind, "unaudited_class_receiver");
                 }
                 return null;
             }
 
             switch (name) {
                 case "newInstance" -> accept(node, kind, owner.loader(), owner.className(),
-                        Expr.litString("<init>"), "()", null);
+                        Expr.litString("<init>"), "()", null, owner.assumptions());
                 case "getConstructor" -> {
                     String signature = signature(node.getArguments(), env);
                     if (signature == null) {
                         reject(node, kind, "unsupported_parameter_type_expression");
                     } else {
                         accept(node, kind, owner.loader(), owner.className(),
-                                Expr.litString("<init>"), signature, null);
+                                Expr.litString("<init>"), signature, null, owner.assumptions());
                     }
                 }
                 case "getConstructors" -> accept(node, kind, owner.loader(), owner.className(),
-                        Expr.litString("<constructors>"), "[]", null);
+                        Expr.litString("<constructors>"), "[]", null, owner.assumptions());
                 case "getMethod", "getDeclaredMethod" -> {
                     if (node.getArguments().isEmpty()) {
                         reject(node, kind, "missing_member_name");
@@ -325,25 +391,30 @@ public final class JavaReflectionExtractor {
                     Expr member = stringExpr(node.getArguments().get(0), env);
                     String signature = signature(node.getArguments().subList(1, node.getArguments().size()), env);
                     if (member == null) {
-                        reject(node, kind, "unsupported_member_name_expression");
+                        reject(node, kind, failureReason(node.getArguments().get(0), env,
+                                "unsupported_member_name_expression"));
                     } else if (signature == null) {
                         reject(node, kind, "unsupported_parameter_type_expression");
                     } else {
-                        accept(node, kind, owner.loader(), owner.className(), member, signature, null);
+                        accept(node, kind, owner.loader(), owner.className(), member, signature,
+                                null, owner.assumptions());
                     }
                 }
                 case "getMethods", "getDeclaredMethods" -> accept(node, kind, owner.loader(), owner.className(),
-                        Expr.litString("<methods>"), "[]", null);
+                        Expr.litString("<methods>"), "[]", null, owner.assumptions());
                 case "getField", "getDeclaredField" -> {
                     Expr member = oneStringArgument(node, env);
                     if (member == null) {
-                        reject(node, kind, "unsupported_member_name_expression");
+                        reject(node, kind, failureReason(
+                                node.getArguments().isEmpty() ? null : node.getArguments().get(0), env,
+                                "unsupported_member_name_expression"));
                     } else {
-                        accept(node, kind, owner.loader(), owner.className(), member, "field", null);
+                        accept(node, kind, owner.loader(), owner.className(), member, "field",
+                                null, owner.assumptions());
                     }
                 }
                 case "getFields", "getDeclaredFields" -> accept(node, kind, owner.loader(), owner.className(),
-                        Expr.litString("<fields>"), "fields[]", null);
+                        Expr.litString("<fields>"), "fields[]", null, owner.assumptions());
                 default -> throw new IllegalStateException(name);
             }
             return null;
@@ -356,9 +427,9 @@ public final class JavaReflectionExtractor {
             if (node.getElseStatement() != null) {
                 scanControlled(node.getElseStatement(), env);
             }
-            env.invalidate(assignedNames(node.getThenStatement()));
+            env.invalidate(assignedNames(node.getThenStatement()), "unsupported_control_state_merge");
             if (node.getElseStatement() != null) {
-                env.invalidate(assignedNames(node.getElseStatement()));
+                env.invalidate(assignedNames(node.getElseStatement()), "unsupported_control_state_merge");
             }
             return null;
         }
@@ -377,7 +448,7 @@ public final class JavaReflectionExtractor {
             } finally {
                 controlDepth--;
             }
-            env.invalidate(assignedNames(node));
+            env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
             return null;
         }
 
@@ -385,7 +456,7 @@ public final class JavaReflectionExtractor {
         public Void visitEnhancedForLoop(EnhancedForLoopTree node, Env env) {
             scan(node.getExpression(), env);
             scanControlled(node.getStatement(), env);
-            env.invalidate(assignedNames(node));
+            env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
             return null;
         }
 
@@ -399,7 +470,7 @@ public final class JavaReflectionExtractor {
             } finally {
                 controlDepth--;
             }
-            env.invalidate(assignedNames(node));
+            env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
             return null;
         }
 
@@ -413,7 +484,27 @@ public final class JavaReflectionExtractor {
             } finally {
                 controlDepth--;
             }
-            env.invalidate(assignedNames(node));
+            env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
+            return null;
+        }
+
+        @Override
+        public Void visitSwitch(SwitchTree node, Env env) {
+            scan(node.getExpression(), env);
+            for (CaseTree branch : node.getCases()) {
+                scanControlled(branch, env);
+            }
+            env.invalidate(assignedNames(node), "unsupported_switch_state_merge");
+            return null;
+        }
+
+        @Override
+        public Void visitSwitchExpression(SwitchExpressionTree node, Env env) {
+            scan(node.getExpression(), env);
+            for (CaseTree branch : node.getCases()) {
+                scanControlled(branch, env);
+            }
+            env.invalidate(assignedNames(node), "unsupported_switch_state_merge");
             return null;
         }
 
@@ -437,19 +528,30 @@ public final class JavaReflectionExtractor {
                     }
                     return super.visitAssignment(assignment, ignored);
                 }
+
+                @Override
+                public Void visitCompoundAssignment(CompoundAssignmentTree assignment, Void ignored) {
+                    ExpressionTree variable = strip(assignment.getVariable());
+                    if (variable instanceof IdentifierTree identifier) {
+                        names.add(identifier.getName().toString());
+                    }
+                    return super.visitCompoundAssignment(assignment, ignored);
+                }
             }.scan(tree, null);
             return names;
         }
 
         private boolean isReflectionCandidate(String name, ExpressionTree receiver, Env env) {
             if (name.equals("forName")) {
-                return isClassName(receiver);
+                return looksLikeClassName(receiver);
             }
             if (name.equals("loadClass")) {
-                return isApplicationClassLoader(receiver) || isLoaderTypedReceiver(receiver, env);
+                ApiDecision identity = loaderApiIdentity(receiver, env);
+                return identity.accepted() || identity.rejection() != null;
             }
             if (CLASS_APIS.contains(name)) {
-                return resolveClass(receiver, env) != null || isClassTypedReceiver(receiver, env);
+                return resolveClass(receiver, env) != null || isClassTypedReceiver(receiver, env)
+                        || isUnauditedClassTypedReceiver(receiver, env);
             }
             return false;
         }
@@ -468,6 +570,15 @@ public final class JavaReflectionExtractor {
             return false;
         }
 
+        private boolean isUnauditedClassTypedReceiver(ExpressionTree receiver, Env env) {
+            if (receiver == null) {
+                return false;
+            }
+            ExpressionTree expression = strip(receiver);
+            return expression instanceof IdentifierTree identifier
+                    && env.unauditedClassTyped.contains(identifier.getName().toString());
+        }
+
         private boolean isLoaderTypedReceiver(ExpressionTree receiver, Env env) {
             if (receiver == null) {
                 return false;
@@ -477,6 +588,63 @@ public final class JavaReflectionExtractor {
                     && env.loaderTyped.contains(identifier.getName().toString());
         }
 
+        private boolean looksLikeClassName(ExpressionTree receiver) {
+            if (receiver == null) {
+                return false;
+            }
+            String text = receiver.toString();
+            return text.equals("Class") || text.equals("java.lang.Class");
+        }
+
+        private ApiDecision classApiIdentity(ExpressionTree receiver) {
+            if (receiver == null) {
+                return ApiDecision.absent();
+            }
+            String text = receiver.toString();
+            if (text.equals("java.lang.Class")) {
+                return ApiDecision.accepted("default", List.of());
+            }
+            if (!text.equals("Class")) {
+                return ApiDecision.absent();
+            }
+            if (simpleClassShadowed) {
+                return ApiDecision.rejected("shadowed_class_api_receiver");
+            }
+            if (!policy.auditSimpleJavaLangClass()) {
+                return ApiDecision.rejected("unaudited_class_api_receiver");
+            }
+            return ApiDecision.accepted("default", List.of(SIMPLE_CLASS_ASSUMPTION));
+        }
+
+        private ApiDecision loaderApiIdentity(ExpressionTree receiver, Env env) {
+            if (receiver == null) {
+                return ApiDecision.absent();
+            }
+            ExpressionTree expression = strip(receiver);
+            if (expression instanceof IdentifierTree && isLoaderTypedReceiver(expression, env)) {
+                return ApiDecision.rejected("unsupported_loader_receiver");
+            }
+            if (!(expression instanceof MethodInvocationTree getter)
+                    || !methodName(getter).equals("getClassLoader")
+                    || !getter.getArguments().isEmpty()) {
+                return ApiDecision.absent();
+            }
+            ExpressionTree getterReceiver = receiver(getter);
+            boolean thisGetter = getterReceiver == null
+                    || (strip(getterReceiver) instanceof IdentifierTree identifier
+                    && identifier.getName().contentEquals("this"));
+            if (!thisGetter) {
+                return ApiDecision.rejected("unaudited_loader_getter");
+            }
+            if (declaresGetClassLoader) {
+                return ApiDecision.rejected("shadowed_application_loader_getter");
+            }
+            if (!policy.auditThisApplicationLoader()) {
+                return ApiDecision.rejected("unaudited_loader_getter");
+            }
+            return ApiDecision.accepted("app", List.of(APPLICATION_LOADER_ASSUMPTION));
+        }
+
         private String reflectionKind(String name) {
             if (name.equals("forName")) return "Class.forName";
             if (name.equals("loadClass")) return "ClassLoader.loadClass";
@@ -484,6 +652,7 @@ public final class JavaReflectionExtractor {
         }
 
         private void bind(String name, ExpressionTree expression, Env env) {
+            env.unsupported.remove(name);
             Expr string = stringExpr(expression, env);
             if (string != null) {
                 env.strings.put(name, string);
@@ -502,10 +671,17 @@ public final class JavaReflectionExtractor {
             } else {
                 env.booleans.remove(name);
             }
+            if (string == null && classRef == null && booleanValue == null) {
+                String reason = failureReason(expression, env, null);
+                if (reason != null) {
+                    env.unsupported.put(name, reason);
+                }
+            }
         }
 
         private void accept(Tree node, String kind, String loader, Expr className,
-                            Expr member, String signature, String note) {
+                            Expr member, String signature, String note,
+                            List<String> assumptions) {
             LinkedHashMap<String, Object> event = position(node);
             event.put("status", "accepted");
             event.put("kind", kind);
@@ -515,6 +691,7 @@ public final class JavaReflectionExtractor {
             event.put("member_expr", member.value);
             event.put("member_constant", member.constantString);
             event.put("signature", signature);
+            event.put("assumptions", List.copyOf(assumptions));
             if (note != null) {
                 event.put("note", note);
             }
@@ -548,6 +725,47 @@ public final class JavaReflectionExtractor {
                 return null;
             }
             return stringExpr(node.getArguments().get(0), env);
+        }
+
+        private String failureReason(ExpressionTree input, Env env, String fallback) {
+            if (input == null) {
+                return fallback;
+            }
+            ExpressionTree expression = strip(input);
+            if (expression instanceof IdentifierTree identifier) {
+                return env.unsupported.getOrDefault(identifier.getName().toString(), fallback);
+            }
+            if (expression instanceof BinaryTree binary) {
+                if (binary.getKind() == Tree.Kind.EQUAL_TO
+                        && stringExpr(binary.getLeftOperand(), env) != null
+                        && stringExpr(binary.getRightOperand(), env) != null) {
+                    return "unsupported_string_reference_equality";
+                }
+                String left = failureReason(binary.getLeftOperand(), env, null);
+                if (left != null) return left;
+                String right = failureReason(binary.getRightOperand(), env, null);
+                return right != null ? right : fallback;
+            }
+            if (expression instanceof ConditionalExpressionTree conditional) {
+                String condition = failureReason(conditional.getCondition(), env, null);
+                if (condition != null) return condition;
+                String yes = failureReason(conditional.getTrueExpression(), env, null);
+                if (yes != null) return yes;
+                String no = failureReason(conditional.getFalseExpression(), env, null);
+                return no != null ? no : fallback;
+            }
+            if (expression instanceof MethodInvocationTree invocation) {
+                ExpressionTree invocationReceiver = receiver(invocation);
+                if (invocationReceiver != null) {
+                    String receiverReason = failureReason(invocationReceiver, env, null);
+                    if (receiverReason != null) return receiverReason;
+                }
+                for (ExpressionTree argument : invocation.getArguments()) {
+                    String argumentReason = failureReason(argument, env, null);
+                    if (argumentReason != null) return argumentReason;
+                }
+            }
+            return fallback;
         }
 
         private Expr stringExpr(ExpressionTree input, Env env) {
@@ -607,13 +825,6 @@ public final class JavaReflectionExtractor {
                 if (left != null && right != null) {
                     return Expr.binary(op, left, right);
                 }
-                if (op.equals("eq")) {
-                    Expr leftString = stringExpr(binary.getLeftOperand(), env);
-                    Expr rightString = stringExpr(binary.getRightOperand(), env);
-                    if (leftString != null && rightString != null) {
-                        return Expr.binary(op, leftString, rightString);
-                    }
-                }
             }
             return null;
         }
@@ -629,13 +840,23 @@ public final class JavaReflectionExtractor {
             if (expression instanceof MethodInvocationTree invocation) {
                 String name = methodName(invocation);
                 ExpressionTree receiver = receiver(invocation);
-                if (name.equals("forName") && isClassName(receiver)) {
+                if (name.equals("forName") && looksLikeClassName(receiver)) {
+                    ApiDecision identity = classApiIdentity(receiver);
+                    if (!identity.accepted()) {
+                        return null;
+                    }
                     Expr className = oneStringArgument(invocation, env);
-                    return className == null ? null : new ClassRef("default", className);
+                    return className == null ? null
+                            : new ClassRef("default", className, identity.assumptions());
                 }
-                if (name.equals("loadClass") && isApplicationClassLoader(receiver)) {
+                if (name.equals("loadClass")) {
+                    ApiDecision identity = loaderApiIdentity(receiver, env);
+                    if (!identity.accepted()) {
+                        return null;
+                    }
                     Expr className = oneStringArgument(invocation, env);
-                    return className == null ? null : new ClassRef("app", className);
+                    return className == null ? null
+                            : new ClassRef(identity.loader(), className, identity.assumptions());
                 }
             }
             return null;
@@ -692,21 +913,6 @@ public final class JavaReflectionExtractor {
             return dot >= 0 ? type.substring(dot + 1) : type;
         }
 
-        private boolean isClassName(ExpressionTree receiver) {
-            if (receiver == null) {
-                return false;
-            }
-            String text = receiver.toString();
-            return text.equals("Class") || text.equals("java.lang.Class");
-        }
-
-        private boolean isApplicationClassLoader(ExpressionTree receiver) {
-            if (!(strip(receiver) instanceof MethodInvocationTree invocation)) {
-                return false;
-            }
-            return methodName(invocation).equals("getClassLoader") && invocation.getArguments().isEmpty();
-        }
-
         private String methodName(MethodInvocationTree node) {
             ExpressionTree select = node.getMethodSelect();
             if (select instanceof MemberSelectTree member) {
@@ -736,11 +942,19 @@ public final class JavaReflectionExtractor {
             return current;
         }
 
-        private boolean isClassType(Tree type) {
+        private boolean isAcceptedClassType(Tree type) {
             if (type == null) return false;
             String text = type.toString();
-            return text.equals("Class") || text.startsWith("Class<")
-                    || text.equals("java.lang.Class") || text.startsWith("java.lang.Class<");
+            if (text.equals("java.lang.Class") || text.startsWith("java.lang.Class<")) {
+                return true;
+            }
+            return isSimpleClassType(type) && policy.auditSimpleJavaLangClass() && !simpleClassShadowed;
+        }
+
+        private boolean isSimpleClassType(Tree type) {
+            if (type == null) return false;
+            String text = type.toString();
+            return text.equals("Class") || text.startsWith("Class<");
         }
 
         private boolean isClassLoaderType(Tree type) {
@@ -753,11 +967,51 @@ public final class JavaReflectionExtractor {
             return type instanceof PrimitiveTypeTree primitive
                     && primitive.getPrimitiveTypeKind().name().equals("BOOLEAN");
         }
+
+        private static boolean declaresName(CompilationUnitTree unit, String sought) {
+            for (var importTree : unit.getImports()) {
+                if (!importTree.isStatic()) {
+                    String imported = importTree.getQualifiedIdentifier().toString();
+                    if (imported.endsWith("." + sought) && !imported.equals("java.lang." + sought)) {
+                        return true;
+                    }
+                }
+            }
+            final boolean[] found = {false};
+            new TreeScanner<Void, Void>() {
+                @Override
+                public Void visitClass(ClassTree node, Void ignored) {
+                    if (node.getSimpleName().contentEquals(sought)) found[0] = true;
+                    return super.visitClass(node, ignored);
+                }
+
+                @Override
+                public Void visitVariable(VariableTree node, Void ignored) {
+                    if (node.getName().contentEquals(sought)) found[0] = true;
+                    return super.visitVariable(node, ignored);
+                }
+            }.scan(unit, null);
+            return found[0];
+        }
+
+        private static boolean declaresMethod(CompilationUnitTree unit, String sought) {
+            final boolean[] found = {false};
+            new TreeScanner<Void, Void>() {
+                @Override
+                public Void visitMethod(MethodTree node, Void ignored) {
+                    if (node.getName().contentEquals(sought)) found[0] = true;
+                    return super.visitMethod(node, ignored);
+                }
+            }.scan(unit, null);
+            return found[0];
+        }
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            System.err.println("usage: JavaReflectionExtractor <source.java> ...");
+            System.err.println("usage: JavaReflectionExtractor "
+                    + "[--audit-simple-java-lang-class] [--audit-this-application-loader] "
+                    + "<source.java> ...");
             System.exit(2);
         }
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -766,9 +1020,19 @@ public final class JavaReflectionExtractor {
         }
         DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
         List<Path> paths = new ArrayList<>();
+        boolean auditSimpleJavaLangClass = false;
+        boolean auditThisApplicationLoader = false;
         for (String arg : args) {
-            paths.add(Path.of(arg));
+            switch (arg) {
+                case "--audit-simple-java-lang-class" -> auditSimpleJavaLangClass = true;
+                case "--audit-this-application-loader" -> auditThisApplicationLoader = true;
+                default -> paths.add(Path.of(arg));
+            }
         }
+        if (paths.isEmpty()) {
+            throw new IllegalArgumentException("no Java source paths supplied");
+        }
+        Policy policy = new Policy(auditSimpleJavaLangClass, auditThisApplicationLoader);
         List<Map<String, Object>> filesOut = new ArrayList<>();
         try (StandardJavaFileManager manager = compiler.getStandardFileManager(
                 diagnostics, Locale.ROOT, StandardCharsets.UTF_8)) {
@@ -779,7 +1043,7 @@ public final class JavaReflectionExtractor {
             Trees trees = Trees.instance(task);
             SourcePositions positions = trees.getSourcePositions();
             for (CompilationUnitTree unit : units) {
-                Scanner scanner = new Scanner(unit, positions);
+                Scanner scanner = new Scanner(unit, positions, policy);
                 scanner.scan(unit, new Env());
                 LinkedHashMap<String, Object> file = new LinkedHashMap<>();
                 file.put("path", Path.of(unit.getSourceFile().toUri()).toString());
@@ -802,6 +1066,9 @@ public final class JavaReflectionExtractor {
         filesOut.sort(Comparator.comparing(file -> file.get("path").toString()));
         LinkedHashMap<String, Object> output = new LinkedHashMap<>();
         output.put("format", FORMAT);
+        output.put("policy", map(
+                "audit_simple_java_lang_class", policy.auditSimpleJavaLangClass(),
+                "audit_this_application_loader", policy.auditThisApplicationLoader()));
         output.put("files", filesOut);
         output.put("parse_errors", errors);
         System.out.println(json(output));

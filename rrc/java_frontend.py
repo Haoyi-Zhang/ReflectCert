@@ -74,6 +74,10 @@ def _load_gold() -> dict[str, Any]:
     except (OSError, ValueError) as exc:
         raise FrontendError("cannot read frontend gold inventory") from exc
     _require(type(value) is dict and value.get("format") == GOLD_FORMAT, "frontend gold format")
+    _require(value.get("extractor_policy") == {
+        "audit_simple_java_lang_class": True,
+        "audit_this_application_loader": True,
+    }, "frontend gold extractor policy")
     events = value.get("events")
     _require(type(events) is list and events, "frontend gold events")
     cases = [event.get("case") for event in events if type(event) is dict]
@@ -98,7 +102,8 @@ def _source_paths(gold: Mapping[str, Any]) -> list[Path]:
     return paths
 
 
-def run_extractor(paths: Iterable[Path]) -> dict[str, Any]:
+def run_extractor(paths: Iterable[Path], *, audit_simple_java_lang_class: bool = False,
+                  audit_this_application_loader: bool = False) -> dict[str, Any]:
     """Compile and run the Java extractor in a temporary directory."""
     paths = [Path(path).resolve() for path in paths]
     _require(bool(paths), "no Java sources supplied")
@@ -119,8 +124,13 @@ def run_extractor(paths: Iterable[Path]) -> dict[str, Any]:
         )
         if compiled.returncode != 0:
             raise FrontendError("javac failed: " + compiled.stderr.strip())
+        policy_flags = []
+        if audit_simple_java_lang_class:
+            policy_flags.append("--audit-simple-java-lang-class")
+        if audit_this_application_loader:
+            policy_flags.append("--audit-this-application-loader")
         completed = subprocess.run(
-            [java, "-cp", str(build), "JavaReflectionExtractor", *map(str, paths)],
+            [java, "-cp", str(build), "JavaReflectionExtractor", *policy_flags, *map(str, paths)],
             cwd=ARTIFACT_ROOT,
             capture_output=True,
             text=True,
@@ -136,6 +146,10 @@ def run_extractor(paths: Iterable[Path]) -> dict[str, Any]:
         raise FrontendError("Java extractor emitted invalid JSON") from exc
     _require(type(report) is dict and report.get("format") == FRONTEND_FORMAT,
              "Java extractor format")
+    _require(report.get("policy") == {
+        "audit_simple_java_lang_class": audit_simple_java_lang_class,
+        "audit_this_application_loader": audit_this_application_loader,
+    }, "Java extractor policy")
     _require(report.get("parse_errors") == [], "Java parser reported errors")
     _require(type(report.get("files")) is list, "Java extractor files")
     return report
@@ -159,7 +173,7 @@ def _report_by_relative_path(report: Mapping[str, Any]) -> dict[str, dict[str, A
 def _normalized_event(event: Mapping[str, Any]) -> dict[str, Any]:
     keys = (
         "status", "kind", "loader", "class_expr", "class_constant",
-        "member_expr", "member_constant", "signature", "offset", "end_offset",
+        "member_expr", "member_constant", "signature", "assumptions", "offset", "end_offset",
         "line", "column",
     )
     return {key: event.get(key) for key in keys}
@@ -175,6 +189,7 @@ def _gold_event(event: Mapping[str, Any]) -> dict[str, Any]:
         "member_expr": event["member_expr"],
         "member_constant": event["member"],
         "signature": event["signature"],
+        "assumptions": event.get("assumptions", []),
         "offset": event["offset"],
         "end_offset": event["end_offset"],
         "line": event["line"],
@@ -333,7 +348,11 @@ def public_frontend_evidence() -> dict[str, Any]:
         blob_results.append({"local_path": rel, "expected_blob_sha1": expected,
                              "actual_blob_sha1": actual, "matched": True})
 
-    report = run_extractor(paths)
+    report = run_extractor(
+        paths,
+        audit_simple_java_lang_class=True,
+        audit_this_application_loader=True,
+    )
     by_path = _report_by_relative_path(report)
     _require(set(by_path) == set(expected_by_path), "frontend source inventory mismatch")
 
@@ -358,6 +377,7 @@ def public_frontend_evidence() -> dict[str, Any]:
                 "line": actual["line"],
                 "column": actual["column"],
                 "kind": actual["kind"],
+                "assumptions": actual.get("assumptions", []),
                 "matched": True,
             })
             cases.append(ExtractedCase(
@@ -483,6 +503,108 @@ def runtime_probe_record() -> dict[str, Any]:
     }
 
 
+def bridge_risk_record() -> dict[str, Any]:
+    """Execute the four source-level bridge regressions and require fail-closed extraction.
+
+    These programs are independent Java executions, not finite-backend tests.  They show why
+    reference equality, compound updates, switch-carried state, and name-only API recognition
+    cannot be admitted by the syntactic bridge.  The fixed extractor must reject all seven
+    reflection-looking events while the Java programs still execute with their native meaning.
+    """
+    root = FRONTEND_ROOT / "bridge_risks"
+    paths = sorted(root.glob("*.java"))
+    _require([path.name for path in paths] == [
+        "ApiIdentityRisk.java",
+        "CompoundAssignmentRisk.java",
+        "ReferenceEqualityRisk.java",
+        "SwitchBindingRisk.java",
+    ], "bridge-risk source inventory")
+    report = run_extractor(paths)
+    by_name = {Path(record["path"]).name: record for record in report["files"]}
+    expected_rejections = {
+        "ApiIdentityRisk.java": [
+            "shadowed_class_api_receiver",
+            "shadowed_application_loader_getter",
+            "unaudited_loader_getter",
+        ],
+        "CompoundAssignmentRisk.java": [
+            "unsupported_compound_assignment",
+            "unsupported_compound_assignment",
+        ],
+        "ReferenceEqualityRisk.java": ["unsupported_string_reference_equality"],
+        "SwitchBindingRisk.java": ["unsupported_switch_state_merge"],
+    }
+    rejection_rows: list[dict[str, Any]] = []
+    for name, reasons in expected_rejections.items():
+        events = by_name[name]["events"]
+        actual = [event.get("reason") for event in events if event.get("status") == "rejected"]
+        _require(actual == reasons, f"bridge-risk rejection mismatch: {name}")
+        _require(all(event.get("status") == "rejected" for event in events),
+                 f"bridge-risk event accepted: {name}")
+        rejection_rows.append({"source": name, "reasons": reasons, "matched": True})
+
+    javac = shutil.which("javac")
+    java = shutil.which("java")
+    _require(javac is not None and java is not None, "a full JDK with javac and java is required")
+    executions = [
+        ("ReferenceEqualityRisk", ["false"], "false\ttrue\tReferenceDifferent"),
+        ("ReferenceEqualityRisk", ["true"], "false\ttrue\tReferenceDifferent"),
+        ("CompoundAssignmentRisk", ["false", "false"], "B\tB"),
+        ("CompoundAssignmentRisk", ["false", "true"], "B\tB"),
+        ("CompoundAssignmentRisk", ["true", "false"], "A\tB"),
+        ("CompoundAssignmentRisk", ["true", "true"], "A\tA"),
+        ("SwitchBindingRisk", ["false"], "B"),
+        ("SwitchBindingRisk", ["true"], "A"),
+        ("ApiIdentityRisk", [], "ShadowTarget\tLoaderTarget\tLoaderTarget"),
+    ]
+    runtime_rows: list[dict[str, Any]] = []
+    with tempfile.TemporaryDirectory(prefix="rrc-java-bridge-risks-") as temp:
+        build = Path(temp) / "classes"
+        build.mkdir()
+        compiled = subprocess.run(
+            [javac, "-encoding", "UTF-8", "-d", str(build), *map(str, paths)],
+            cwd=ARTIFACT_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=60,
+            check=False,
+        )
+        if compiled.returncode != 0:
+            raise FrontendError("bridge-risk javac failed: " + compiled.stderr.strip())
+        for main_class, arguments, expected in executions:
+            completed = subprocess.run(
+                [java, "-cp", str(build), main_class, *arguments],
+                cwd=ARTIFACT_ROOT,
+                capture_output=True,
+                text=True,
+                timeout=20,
+                check=False,
+            )
+            if completed.returncode != 0:
+                message = completed.stderr.strip() or completed.stdout.strip()
+                raise FrontendError(f"bridge-risk execution failed ({main_class}): {message}")
+            actual = completed.stdout.rstrip("\n")
+            _require(actual == expected, f"bridge-risk runtime mismatch: {main_class} {arguments}")
+            runtime_rows.append({
+                "class": main_class,
+                "arguments": arguments,
+                "output": actual,
+                "matched": True,
+            })
+    return {
+        "format": "rrc-java-bridge-risk-v1",
+        "source_files": len(paths),
+        "runtime_executions": len(runtime_rows),
+        "rejected_events": sum(len(reasons) for reasons in expected_rejections.values()),
+        "string_reference_equality_executions": 2,
+        "compound_assignment_executions": 4,
+        "switch_executions": 2,
+        "api_identity_executions": 1,
+        "rejections": rejection_rows,
+        "runtime": runtime_rows,
+    }
+
+
 def frontend_control_record() -> dict[str, Any]:
     """Run the supported-expression pilot and seven fail-closed source controls."""
     fixture_root = FRONTEND_ROOT / "fixtures"
@@ -498,7 +620,7 @@ def frontend_control_record() -> dict[str, Any]:
         "UnsupportedReceiver.java": "unresolved_class_receiver",
         "UnsupportedParameter.java": "unsupported_parameter_type_expression",
         "UnsupportedControl.java": "unsupported_control_context",
-        "UnsupportedReassignment.java": "unsupported_class_name_expression",
+        "UnsupportedReassignment.java": "unsupported_control_state_merge",
     }
     rejection_rows: list[dict[str, Any]] = []
     for name, reason in expected_rejections.items():
@@ -540,6 +662,7 @@ def frontend_control_record() -> dict[str, Any]:
         "ignored_nonreflection_controls": 1,
         "runtime_probe": runtime_probe_record(),
         "direct_call_probe": direct_call_probe_record(),
+        "bridge_risks": bridge_risk_record(),
         "accepted": accepted_rows,
         "rejected": rejection_rows,
     }

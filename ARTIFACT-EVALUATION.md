@@ -23,7 +23,8 @@ For an interrupted full run, repeat `reproduce.py` with `--resume`. Deterministi
 - input reconstruction reports no drift;
 - the result comparator reports all certificate bundles matched;
 - the release gate writes `results/release-audit.json` with `overall_status: pass`;
-- public-source reconstruction reports no manually modeled public case;
+- public-source reconstruction reports the declared split exactly: 29 source-extracted cases and 11 explicitly labeled manual finite projections;
+- no manual case is relabeled as automatic, and every automatic case carries pinned source, blob, location, expression, and audit-premise fields;
 - online reference checks may be `not-run` in an offline environment, but structural reference checks remain mandatory.
 
 ## Badge-oriented checklist
