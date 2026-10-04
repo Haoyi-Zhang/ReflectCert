@@ -5,39 +5,56 @@ source-to-model bridge, and its checked finite direct-dispatch lowering. They ar
 proof-assistant developments and do not establish a whole-program Java semantics or a
 general Java/Android invocation transformation.
 
-## P0. Restricted frontend expression and event preservation
+## P0. Restricted frontend: values, entry states, and normalized queries
 
-The accepted javac expression fragment is homomorphic on string and Boolean literals, Boolean
-parameters, simple straight-line aliases, negation, conjunction, disjunction, **Boolean** equality,
-string concatenation, and conditionals. Java `String ==`/`!=` is reference equality, so it has no
-content-equality translation and is rejected. Compound assignments and values written through an
-`if`, loop, or `switch` join also have no translation; the extractor invalidates the binding and
-rejects any later reflection use instead of reusing a stale or last-scanned value.
+The optional javac-tree bridge parses without Java type attribution or an Android classpath.
+Its theorem is conditional, not a proof that a source file is a well-typed complete application.
+For accepted expressions, let `alpha` map a non-null Java String value to its bounded ASCII
+content and a primitive Boolean to itself. The assertion is
+`alpha(J[e, sigma]) = F[T(e), rho]`: it is not equality of Java String object identities.
 
-Structural induction gives equal source-fragment and finite-DAG values for every Boolean
-assignment. Literals and parameters are immediate; aliases substitute a previously accepted
-binding; each remaining constructor applies the same typed operation to induction-hypothesis equal
-operands. Unsupported syntax contributes no induction case.
+The accepted constructors are literals, primitive Boolean parameters, simple straight-line
+bindings to previously accepted expressions, Boolean negation/conjunction/disjunction/value
+equality, String concatenation, and conditionals. The entry-state premise relates parameters
+and local bindings to `rho`. Operations are pure and total under the fragment premises;
+normalization must fit the finite node and byte limits. String `==` and `!=`, unchecked casts,
+compound assignments, and side-effecting expression/statement joins have no translation.
+Bindings written by conditional or short-circuit expressions, branches, loops, switch,
+try/catch/finally joins, or compound assignments are invalidated before downstream use.
+The scanner may find calls inside a syntactic region but does not prove that region reachable.
+An event inside a simple try body is interpreted conditional on reaching it normally; the
+post-try state is not taken from the last scanned path. Lambda bodies are not executed at
+lambda construction. Rejection is not a certificate for an empty target set.
 
-Event identity has one additional premise. Fully qualified `java.lang.Class.forName` is
-whitelisted. Simple `Class.forName` and unqualified or `this.getClassLoader()` are accepted only
-when a pinned-source audit premise identifies the former as `java.lang.Class` and the latter as the
-application loader; that premise is written into the event. Lexical shadows, arbitrary getters, and
-custom loader variables are rejected. Under the recorded premise, loader and normalized signature
-are literal-preserving, so each accepted event yields the same four-field identity in the source
-fragment and generated finite site.
+**Induction.** Literals and related parameters agree after `alpha`. An alias substitutes its
+previously accepted expression value. Negation and primitive Boolean equality preserve their
+truth functions. Conjunction/disjunction may be evaluated eagerly in the finite DAG because
+accepted operands have neither side effects nor abrupt completion; thus Java short-circuiting
+has the same value. Concatenation preserves String content, not allocation identity. A
+conditional selects the same arm under the equal Boolean guard, and its selected value agrees
+by induction. Unsupported expressions introduce no induction case. The implementation's
+conservative exclusions are regression-tested; this is not a machine-checked implementation proof.
 
-The executable evidence checks two accepted events over all four Boolean assignments, eight actual
-runtime lookup identities, and 12 reflective/direct returns. Seven original exclusion controls and
-one same-name nonreflection control test fail-closed classification. Four independent adversarial
-Java programs add nine JVM executions and seven rejected reflection-looking events covering string
-reference equality, compound assignment, `switch` state, shadowed `Class.forName`, and custom
-loader getters.
+**API premises.** The default whitelist recognizes fully qualified `java.lang.Class.forName`
+only when no lexical `java` shadow is found. Simple `Class.forName` and unqualified or
+`this.getClassLoader()` lookup require explicitly recorded, fixed-source audit premises about
+API and application-loader identity; lexical shadows and arbitrary/custom getters are rejected.
+Parsing and a whitelist do not replace Java name/type resolution. Accepted query components
+are compared under a declared normalization map for loader, class, member, and parameter
+signature. Syntactic class-literal normalization can omit qualification, and enumeration markers
+such as `<fields>` denote one finite query identity, not the actual set of reflected fields.
+The theorem therefore preserves normalized query identity under identity/normalization premises,
+not declaring-class resolution, classpath coverage, access control, initialization, receiver
+behavior, or Java invocation effects.
 
-This theorem is conditional on javac parsing, the stated syntax, and any recorded API-identity
-premise. It does not establish classpath/table completeness, access checks, initialization,
-invocation behavior, or a general Java rewrite theorem. Rejection by the bridge does not affect the
-finite-backend theorems, which start from an already fixed finite source and target table.
+**Executable evidence.** The main campaign retains 29 events from nine fixed DroidRA files,
+eight runtime lookup identities, 12 direct/reflective return comparisons, seven original
+exclusion controls, and four bridge-risk programs with nine JVM executions and seven rejected
+events. A separate journal control set adds two Java sources, two JVM executions, seven output
+observations, and four rejected events for conditional writes, short-circuit writes, exceptional
+joins, and a shadowed qualified API. The suites are reported separately and are not additional
+members of the 664-case main corpus. Changes to the optional bridge neither invalidate nor
+extend the finite-backend theorems below.
 
 ## P1. Pointwise factorized-certificate exactness
 
@@ -81,8 +98,9 @@ bounded family, not a worst-case compression theorem.
 
 ## P4. Missing-target retention soundness
 
-Fix a feasible base world `b`, site `s`, possible target `t`, and selected external
-coordinates `S`. The checker scans every feasible world `w` that agrees with `b` on `S`
+Fix a previously accepted complete summary, feasible base world `b`, site `s`, possible target
+`t`, and selected external coordinates `S`. The acceptance implementation in `rrc/witness_checker.py`
+uses a direct universal loop, not the production retention predicate. The checker scans every feasible world `w` that agrees with `b` on `S`
 and requires `t` in `Profile_s(w)`. Therefore acceptance directly implies the retention
 predicate. Since `b` itself matches and contains `t`, the universal statement is not
 vacuously true.
@@ -113,8 +131,8 @@ minimal sets.
 Consider four external bits and a target retained exactly when `(h0 and h1) or (h2 and
 h3)` is true, with an all-true base. `{0,1}` and `{2,3}` are both sufficient and
 subset-minimal. Neither contains the other, and their intersection is insufficient.
-There is no unique least witness under set inclusion. The generated family and exhaustive
-oracle instantiate this counterexample.
+There is no unique least witness under set inclusion. The generated four-coordinate family instantiates this counterexample; the label-table oracle
+checks a separate, smaller family of sufficient observations.
 
 ## P7b. Greedy subset-minimality does not imply minimum cardinality
 
@@ -136,11 +154,11 @@ checked semantic object of interest, not merely over execution inequality.
 
 ## P9. One-deletion minimality of a changed support is a different predicate
 
-A support that changes one chosen row after every individual deletion can still contain a
-strict subset that changes the aggregate profile once feasibility and existential internal
-choice are considered. The exhaustive oracle records 2,432 such model/anchor/support
-instances. This finite count corroborates the explicit counterexample; it is not the
-proof of the distinction.
+The legacy label-table oracle considers changes from an anchor to another table label.
+A changed-coordinate support can be minimal under one-coordinate reversion but not under
+arbitrary subset reversion. It records 2,432 such table/anchor/support instances. These are
+not target-retention witnesses and do not prove a minimum-cardinality result for retention.
+The separate ternary target-presence oracle directly checks the retention predicate.
 
 ## P10. Public-source strata and Java non-claims
 
@@ -178,3 +196,13 @@ versions, and compares them for all four coordinate assignments and three payloa
 return values agree. This is executable evidence for that concrete calling convention, not the
 proof of P11 and not a general Java transformation theorem.
 
+## P13. Separate finite oracle for the retention predicate
+
+For each Boolean space of zero through three coordinates, assign one of infeasible,
+target-absent, or target-present to every world. For each target-present base, enumerate all
+coordinate subsets and test universal retention directly; retain only inclusion minima.
+Independently build the minimal transversals of difference sets from target-absent feasible
+worlds. Compare both families, then check producer forward/reverse records using the separate
+acceptance implementation. The executed domain has 6,654 tables, 17,611 bases, and 35,222
+checked records, with no disagreement. This is exhaustive within that small table domain,
+not a mechanized proof, a random holdout, or an addition to the main 664 input programs.

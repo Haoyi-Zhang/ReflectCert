@@ -7,7 +7,6 @@ from typing import Any
 from .missing_witness import (
     check_missing_target_witness,
     produce_missing_target_witness,
-    retains_target,
 )
 
 TARGET = ["L", "A", "f", "()"]
@@ -34,10 +33,12 @@ def minimum_cardinality_counterexample() -> dict[str, Any]:
     for size in range(4):
         for subset in combinations(range(3), size):
             selected = set(subset)
-            if not retains_target(summary["worlds"], 0, TARGET, base, selected):
+            def sufficient(keep):
+                return all(TARGET in w["targets"][0] for w in summary["worlds"]
+                           if all(w["external"][j] == base["external"][j] for j in keep))
+            if not sufficient(selected):
                 continue
-            if any(retains_target(summary["worlds"], 0, TARGET, base, selected - {index})
-                   for index in selected):
+            if any(sufficient(selected - {index}) for index in selected):
                 continue
             minimal.append(list(subset))
     forward = produce_missing_target_witness(summary, 0, TARGET, [], 0, reverse=False)

@@ -1,0 +1,58 @@
+{
+  "alphabet": [
+    "infeasible",
+    "absent",
+    "present"
+  ],
+  "by_width": [
+    {
+      "checked_order_records": 2,
+      "mismatches": 0,
+      "multiple_minimal_families": 0,
+      "tables": 3,
+      "target_present_bases": 1,
+      "unequal_cardinality_families": 0,
+      "width": 0
+    },
+    {
+      "checked_order_records": 12,
+      "mismatches": 0,
+      "multiple_minimal_families": 0,
+      "tables": 9,
+      "target_present_bases": 6,
+      "unequal_cardinality_families": 0,
+      "width": 1
+    },
+    {
+      "checked_order_records": 216,
+      "mismatches": 0,
+      "multiple_minimal_families": 16,
+      "tables": 81,
+      "target_present_bases": 108,
+      "unequal_cardinality_families": 0,
+      "width": 2
+    },
+    {
+      "checked_order_records": 34992,
+      "mismatches": 0,
+      "multiple_minimal_families": 6752,
+      "tables": 6561,
+      "target_present_bases": 17496,
+      "unequal_cardinality_families": 1152,
+      "width": 3
+    }
+  ],
+  "checked_order_records": 35222,
+  "mismatches": 0,
+  "multiple_minimal_families": 6768,
+  "predicate": "single-target retention",
+  "tables": 6654,
+  "target_present_bases": 17611,
+  "unequal_cardinality_families": 1152,
+  "widths": [
+    0,
+    1,
+    2,
+    3
+  ]
+}

@@ -17,9 +17,9 @@ LITERATURE = ROOT / "docs" / "literature.csv"
 class BibliographyTests(unittest.TestCase):
     def test_frozen_bibliography_and_audit_match(self):
         result = verify(BIB, AUDIT, LITERATURE)
-        self.assertEqual(result["entries"], 59)
-        self.assertEqual(result["unique_dois"], 54)
-        self.assertEqual(result["no_doi_records"], 5)
+        self.assertEqual(result["entries"], 66)
+        self.assertEqual(result["unique_dois"], 60)
+        self.assertEqual(result["no_doi_records"], 6)
         self.assertGreaterEqual(result["entries"], result["minimum_required"])
 
     def test_duplicate_doi_is_rejected(self):
@@ -52,7 +52,7 @@ class BibliographyTests(unittest.TestCase):
                 self.assertTrue(fields["author"])
                 self.assertTrue(fields["title"])
                 self.assertTrue(fields["year"])
-                self.assertTrue(fields.get("journal") or fields.get("booktitle"))
+                self.assertTrue(fields.get("journal") or fields.get("booktitle") or fields.get("organization"))
 
 
 if __name__ == "__main__":

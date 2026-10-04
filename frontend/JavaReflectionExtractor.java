@@ -1,3 +1,6 @@
+import com.sun.source.tree.TryTree;
+import com.sun.source.tree.CatchTree;
+import com.sun.source.tree.LambdaExpressionTree;
 import com.sun.source.tree.ArrayAccessTree;
 import com.sun.source.tree.AssignmentTree;
 import com.sun.source.tree.BinaryTree;
@@ -206,6 +209,7 @@ public final class JavaReflectionExtractor {
         private final SourcePositions positions;
         private final Policy policy;
         private final boolean simpleClassShadowed;
+        private final boolean javaNamespaceShadowed;
         private final boolean declaresGetClassLoader;
         private final List<Map<String, Object>> events = new ArrayList<>();
         private long sequence = 0;
@@ -216,6 +220,7 @@ public final class JavaReflectionExtractor {
             this.positions = positions;
             this.policy = policy;
             this.simpleClassShadowed = declaresName(unit, "Class");
+            this.javaNamespaceShadowed = declaresName(unit, "java");
             this.declaresGetClassLoader = declaresMethod(unit, "getClassLoader");
         }
 
@@ -508,6 +513,47 @@ public final class JavaReflectionExtractor {
             return null;
         }
 
+        @Override
+        public Void visitConditionalExpression(ConditionalExpressionTree node, Env env) {
+            scan(node.getCondition(), env);
+            scanControlled(node.getTrueExpression(), env);
+            scanControlled(node.getFalseExpression(), env);
+            env.invalidate(assignedNames(node.getTrueExpression()), "unsupported_expression_state_merge");
+            env.invalidate(assignedNames(node.getFalseExpression()), "unsupported_expression_state_merge");
+            return null;
+        }
+
+        @Override
+        public Void visitBinary(BinaryTree node, Env env) {
+            if (node.getKind() == Tree.Kind.CONDITIONAL_AND
+                    || node.getKind() == Tree.Kind.CONDITIONAL_OR) {
+                scan(node.getLeftOperand(), env);
+                scanControlled(node.getRightOperand(), env);
+                env.invalidate(assignedNames(node.getRightOperand()), "unsupported_expression_state_merge");
+                return null;
+            }
+            return super.visitBinary(node, env);
+        }
+
+        @Override
+        public Void visitTry(TryTree node, Env env) {
+            // We extract query expressions at their own entry, not Java reachability.
+            // A try body may contain a supported expression; merged state is not modeled.
+            Env local = env.copy();
+            for (Tree resource : node.getResources()) scan(resource, local);
+            scan(node.getBlock(), local);
+            for (CatchTree handler : node.getCatches()) scanControlled(handler, env);
+            if (node.getFinallyBlock() != null) scanControlled(node.getFinallyBlock(), env);
+            env.invalidate(assignedNames(node), "unsupported_exception_state_merge");
+            return null;
+        }
+
+        @Override
+        public Void visitLambdaExpression(LambdaExpressionTree node, Env env) {
+            scanControlled(node.getBody(), env);
+            return null;
+        }
+
         private void scanControlled(Tree tree, Env env) {
             controlDepth++;
             try {
@@ -602,6 +648,9 @@ public final class JavaReflectionExtractor {
             }
             String text = receiver.toString();
             if (text.equals("java.lang.Class")) {
+                if (javaNamespaceShadowed) {
+                    return ApiDecision.rejected("shadowed_qualified_class_api_receiver");
+                }
                 return ApiDecision.accepted("default", List.of());
             }
             if (!text.equals("Class")) {
@@ -736,7 +785,7 @@ public final class JavaReflectionExtractor {
                 return env.unsupported.getOrDefault(identifier.getName().toString(), fallback);
             }
             if (expression instanceof BinaryTree binary) {
-                if (binary.getKind() == Tree.Kind.EQUAL_TO
+                if ((binary.getKind() == Tree.Kind.EQUAL_TO || binary.getKind() == Tree.Kind.NOT_EQUAL_TO)
                         && stringExpr(binary.getLeftOperand(), env) != null
                         && stringExpr(binary.getRightOperand(), env) != null) {
                     return "unsupported_string_reference_equality";
@@ -931,13 +980,8 @@ public final class JavaReflectionExtractor {
 
         private ExpressionTree strip(ExpressionTree input) {
             ExpressionTree current = input;
-            while (current instanceof ParenthesizedTree parenthesized
-                    || current instanceof TypeCastTree) {
-                if (current instanceof ParenthesizedTree parenthesized) {
-                    current = parenthesized.getExpression();
-                } else {
-                    current = ((TypeCastTree) current).getExpression();
-                }
+            while (current instanceof ParenthesizedTree parenthesized) {
+                current = parenthesized.getExpression();
             }
             return current;
         }

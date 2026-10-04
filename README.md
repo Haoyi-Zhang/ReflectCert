@@ -29,6 +29,7 @@ The final measured results are:
 
 - 32,139 complete Boolean assignments;
 - 14,279,992 flat-certificate bytes and 3,329,807 factorized-certificate bytes;
+- deterministic gzip-9 totals of 855,047 flat bytes and 588,640 factorized bytes; under this codec 371 factorized objects are smaller, 292 larger, and one tied;
 - 1,389,323 direct-dispatch bytes, 11,019 total dispatch nodes, and 66 nodes at maximum;
 - 78,705 independently replayed site actions: 49,891 invocations, 3,019 lookup errors,
   9,362 skipped sites, and 16,433 infeasible sites;
@@ -42,7 +43,7 @@ The final measured results are:
 - 7,186 exhaustive oracle tables, 36,992 feasible anchors, 213,952 deletion orders, and zero
   disagreement with the independent characterization;
 - five seeded certificate/dispatch/witness faults rejected, plus an invoke-all counterexample;
-- 60 unit-test methods passing.
+- 68 unit-test methods passing.
 
 The Java bridge adds bounded source evidence:
 
@@ -88,7 +89,7 @@ python compare_results.py results/measured results/reproduced
 `verify_inputs.py` reconstructs all 664 inputs, compares all 24 boundary fixtures against a
 closed-form oracle that imports neither the fixture builder nor producer/checker code, reruns the
 Java frontend and bridge-risk programs, verifies source blobs and public provenance, runs the
-lookup/direct-call probes, and checks the 59-entry bibliography audit. `reproduce.py` runs the complete finite campaign, frontend controls, Java probes, oracle,
+lookup/direct-call probes, and checks the 66-entry bibliography audit. `reproduce.py` runs the complete finite campaign, frontend controls, Java probes, oracle,
 fault controls, and bibliography check. It writes each completed case atomically; an interrupted
 campaign may resume with:
 
@@ -98,8 +99,8 @@ python reproduce.py --output results/reproduced --resume
 
 `compare_results.py` excludes host-dependent time and RSS but requires equality of deterministic
 case/summary, bibliography, frontend, negative-control and oracle records, plus all 664 complete
-evidence bundles. The retained uninterrupted measured run used 36.30 cumulative user+system CPU
-seconds for the driver and completed Java children, 26.12 wall seconds, and 140,912 KiB maximum
+evidence bundles. The retained uninterrupted measured run used 37.21 cumulative user+system CPU
+seconds for the driver and completed Java children, 26.40 wall seconds, and 140,884 KiB maximum
 resident set.
 
 ## Inspect the Java-source bridge
@@ -149,9 +150,9 @@ python verify_bibliography.py \
   --literature docs/literature.csv
 ```
 
-The verifier requires at least 55 complete scholarly records, unique keys and DOI values, and an
+The verifier requires at least 55 complete scholarly or normative records, unique keys and DOI values, and an
 exact one-to-one match with the audit and literature inventories. The paper build additionally
-checks all 59 manuscript citation keys and byte equality with the canonical standalone copy.
+checks all 66 manuscript citation keys and byte equality with the canonical standalone copy.
 
 ## Repository map
 
@@ -160,7 +161,7 @@ checks all 59 manuscript citation keys and byte equality with the canonical stan
 - `frontend/`: javac extractor, audited inventory, positive/negative controls, and runtime pilots;
 - `third_party/droidra-reflection-sources/`: nine exact upstream Java files and LGPL 2.1 notice;
 - `inputs/`: 24 fixtures, 600 generated inputs, and 40 pinned-source cases;
-- `tests/`: 60 unit-test methods, including mutation, independent fixture gold, bibliography, frontend, runtime, bridge-risk, and direct-dispatch controls;
+- `tests/`: 68 unit-test methods, including mutation, independent fixture gold, bibliography, frontend, runtime, bridge-risk, and direct-dispatch controls;
 - `results/measured/`: frozen measured records and 664 checked evidence bundles;
 - `docs/model.md`, `docs/proofs.md`, `docs/frontend.md`, and `docs/dispatch.md`: schema,
   arguments, source bridge, and dispatch contract;
@@ -172,9 +173,10 @@ checks all 59 manuscript citation keys and byte equality with the canonical stan
 
 ## Trust boundary and admission bounds
 
-The finite source validator and two independent checkers, Python runtime, javac/JVM, and host are
-trusted. Certificate/direct-dispatch/witness producers, case generator, analyzer claim, and public
-mapping are not. The Java parser/extractor and any recorded pinned-source API-identity premises form an additional
+The finite source validator, flat/factorized/dispatch/witness acceptance implementations, and
+Python runtime form the finite trust boundary. The witness checker requires an already accepted
+complete summary. Certificate/direct-dispatch/witness producers, case generator, and client claim
+are not trusted as evidence of finite semantics. The Java parser/extractor and any recorded pinned-source API-identity premises form an additional
 frontend boundary; the finite checkers do not validate general Java typing, source name resolution,
 or classpath coverage.
 
@@ -205,4 +207,37 @@ review that directory before redistribution or modification.
 
 ## Release gate
 
-`python release_gate.py --artifact-root .` performs structural, provenance, checker-independence, bibliography-inventory (when the paper is adjacent), result, and packaging checks and writes `results/release-audit.json`. See `ARTIFACT-EVALUATION.md`, `EXPERIMENT-DESIGN-AUDIT.md`, `TRUSTED-COMPUTING-BASE.md`, and `REPRODUCIBILITY.md` before interpreting a passing result.
+`sh run_release_gate.sh` is the validated clean route. It performs unit tests, input verification, full reproduction, journal recomputation, comparisons, cache cleanup, and structural release checks. The final structural step writes `results/release-audit.json`. See `ARTIFACT-EVALUATION.md`, `EXPERIMENT-DESIGN-AUDIT.md`, `TRUSTED-COMPUTING-BASE.md`, and `REPRODUCIBILITY.md` before interpreting a passing result.
+
+## Journal analysis and source boundaries
+
+This artifact accompanies the ACM TOSEM-oriented named manuscript. The original 664 finite
+programs and their certificate/dispatch/witness results are preserved. All 40 public cases remain
+explicitly split into 29 automatic events and 11 manual projections; there is no claim that all
+are automatic or that these are large applications.
+
+Run the additional deterministic analyses after reproducing the main campaign:
+
+```sh
+python journal_analysis.py --measured results/reproduced --output results/journal-reproduced
+python compare_journal.py results/journal results/journal-reproduced
+```
+
+This checks 6,654 target-presence tables separately from the inherited 7,186 complete-label
+tables. It also compiles and runs two additional Java controls, checks four rejected events,
+computes cross-root node accounting, reports per-stratum and post-hoc sensitivity results,
+compares exact compact JSON with deterministic gzip-9 transport, inventories the implementation
+trust surface, and summarizes retained per-stage CPU observations. The journal output contains 15 machine-readable files. All deterministic fields are compared exactly; retained per-stage CPU values are host observations, so comparison checks the six-stage inventory and 664-case denominator rather than requiring identical timings.
+These analyses add no cases to the main population and perform no tuning, random-sample inference,
+external analyzer comparison, or human study.
+
+`rrc/witness_checker.py` is a separate acceptance implementation, importing only trusted syntax
+utilities. The producer's retention predicate is not in this acceptance path. The bridge now
+invalidates writes in conditional expressions, short-circuit operands, and exception-state joins,
+and detects lexical `java` namespace shadowing. Casts are not erased to obtain accepted values.
+Theorem 1 relates string contents through an abstraction, under entry-state and API/normalization
+premises. Simplified type tokens and enumeration markers do not prove JVM member resolution.
+
+Read `docs/journal-method.md`, `docs/frontend.md`, and `TRUSTED-COMPUTING-BASE.md` before treating
+an accepted finite object as evidence about a concrete program. The publication checklist is
+separate from executable scientific validation; no author approval or submission is asserted.

@@ -1,28 +1,52 @@
-# Trusted Computing Base and Adversary Model
+# Trusted boundary
 
-## Security goal
+## Finite acceptance
 
-A consumer must not use a reflection target profile, missing-target explanation, or direct-dispatch action merely because the producer emitted it. The consumer accepts it only after the corresponding checker validates the artifact against the source-bound finite semantics.
+The consumer independently supplies a finite source and its ordered target table. These define
+the requested contract. Schema validation does not prove that the table covers a JVM classpath.
+The trusted specification distinguishes external worlds from internal choices, four outcome
+kinds, per-world sets, may sets, and robust possibility (forall external / exists internal).
 
-## Trusted components
+Acceptance trusts Python, JSON parsing/serialization and primitive operations, shared schema
+utilities, and the specific checker implementation. `rrc/checker.py`, `rrc/factor_checker.py`,
+`rrc/dispatch_checker.py`, and `rrc/witness_checker.py` are separately implemented acceptance
+paths. They do not invoke producer evaluation, diagram construction, lowering, or retention
+helpers. The witness checker requires an already checked summary; it is not a checker for
+arbitrary unvalidated summaries.
 
-1. The finite-language semantic specification and the declared class/member table.
-2. The independent checker implementation for the artifact being consumed.
-3. The parser/serialization layer, integer/string primitives, Python runtime, operating system, and cryptographic hash implementation used by the release gate.
-4. For source-derived cases, javac parsing/type-tree behavior and the explicit frontend acceptance predicate.
+Production algorithms, generators, deletion orders, cached results, diagram heuristics, paper
+tables, and client omission claims are not evidence of correctness by themselves. Structural
+source equality is not a cryptographic attestation, and no release-hash mechanism is claimed.
+Independence means implementation/dependency separation, not independent authorship or Coq proof.
 
-The producer, reduction heuristics, deletion order used for witnesses, benchmark generator, cached results, and paper tables are **not** trusted.
+## Optional Java bridge
 
-## Attacker capabilities exercised by tests
+The bridge additionally trusts javac parsing, the extractor, a related normal query-entry state,
+non-null ASCII value premises, intended API/loader binding, and consistent query normalization.
+A whitelist is not type attribution. Simplified signature tokens can merge distinct qualified
+types, and enumeration markers do not represent actual returned member arrays. Additional
+injectivity/coverage obligations are required to interpret tokens as concrete JVM members.
 
-- modify source-binding hashes or identifiers;
-- redirect a decision edge or alter a shared terminal;
-- change a dispatch leaf while retaining a syntactically valid object;
-- delete a necessity witness or substitute a non-matching world;
-- inject malformed, unreachable, unordered, duplicate, or cyclic graph records;
-- change public-source provenance, blob hashes, reflection-log expectations, or result summaries;
-- introduce a checker-to-producer import dependency.
+The bridge rejects known reference-equality, compound/state-merge, and API-shadow hazards.
+Neither syntactic acceptance nor the existing controls prove whole-program reachability,
+classpath completeness, arbitrary unsupported-feature detection, or Java/Android execution
+preservation. Direct dispatch preserves finite action identity only. Arguments, effects,
+initialization, access, exceptions, return values, and concurrency require separate obligations.
 
-## Non-goals
+## Fault checks and resource limits
 
-The design is not a sandbox for malicious native code, a proof of the host language/runtime, a verifier for the completeness of a whole Java classpath, or a defense against a compromised compiler/OS. Resource-exhaustion limits are interface policy and are checked separately from semantic validity.
+The seeded tests alter source fields, terminal values, direct-action leaves, and necessity
+records. Tests also cover structural graph errors and checker dependency isolation. Malformed
+witness-coordinate tests reject a Boolean identifier and a non-hashable coordinate.
+
+The design is not a sandbox, a verified parser/runtime, or a general resource-exhaustion defense.
+Schema, serialized-byte, and node limits are separate admission policies. The mathematical
+existence result is conditional on a representation fitting those limits.
+
+## Descriptive implementation inventory
+
+`results/journal/trust-surface.csv` counts nonblank, non-comment source lines for the shared schema,
+flat/factorized/direct/witness acceptance paths, untrusted producer/lowerer paths, and the optional
+Java bridge. The shared schema plus four finite acceptance paths total 644 significant source
+lines. This inventory is intended to make the partition inspectable; it is not a proof that the
+code is correct, minimal, easy to review, or free of parser/runtime defects.

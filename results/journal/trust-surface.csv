@@ -1,0 +1,9 @@
+component,files,significant_source_lines,python_ast_nodes,role
+shared schema and JSON admission,1,129,1548,trusted shared syntax/limits
+flat reference checker,1,104,1581,trusted finite reference acceptance
+factorized certificate checker,1,173,2048,trusted finite certificate acceptance
+direct-dispatch checker,1,177,1879,trusted finite action replay
+missing-target witness checker,1,61,747,trusted retention/minimality acceptance
+untrusted producers and lowerers,4,445,5021,outside the trusted base
+Python source-bridge adapter and controls,2,802,6613,optional frontend trust boundary
+javac AST extractor,1,1084,,optional frontend trust boundary

@@ -1,1 +1,9 @@
-{"audit_rows": 59, "cited_keys": 59, "entries": 59, "minimum_required": 55, "no_doi_records": 5, "status": "matched", "unique_dois": 54}
+{
+  "audit_rows": 66,
+  "cited_keys": 66,
+  "entries": 66,
+  "minimum_required": 55,
+  "no_doi_records": 6,
+  "status": "matched",
+  "unique_dois": 60
+}

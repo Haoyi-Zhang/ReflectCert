@@ -143,7 +143,7 @@ def _plain(value: str) -> str:
 
 
 def _venue(fields: Mapping[str, str]) -> str:
-    return fields.get("journal", fields.get("booktitle", ""))
+    return fields.get("journal") or fields.get("booktitle") or fields.get("organization", "")
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
@@ -181,7 +181,7 @@ def verify(
             if not fields.get(required, "").strip():
                 raise ValueError(f"{key} is missing required field {required}")
         if not _venue(fields):
-            raise ValueError(f"{key} has neither journal nor booktitle")
+            raise ValueError(f"{key} has no journal, booktitle, or issuing organization")
         doi = fields.get("doi", "").strip().lower()
         if doi:
             if not DOI_RE.fullmatch(doi):

@@ -1,0 +1,76 @@
+{
+  "main": {
+    "pages": 37,
+    "page_points": [
+      0.0,
+      0.0,
+      486.0,
+      720.0
+    ],
+    "reference_start_page": 34,
+    "data_availability_page": 34,
+    "bibliography_items": 64,
+    "figures": {
+      "figure_1": [
+        2
+      ],
+      "figure_2": [
+        17
+      ],
+      "figure_3": [
+        26
+      ],
+      "figure_4": [
+        27
+      ],
+      "figure_5": [
+        28
+      ]
+    },
+    "overfull_hboxes": 0,
+    "overfull_vboxes": 0,
+    "undefined_citations": false,
+    "undefined_references": false,
+    "city_metadata_warnings": 5,
+    "font_records": 18,
+    "visual_check": "all pages inspected in contact sheets; critical figure/table pages also inspected at page scale; no page overflow",
+    "pdf_author": ""
+  },
+  "review": {
+    "pages": 37,
+    "page_points": [
+      0.0,
+      0.0,
+      612.0,
+      792.0
+    ],
+    "reference_start_page": 34,
+    "data_availability_page": 34,
+    "bibliography_items": 64,
+    "figures": {
+      "figure_1": [
+        2
+      ],
+      "figure_2": [
+        17
+      ],
+      "figure_3": [
+        26
+      ],
+      "figure_4": [
+        28
+      ],
+      "figure_5": [
+        28
+      ]
+    },
+    "overfull_hboxes": 0,
+    "overfull_vboxes": 0,
+    "undefined_citations": false,
+    "undefined_references": false,
+    "city_metadata_warnings": 5,
+    "font_records": 18,
+    "visual_check": "all pages inspected in contact sheets; critical figure/table pages also inspected at page scale; no page overflow",
+    "pdf_author": ""
+  }
+}

@@ -1,2 +1,2 @@
-# Runtime implementation and checkers use the Python standard library.
-# coverage.py is optional and used only to regenerate results/coverage.json.
+# Runtime checkers, main reproduction, and journal analysis use the Python standard library.
+# A full JDK is required for source/JVM controls; TeX Live is required only for the paper.

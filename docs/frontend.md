@@ -17,7 +17,8 @@ source location under the syntax and identity premises below.
 
 ## Accepted source fragment
 
-The default API whitelist recognizes fully qualified `java.lang.Class.forName(name)`. For exact
+The default API whitelist recognizes fully qualified `java.lang.Class.forName(name)` only
+when no lexical declaration shadows `java`. It is a syntactic policy, not type attribution. For exact
 pinned sources, two optional audit policies may additionally accept:
 
 - simple `Class.forName(name)`, provided an external audit establishes that `Class` resolves to
@@ -40,7 +41,10 @@ rejected as `unsupported_string_reference_equality`.
 
 Only local declarations and simple `=` bindings are modeled. Compound assignments such as `+=`,
 `&=`, and `|=` invalidate the affected binding. A binding written in an `if`, loop, or `switch`
-is invalidated before a later reflection use because this bridge does not model the join. Dynamic
+is invalidated before a later reflection use because this bridge does not model the join.
+The same rule applies to writes in conditional/short-circuit expressions and try/catch/finally
+regions. An extracted try-body query is conditional on reaching that location normally; no
+post-try state or exception propagation is inferred. Unchecked casts are not erased. Dynamic
 parameter-type expressions are rejected; accepted signatures use syntactic class literals or an
 explicit empty class array. javac may fold constant string expressions in its parse tree, so
 `"setIme" + "i"` may be emitted as the literal `"setImei"`; this is compiler-AST normalization,
@@ -56,6 +60,9 @@ not a post-hoc value guess.
 | `+=` or Boolean compound assignment feeding reflection | `unsupported_compound_assignment` |
 | binding written by branch/loop state merge | `unsupported_control_state_merge` |
 | binding written by `switch`/switch expression | `unsupported_switch_state_merge` |
+| conditional / short-circuit expression writes | `unsupported_expression_state_merge` |
+| try/catch/finally writes used after the join | `unsupported_exception_state_merge` |
+| lexical `java` shadow before qualified API | `shadowed_qualified_class_api_receiver` |
 | custom loader variable | `unsupported_loader_receiver` |
 | arbitrary/custom loader getter | `unaudited_loader_getter` or `shadowed_application_loader_getter` |
 | shadowed simple `Class.forName` | `shadowed_class_api_receiver` |
@@ -82,7 +89,8 @@ accepted javac expression and `F[T(e)]_rho` for the generated finite DAG node:
 - loader and normalized signature are finite literals, under any recorded API-identity premise.
 
 **Expression preservation.** For every accepted expression `e` and Boolean assignment `rho`,
-`J[e]_rho = F[T(e)]_rho`. The proof is structural induction. String reference equality, compound
+`alpha(J[e, sigma]) = F[T(e)]_rho`, under the stated entry-state relation. Here `alpha`
+extracts ASCII String content and preserves primitive Boolean values; Java object identity is not preserved. The proof is structural induction for pure, normally evaluating accepted expressions. String reference equality, compound
 assignment, and statement-control joins are outside the grammar, so they provide no induction case
 and cause rejection.
 
@@ -152,3 +160,34 @@ the frontend trust boundary. The finite producer remains untrusted. `rrc/factor_
 `rrc/dispatch_checker.py` independently validate the generated finite objects, but neither
 validates javac, Java name resolution, or the source-to-model theorem. The static gold inventory
 detects source/extractor drift and records premises; it is not used to construct finite programs.
+
+
+## Journal contract alignment
+
+The statement in the accompanying manuscript uses an explicit abstraction alpha from non-null
+bounded ASCII Java strings to their contents. Its entry-state and API/loader premises are
+assumptions, not consequences of parsing or a source whitelist. Signature normalization may
+collapse distinct qualified type names; enumeration tokens are query markers, not returned JVM
+member arrays. Interpreting them as concrete members needs additional injectivity/coverage.
+
+Casts are not erased for acceptance. Conditional and short-circuit expression writes invalidate
+subsequent dependent bindings; exception-state joins do not inherit a last scanned catch branch;
+lexical `java` shadowing defeats the qualified API whitelist. Lambda bodies are scanned under a
+non-executed control context. New controls have two actual JVM runs and four rejected events.
+The original 29 automatic/11 manual public split and all finite results remain unchanged.
+
+Witness acceptance resides in `rrc/witness_checker.py`, separate from the generation predicate.
+The dedicated target-presence oracle is not the inherited complete-label/changed-support oracle.
+See `docs/journal-method.md` and `FORMAL-CLAIM-AUDIT.md` for the exact denominators and proof scope.
+
+## Query normalization and additional controls
+
+The preserved event is a normalized query tuple, not proof of JVM lookup or declaring-class
+resolution. Class-literal parameter normalization and array-query markers are explicit finite
+conventions. They require an identity/normalization premise before being interpreted as Java
+member identity. The theorem and premises are detailed in `docs/proofs.md`, P0.
+
+`rrc/journal_bridge.py` compiles the two self-contained sources in `frontend/journal_controls/`
+and executes both. Seven runtime output lines are checked; the extractor must reject four
+associated events. `results/journal/bridge-controls.json` retains values and reasons. This is
+separate from the four legacy risk programs/nine executions/seven rejections in the main campaign.

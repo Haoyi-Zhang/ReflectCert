@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .schema import exact_keys, require, strict_equal
+from .schema import strict_equal
 
 
 def _contains(world: dict[str, Any], site: int, target: list[str]) -> bool:
@@ -50,42 +50,10 @@ def produce_missing_target_witness(summary: dict[str, Any], site: int, target: l
 
 
 def check_missing_target_witness(summary: dict[str, Any], evidence: Any) -> bool:
-    exact_keys(evidence, {"site", "claimed_targets", "target", "base", "selected", "necessity"},
-               "missing-target witness")
-    worlds = summary["worlds"]
-    site = evidence["site"]
-    require(type(site) is int and 0 <= site < len(summary["may"]), "missing-target site")
-    target = evidence["target"]
-    require(type(target) is list and len(target) == 4 and all(type(field) is str for field in target),
-            "missing-target identity")
-    claimed = evidence["claimed_targets"]
-    require(type(claimed) is list, "claimed target set")
-    require(all(type(candidate) is list and len(candidate) == 4 and
-                all(type(field) is str for field in candidate) for candidate in claimed),
-            "claimed target identity")
-    require(claimed == sorted(claimed) and len({tuple(candidate) for candidate in claimed}) == len(claimed),
-            "claimed target canonical form")
-    actual_may = {tuple(candidate) for candidate in summary["may"][site]}
-    require(all(tuple(candidate) in actual_may for candidate in claimed), "claimed target outside exact set")
-    require(not any(strict_equal(candidate, target) for candidate in claimed), "target is not omitted")
-    require(tuple(target) in actual_may, "target is not possible")
-    by_id = {world["index"]: world for world in worlds}
-    base_index = evidence["base"]
-    require(type(base_index) is int and base_index in by_id, "missing-target base")
-    base = by_id[base_index]
-    require(_contains(base, site, target), "base lacks missing target")
-    selected = evidence["selected"]
-    require(type(selected) is list and selected == sorted(set(selected)), "selected coordinates")
-    require(all(type(index) is int and 0 <= index < len(base["external"]) for index in selected),
-            "selected coordinate bound")
-    require(retains_target(worlds, site, target, base, set(selected)), "slice does not retain target")
-    necessity = evidence["necessity"]
-    require(type(necessity) is list and len(necessity) == len(selected), "necessity coverage")
-    for index, witness in zip(selected, necessity):
-        exact_keys(witness, {"removed", "world"}, "missing-target necessity")
-        require(witness["removed"] == index and type(witness["world"]) is int and witness["world"] in by_id,
-                "necessity identity")
-        world = by_id[witness["world"]]
-        require(_matches(world, base, set(selected) - {index}) and not _contains(world, site, target),
-                "false missing-target necessity")
-    return True
+    """Compatibility entry point; the acceptance implementation is separate.
+
+    ``summary`` must be obtained from a successful finite certificate check.
+    Neither this wrapper nor the independent checker invokes production helpers.
+    """
+    from .witness_checker import check_missing_target_witness as independent_check
+    return independent_check(summary, evidence)

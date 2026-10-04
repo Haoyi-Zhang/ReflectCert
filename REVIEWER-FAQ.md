@@ -24,6 +24,21 @@ It means inclusion-minimal. The artifact proves sufficiency and supplies a neces
 
 No such theorem is claimed. The checker proves equality of finite action identities. JVM probes cover a declared calling convention; broader observational equivalence requires additional assumptions and evidence.
 
-## Are 59 references present merely to satisfy a count?
+## Are 66 reference records present merely to satisfy a count?
 
 The release gate requires every entry to be cited, rejects duplicate DOI values and missing keys, and emits structural and online metadata audits. The human authors must still verify that every citation supports the sentence in which it appears.
+
+## Does generic compression explain the reported size reduction?
+
+Partly. On exact compact JSON the aggregate flat/factorized ratio is 4.29, but deterministic
+gzip-9 reduces it to 1.45; only 371 of 664 factorized objects remain smaller, 292 are larger, and
+one ties. The manuscript reports both regimes. The certificate's semantic benefit is structured,
+source-bound sharing with independently checked roots, not a claim that it always beats an
+ordinary compressor or every wire envelope.
+
+## Is the checker demonstrably small or fast?
+
+The artifact publishes descriptive source-line counts for the shared schema, four checker paths,
+producers/lowerers, and optional Java bridge, plus retained per-stage CPU observations. These
+numbers improve auditability but are not assurance measures or cross-tool benchmarks. The finite
+checker still exhaustively enumerates assignments and remains exponential in declared width.

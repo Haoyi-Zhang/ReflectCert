@@ -1,0 +1,56 @@
+{
+  "jvm_executions": 2,
+  "observed_output_rows": 7,
+  "rejected_events": 4,
+  "rejections": [
+    {
+      "matched": true,
+      "reasons": [
+        "unsupported_expression_state_merge",
+        "unsupported_expression_state_merge",
+        "unsupported_exception_state_merge"
+      ],
+      "source": "frontend/journal_controls/JournalBridgeControls.java"
+    },
+    {
+      "matched": true,
+      "reasons": [
+        "shadowed_qualified_class_api_receiver"
+      ],
+      "source": "frontend/journal_controls/QualifiedApiShadow.java"
+    }
+  ],
+  "runtime": [
+    {
+      "expected_stdout": [
+        "conditional,false,java.lang.Integer",
+        "short-circuit,false,java.lang.Integer",
+        "exception,false,java.lang.String",
+        "conditional,true,java.lang.String",
+        "short-circuit,true,java.lang.String",
+        "exception,true,java.lang.Integer"
+      ],
+      "matched": true,
+      "program": "JournalBridgeControls",
+      "stdout": [
+        "conditional,false,java.lang.Integer",
+        "short-circuit,false,java.lang.Integer",
+        "exception,false,java.lang.String",
+        "conditional,true,java.lang.String",
+        "short-circuit,true,java.lang.String",
+        "exception,true,java.lang.Integer"
+      ]
+    },
+    {
+      "expected_stdout": [
+        "qualified-shadow,java.lang.String"
+      ],
+      "matched": true,
+      "program": "QualifiedApiShadow",
+      "stdout": [
+        "qualified-shadow,java.lang.String"
+      ]
+    }
+  ],
+  "source_files": 2
+}
