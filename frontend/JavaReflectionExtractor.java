@@ -214,6 +214,7 @@ public final class JavaReflectionExtractor {
         private final List<Map<String, Object>> events = new ArrayList<>();
         private long sequence = 0;
         private int controlDepth = 0;
+        private int classContextDepth = 0;
 
         Scanner(CompilationUnitTree unit, SourcePositions positions, Policy policy) {
             this.unit = unit;
@@ -235,6 +236,18 @@ public final class JavaReflectionExtractor {
         }
 
         @Override
+        public Void visitClass(ClassTree node, Env ignored) {
+            // Class members cannot overwrite bindings in an enclosing method.
+            int previousClassContext = classContextDepth;
+            classContextDepth++;
+            try {
+                return super.visitClass(node, new Env());
+            } finally {
+                classContextDepth = previousClassContext;
+            }
+        }
+
+        @Override
         public Void visitMethod(MethodTree node, Env ignored) {
             Env env = new Env();
             for (VariableTree parameter : node.getParameters()) {
@@ -253,7 +266,16 @@ public final class JavaReflectionExtractor {
             }
             BlockTree body = node.getBody();
             if (body != null) {
-                scan(body, env);
+                int previousControl = controlDepth;
+                int previousClassContext = classContextDepth;
+                controlDepth = 0;
+                classContextDepth = 0;
+                try {
+                    scan(body, env);
+                } finally {
+                    controlDepth = previousControl;
+                    classContextDepth = previousClassContext;
+                }
             }
             return null;
         }
@@ -314,6 +336,10 @@ public final class JavaReflectionExtractor {
 
             String name = methodName(node);
             ExpressionTree receiver = receiver(node);
+            if (classContextDepth > 0 && isReflectionCandidate(name, receiver, env)) {
+                reject(node, reflectionKind(name), "unsupported_class_context");
+                return null;
+            }
             if (controlDepth > 0 && isReflectionCandidate(name, receiver, env)) {
                 reject(node, reflectionKind(name), "unsupported_control_context");
                 return null;

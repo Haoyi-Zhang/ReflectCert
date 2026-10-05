@@ -39,7 +39,10 @@ straight-line Boolean aliases, `!`, `&&`, `||`, and primitive-boolean `==`/`!=`.
 are reference comparisons and are **not** translated to finite content equality. A recognized use is
 rejected as `unsupported_string_reference_equality`.
 
-Only local declarations and simple `=` bindings are modeled. Compound assignments such as `+=`,
+Only method-local declarations and simple `=` bindings are modeled. Class members use a separate
+environment: a local or anonymous class cannot replace an enclosing method's bindings. Reflection
+in field initializers or class initializer blocks is rejected as `unsupported_class_context`;
+each method body starts its own environment and control context. Compound assignments such as `+=`,
 `&=`, and `|=` invalidate the affected binding. A binding written in an `if`, loop, or `switch`
 is invalidated before a later reflection use because this bridge does not model the join.
 The same rule applies to writes in conditional/short-circuit expressions and try/catch/finally
@@ -70,6 +73,7 @@ not a post-hoc value guess.
 | class value not created by an accepted lookup | `unresolved_class_receiver` |
 | dynamic parameter-type expression | `unsupported_parameter_type_expression` |
 | reflection expression inside unsupported statement control | `unsupported_control_context` |
+| reflection in a field or class initializer | `unsupported_class_context` |
 | ordinary same-named method on a nonreflection receiver | no reflection event |
 
 The extractor scans unsupported branches only to locate reflection-looking operations and stable
