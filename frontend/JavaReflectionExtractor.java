@@ -168,6 +168,7 @@ public final class JavaReflectionExtractor {
         final Set<String> classTyped = new HashSet<>();
         final Set<String> unauditedClassTyped = new HashSet<>();
         final Set<String> loaderTyped = new HashSet<>();
+        final Set<String> locals = new HashSet<>();
 
         Env copy() {
             Env out = new Env();
@@ -178,7 +179,32 @@ public final class JavaReflectionExtractor {
             out.classTyped.addAll(classTyped);
             out.unauditedClassTyped.addAll(unauditedClassTyped);
             out.loaderTyped.addAll(loaderTyped);
+            out.locals.addAll(locals);
             return out;
+        }
+
+        // Restore only declarations whose lexical scope ended, not outer writes.
+        void restoreDeclarations(Collection<String> names, Env entry) {
+            for (String name : names) {
+                restore(strings, entry.strings, name);
+                restore(classes, entry.classes, name);
+                restore(booleans, entry.booleans, name);
+                restore(unsupported, entry.unsupported, name);
+                restore(classTyped, entry.classTyped, name);
+                restore(unauditedClassTyped, entry.unauditedClassTyped, name);
+                restore(loaderTyped, entry.loaderTyped, name);
+                restore(locals, entry.locals, name);
+            }
+        }
+
+        private static <T> void restore(Map<String, T> target, Map<String, T> entry, String name) {
+            target.remove(name);
+            if (entry.containsKey(name)) target.put(name, entry.get(name));
+        }
+
+        private static void restore(Set<String> target, Set<String> entry, String name) {
+            target.remove(name);
+            if (entry.contains(name)) target.add(name);
         }
 
         void invalidate(Collection<String> names, String reason) {
@@ -252,6 +278,7 @@ public final class JavaReflectionExtractor {
             Env env = new Env();
             for (VariableTree parameter : node.getParameters()) {
                 String parameterName = parameter.getName().toString();
+                env.locals.add(parameterName);
                 if (isBooleanType(parameter.getType())) {
                     env.booleans.put(parameterName, Expr.input(parameterName));
                 }
@@ -281,8 +308,29 @@ public final class JavaReflectionExtractor {
         }
 
         @Override
+        public Void visitBlock(BlockTree node, Env env) {
+            Env entry = env.copy();
+            try {
+                return super.visitBlock(node, env);
+            } finally {
+                env.restoreDeclarations(declaredNames(node.getStatements()), entry);
+            }
+        }
+
+        private Set<String> declaredNames(Collection<? extends Tree> statements) {
+            Set<String> names = new HashSet<>();
+            for (Tree statement : statements) {
+                if (statement instanceof VariableTree variable) {
+                    names.add(variable.getName().toString());
+                }
+            }
+            return names;
+        }
+
+        @Override
         public Void visitVariable(VariableTree node, Env env) {
             String name = node.getName().toString();
+            if (classContextDepth == 0) env.locals.add(name);
             // A declaration shadows any tracked binding with the same name.
             env.strings.remove(name);
             env.classes.remove(name);
@@ -312,7 +360,13 @@ public final class JavaReflectionExtractor {
             scan(node.getExpression(), env);
             ExpressionTree variable = strip(node.getVariable());
             if (variable instanceof IdentifierTree identifier) {
-                bind(identifier.getName().toString(), node.getExpression(), env);
+                String name = identifier.getName().toString();
+                if (env.locals.contains(name)) {
+                    bind(name, node.getExpression(), env);
+                } else {
+                    // A bare field assignment is not a method-local binding.
+                    env.invalidate(List.of(name), "unsupported_field_assignment");
+                }
             }
             return null;
         }
@@ -467,26 +521,33 @@ public final class JavaReflectionExtractor {
 
         @Override
         public Void visitForLoop(ForLoopTree node, Env env) {
-            for (var initializer : node.getInitializer()) {
-                scan(initializer, env);
-            }
-            Env local = env.copy();
-            controlDepth++;
+            Env entry = env.copy();
             try {
-                if (node.getCondition() != null) scan(node.getCondition(), local);
-                scan(node.getStatement(), local);
-                for (var update : node.getUpdate()) scan(update, local);
+                for (var initializer : node.getInitializer()) {
+                    scan(initializer, env);
+                }
+                Env local = env.copy();
+                controlDepth++;
+                try {
+                    if (node.getCondition() != null) scan(node.getCondition(), local);
+                    scan(node.getStatement(), local);
+                    for (var update : node.getUpdate()) scan(update, local);
+                } finally {
+                    controlDepth--;
+                }
+                env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
             } finally {
-                controlDepth--;
+                env.restoreDeclarations(declaredNames(node.getInitializer()), entry);
             }
-            env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
             return null;
         }
 
         @Override
         public Void visitEnhancedForLoop(EnhancedForLoopTree node, Env env) {
             scan(node.getExpression(), env);
-            scanControlled(node.getStatement(), env);
+            Env local = env.copy();
+            scan(node.getVariable(), local);
+            scanControlled(node.getStatement(), local);
             env.invalidate(assignedNames(node), "unsupported_loop_state_merge");
             return null;
         }

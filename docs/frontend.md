@@ -53,6 +53,22 @@ explicit empty class array. javac may fold constant string expressions in its pa
 `"setIme" + "i"` may be emitted as the literal `"setImei"`; this is compiler-AST normalization,
 not a post-hoc value guess.
 
+Local bindings follow the block and `for` declaration scopes in
+[JLS 6.3](https://docs.oracle.com/javase/specs/jls/se21/html/jls-6.html#jls-6.3).
+A block-local declaration expires on leaving its declaring block; a basic-`for`
+initializer declaration expires on leaving the loop. The enhanced-`for` variable is
+local to the loop body. Scope exit restores only those declarations, including
+their string/Boolean/class bindings, type markers, and rejection state. Writes
+and conservative invalidations of other, outer locals remain in effect.
+Consequently a local can shadow a field inside a block but cannot supply a later
+field read. Field values and assignments remain outside the accepted fragment:
+assigning a bare name with no live local declaration cannot create a local binding.
+Qualified field reads are not made into local aliases. These rules do not add
+symbol attribution or support for arbitrary Java flow-scoped pattern variables.
+`tests/test_block_scope.py` contains benign scope regressions that compile each
+fixture before extraction, plus a local JVM check distinguishing an expired local
+from a later field read.
+
 ## Fail-closed controls
 
 | Pattern | Required result |
@@ -74,6 +90,8 @@ not a post-hoc value guess.
 | dynamic parameter-type expression | `unsupported_parameter_type_expression` |
 | reflection expression inside unsupported statement control | `unsupported_control_context` |
 | reflection in a field or class initializer | `unsupported_class_context` |
+| expired string/Boolean local followed by field-dependent class lookup | `unsupported_class_name_expression` |
+| bare field assignment used as a class-name binding | `unsupported_field_assignment` |
 | ordinary same-named method on a nonreflection receiver | no reflection event |
 
 The extractor scans unsupported branches only to locate reflection-looking operations and stable

@@ -14,16 +14,23 @@ filesystem ordering, PDF timestamps, and temporary compiler paths are not equali
 5. **Paper audit:** rebuild both PDF views and verify references, fonts, warnings, numerical claims,
    and rendered-page integrity.
 
-The validated one-command artifact route is:
+The retained release wrapper is:
 
 ```sh
 sh run_release_gate.sh
 ```
 
 The wrapper sets `PYTHONDONTWRITEBYTECODE=1`, removes only Python bytecode caches before and after
-execution, runs 68 unit tests, verifies all inputs, reproduces and compares the 664 evidence
+execution, runs the discovered unit suite, verifies all inputs, reproduces and compares the 664 evidence
 bundles, recomputes all journal analyses, compares every deterministic field, checks the six-stage timing
 inventory without requiring host-identical CPU values, and finally runs the structural release gate. Cache cleanup prevents a successful test run from making a later package-hygiene check fail.
+
+For a fresh post-repair scientific run, use the project-level
+`../.github/workflows/scientific-checks.yml`. Unlike the retained wrapper, it
+does not resume an existing campaign. It uses isolated `RUNNER_TEMP` output,
+preserves stdout/stderr and partial results, and separates measured current source
+counts from historical journal outcomes. The paper build and release packaging
+remain a separate integration step.
 
 To inspect the stages separately:
 
@@ -34,7 +41,7 @@ python verify_inputs.py
 python reproduce.py --output results/reproduced
 python compare_results.py results/measured results/reproduced
 python journal_analysis.py --measured results/reproduced --output results/journal-reproduced
-python compare_journal.py results/journal results/journal-reproduced
+python compare_journal.py results/journal results/journal-reproduced --current-source-surface
 python release_gate.py --artifact-root .
 ```
 

@@ -43,7 +43,8 @@ The final measured results are:
 - 7,186 exhaustive oracle tables, 36,992 feasible anchors, 213,952 deletion orders, and zero
   disagreement with the independent characterization;
 - five seeded certificate/dispatch/witness faults rejected, plus an invoke-all counterexample;
-- 68 unit-test methods passing.
+- the retained campaign reported 68 passing unit-test methods; later scope and comparison
+  regressions are separate from that historical result.
 
 The Java bridge adds bounded source evidence:
 
@@ -105,6 +106,36 @@ resident set.
 
 ## Inspect the Java-source bridge
 
+The project-level `../.github/workflows/scientific-checks.yml` prepares a manual,
+fresh scientific check on Ubuntu with Python 3.12 and Temurin 21. It copies
+`artifact/` into an isolated `RUNNER_TEMP` work area, runs the full
+unit suite, input and bibliography checks, and regenerates all 664 bundles without
+`--resume`. It retains generated results and each stage's stdout/stderr as a
+workflow artifact, including available partial outputs on failure, with a
+30-minute job timeout. The workflow is prepared, not evidence of a completed run.
+The entire scientific stage sequence shares a 20-minute timeout, with TERM followed
+by KILL after at most 30 seconds and a 22-minute step guard. Logs are initialized
+before tool setup; the combined raw experiment output and actual pipeline exit
+codes are retained along with stage logs. The upload step uses `always()` so an
+ordinary experiment failure or internal timeout does not skip available evidence.
+It checks the standalone artifact bibliography; manuscript bibliography
+alignment and PDF compilation remain part of paper integration.
+
+After the campaign comparison, its journal commands use a fresh results subdirectory:
+
+```sh
+python journal_analysis.py --measured results/reproduced --output results/journal-reproduced
+python compare_journal.py results/journal results/journal-reproduced --current-source-surface
+```
+
+`--current-source-surface` validates both the new JSON and CSV source counts
+against `journal_analysis.trust_surface()` on the current checkout. It reports
+these descriptive counts separately from the retained baseline and still compares
+all other deterministic journal outcomes. Without that option the original exact
+source-count comparison remains in force. Frozen campaign/journal records are
+not rewritten to claim a post-repair run. The manuscript surface table describes
+current source counts; it is not a new Java validation result.
+
 The extractor parses source with the public javac tree API and requires no Android classpath:
 
 ```sh
@@ -161,7 +192,9 @@ checks all 66 manuscript citation keys and byte equality with the canonical stan
 - `frontend/`: javac extractor, audited inventory, positive/negative controls, and runtime pilots;
 - `third_party/droidra-reflection-sources/`: nine exact upstream Java files and LGPL 2.1 notice;
 - `inputs/`: 24 fixtures, 600 generated inputs, and 40 pinned-source cases;
-- `tests/`: 68 unit-test methods, including mutation, independent fixture gold, bibliography, frontend, runtime, bridge-risk, and direct-dispatch controls;
+- `tests/`: mutation, independent fixture gold, bibliography, frontend, runtime,
+  bridge-risk, block-scope, journal-comparison, and direct-dispatch controls; discover
+  the current inventory with `python -m unittest discover -s tests -v`;
 - `results/measured/`: frozen measured records and 664 checked evidence bundles;
 - `docs/model.md`, `docs/proofs.md`, `docs/frontend.md`, and `docs/dispatch.md`: schema,
   arguments, source bridge, and dispatch contract;
