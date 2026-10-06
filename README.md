@@ -25,7 +25,7 @@ The frozen campaign contains exactly 664 cases:
 | Manual pinned-source projections | 11 | DroidBench operations whose source is not redistributed here |
 | Java-source-extracted cases | 29 | Events extracted from nine exact DroidRA Java files |
 
-The final measured results are:
+The finite results are:
 
 - 32,139 complete Boolean assignments;
 - 14,279,992 flat-certificate bytes and 3,329,807 factorized-certificate bytes;
@@ -43,8 +43,8 @@ The final measured results are:
 - 7,186 exhaustive oracle tables, 36,992 feasible anchors, 213,952 deletion orders, and zero
   disagreement with the independent characterization;
 - five seeded certificate/dispatch/witness faults rejected, plus an invoke-all counterexample;
-- the retained campaign reported 68 passing unit-test methods; later scope and comparison
-  regressions are separate from that historical result.
+- the current Linux/JDK run passes 96 unit-test methods without skips; the earlier
+  68-test result remains a historical record. Current outputs are in `results/current/`.
 
 The Java bridge adds bounded source evidence:
 

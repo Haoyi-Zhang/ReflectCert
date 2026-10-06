@@ -1,0 +1,309 @@
+Python 3.12.14
+openjdk version "21.0.12.1" 2026-08-18 LTS
+OpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS, mixed mode, sharing)
+javac 21.0.12.1
+test_audit_inventory_omission_is_rejected (test_bibliography.BibliographyTests.test_audit_inventory_omission_is_rejected) ... ok
+test_duplicate_doi_is_rejected (test_bibliography.BibliographyTests.test_duplicate_doi_is_rejected) ... ok
+test_frozen_bibliography_and_audit_match (test_bibliography.BibliographyTests.test_frozen_bibliography_and_audit_match) ... ok
+test_required_bibliographic_fields_are_present (test_bibliography.BibliographyTests.test_required_bibliographic_fields_are_present) ... ok
+test_basic_for_initializer_local_expires (test_block_scope.BlockScopeTests.test_basic_for_initializer_local_expires) ... ok
+test_enhanced_for_local_does_not_leak (test_block_scope.BlockScopeTests.test_enhanced_for_local_does_not_leak) ... ok
+test_expired_block_local_then_field_matches_jvm_boundary (test_block_scope.BlockScopeTests.test_expired_block_local_then_field_matches_jvm_boundary) ... ok
+test_expired_boolean_local_cannot_supply_field_condition (test_block_scope.BlockScopeTests.test_expired_boolean_local_cannot_supply_field_condition) ... ok
+test_expired_class_handle_and_type_do_not_identify_field (test_block_scope.BlockScopeTests.test_expired_class_handle_and_type_do_not_identify_field) ... ok
+test_expired_loader_type_does_not_identify_field (test_block_scope.BlockScopeTests.test_expired_loader_type_does_not_identify_field) ... ok
+test_expired_unaudited_class_type_does_not_identify_field (test_block_scope.BlockScopeTests.test_expired_unaudited_class_type_does_not_identify_field) ... ok
+test_field_assignment_after_expired_local_is_not_local (test_block_scope.BlockScopeTests.test_field_assignment_after_expired_local_is_not_local) ... ok
+test_field_before_local_declaration_is_not_the_later_local (test_block_scope.BlockScopeTests.test_field_before_local_declaration_is_not_the_later_local) ... ok
+test_later_local_declaration_does_not_inherit_expired_local (test_block_scope.BlockScopeTests.test_later_local_declaration_does_not_inherit_expired_local) ... ok
+test_local_shadows_field_only_inside_block (test_block_scope.BlockScopeTests.test_local_shadows_field_only_inside_block) ... ok
+test_nested_blocks_expire_at_the_declaring_block (test_block_scope.BlockScopeTests.test_nested_blocks_expire_at_the_declaring_block) ... ok
+test_outer_control_invalidation_survives_block_exit (test_block_scope.BlockScopeTests.test_outer_control_invalidation_survives_block_exit) ... ok
+test_outer_local_assignment_survives_block_exit (test_block_scope.BlockScopeTests.test_outer_local_assignment_survives_block_exit) ... ok
+test_outer_parameter_assignment_survives_block_exit (test_block_scope.BlockScopeTests.test_outer_parameter_assignment_survives_block_exit) ... ok
+test_qualified_field_is_not_shadowed_by_local (test_block_scope.BlockScopeTests.test_qualified_field_is_not_shadowed_by_local) ... ok
+test_sibling_blocks_have_separate_declarations (test_block_scope.BlockScopeTests.test_sibling_blocks_have_separate_declarations) ... ok
+test_unsupported_reason_does_not_leak_from_expired_local (test_block_scope.BlockScopeTests.test_unsupported_reason_does_not_leak_from_expired_local) ... ok
+test_value_copied_to_outer_local_survives_source_local_expiry (test_block_scope.BlockScopeTests.test_value_copied_to_outer_local_survives_source_local_expiry) ... ok
+test_all_authored_fixture_rows_match_independent_closed_form_gold (test_certificate.CertificateTests.test_all_authored_fixture_rows_match_independent_closed_form_gold) ... ok
+test_all_but_largest_fixture (test_certificate.CertificateTests.test_all_but_largest_fixture) ... ok
+test_assignment_duplication (test_certificate.CertificateTests.test_assignment_duplication) ... ok
+test_assignment_omission (test_certificate.CertificateTests.test_assignment_omission) ... ok
+test_boolean_integer_confusion (test_certificate.CertificateTests.test_boolean_integer_confusion) ... ok
+test_boolean_row_index (test_certificate.CertificateTests.test_boolean_row_index) ... ok
+test_bundle_has_no_silent_unknown_fields (test_certificate.CertificateTests.test_bundle_has_no_silent_unknown_fields) ... ok
+test_byte_bound (test_certificate.CertificateTests.test_byte_bound) ... ok
+test_choice_constrained_feasibility (test_certificate.CertificateTests.test_choice_constrained_feasibility) ... ok
+test_cli_checker_binds_source_first (test_certificate.CertificateTests.test_cli_checker_binds_source_first) ... ok
+test_constant_join_retains_equal_branches (test_certificate.CertificateTests.test_constant_join_retains_equal_branches) ... ok
+test_direct_dispatch_executes_only_selected_target (test_certificate.CertificateTests.test_direct_dispatch_executes_only_selected_target) ... ok
+test_direct_dispatch_matches_source_all_fixtures (test_certificate.CertificateTests.test_direct_dispatch_matches_source_all_fixtures) ... ok
+test_direct_dispatch_preserves_noninvocation_outcomes (test_certificate.CertificateTests.test_direct_dispatch_preserves_noninvocation_outcomes) ... ok
+test_direct_dispatch_rejects_source_and_target_tamper (test_certificate.CertificateTests.test_direct_dispatch_rejects_source_and_target_tamper) ... ok
+test_direct_dispatch_rejects_unreduced_and_unreachable_nodes (test_certificate.CertificateTests.test_direct_dispatch_rejects_unreduced_and_unreachable_nodes) ... ok
+test_dispatch_and_bad_rewrite (test_certificate.CertificateTests.test_dispatch_and_bad_rewrite) ... ok
+test_duplicate_json_keys (test_certificate.CertificateTests.test_duplicate_json_keys) ... ok
+test_empty_worlds_not_vacuous_robust_claim (test_certificate.CertificateTests.test_empty_worlds_not_vacuous_robust_claim) ... ok
+test_factorized_admits_flat_byte_counterexample (test_certificate.CertificateTests.test_factorized_admits_flat_byte_counterexample) ... ok
+test_factorized_certificate_matches_flat_semantics (test_certificate.CertificateTests.test_factorized_certificate_matches_flat_semantics) ... ok
+test_factorized_order_and_reduction_checks (test_certificate.CertificateTests.test_factorized_order_and_reduction_checks) ... ok
+test_factorized_source_binding_and_terminal_tamper (test_certificate.CertificateTests.test_factorized_source_binding_and_terminal_tamper) ... ok
+test_feasibility_tamper (test_certificate.CertificateTests.test_feasibility_tamper) ... ok
+test_forward_reference (test_certificate.CertificateTests.test_forward_reference) ... ok
+test_generated_specification_oracle_sample (test_certificate.CertificateTests.test_generated_specification_oracle_sample) ... ok
+test_generated_witnesses_include_conjunctions_and_alternatives (test_certificate.CertificateTests.test_generated_witnesses_include_conjunctions_and_alternatives) ... ok
+test_greedy_retention_witness_need_not_have_minimum_cardinality (test_certificate.CertificateTests.test_greedy_retention_witness_need_not_have_minimum_cardinality) ... ok
+test_invalid_sort (test_certificate.CertificateTests.test_invalid_sort) ... ok
+test_loader_identity (test_certificate.CertificateTests.test_loader_identity) ... ok
+test_missing_target_retention_witness (test_certificate.CertificateTests.test_missing_target_retention_witness) ... ok
+test_no_least_slice (test_certificate.CertificateTests.test_no_least_slice) ... ok
+test_nonrelational_overapproximation (test_certificate.CertificateTests.test_nonrelational_overapproximation) ... ok
+test_observation_insufficient (test_certificate.CertificateTests.test_observation_insufficient) ... ok
+test_observation_redundant (test_certificate.CertificateTests.test_observation_redundant) ... ok
+test_observation_witness_omission (test_certificate.CertificateTests.test_observation_witness_omission) ... ok
+test_program_binding (test_certificate.CertificateTests.test_program_binding) ... ok
+test_trace_not_target_set (test_certificate.CertificateTests.test_trace_not_target_set) ... ok
+test_unsupported_primitive (test_certificate.CertificateTests.test_unsupported_primitive) ... ok
+test_valid_source_can_exceed_serialized_certificate_cap (test_certificate.CertificateTests.test_valid_source_can_exceed_serialized_certificate_cap) ... ok
+test_width_limit (test_certificate.CertificateTests.test_width_limit) ... ok
+test_wrong_aggregate (test_certificate.CertificateTests.test_wrong_aggregate) ... ok
+test_wrong_node (test_certificate.CertificateTests.test_wrong_node) ... ok
+test_wrong_target (test_certificate.CertificateTests.test_wrong_target) ... ok
+test_anonymous_class_field_does_not_replace_outer_local (test_class_scope.ClassScopeTests.test_anonymous_class_field_does_not_replace_outer_local) ... ok
+test_class_initializer_is_not_a_method_local_context (test_class_scope.ClassScopeTests.test_class_initializer_is_not_a_method_local_context) ... ok
+test_local_class_field_does_not_replace_outer_local (test_class_scope.ClassScopeTests.test_local_class_field_does_not_replace_outer_local) ... ok
+test_blob_identity_detects_mutation (test_frontend.JavaFrontendTests.test_blob_identity_detects_mutation) ... ok
+test_bridge_risks_execute_in_java_and_fail_closed (test_frontend.JavaFrontendTests.test_bridge_risks_execute_in_java_and_fail_closed) ... ok
+test_direct_call_probe_matches_reflection (test_frontend.JavaFrontendTests.test_direct_call_probe_matches_reflection) ... ok
+test_fail_closed_rejection_reasons (test_frontend.JavaFrontendTests.test_fail_closed_rejection_reasons) ... ok
+test_frontend_gold_is_not_used_as_program_input (test_frontend.JavaFrontendTests.test_frontend_gold_is_not_used_as_program_input) ... ok
+test_public_source_acceptance_records_audited_identity_assumptions (test_frontend.JavaFrontendTests.test_public_source_acceptance_records_audited_identity_assumptions) ... ok
+test_public_source_cases_are_P012_through_P040 (test_frontend.JavaFrontendTests.test_public_source_cases_are_P012_through_P040) ... ok
+test_public_sources_match_blobs_and_gold (test_frontend.JavaFrontendTests.test_public_sources_match_blobs_and_gold) ... ok
+test_runtime_probe_matches_actual_reflection (test_frontend.JavaFrontendTests.test_runtime_probe_matches_actual_reflection) ... ok
+test_supported_finite_source_preserves_all_assignments (test_frontend.JavaFrontendTests.test_supported_finite_source_preserves_all_assignments) ... ok
+test_unrelated_reflection_like_method_names_are_ignored (test_frontend.JavaFrontendTests.test_unrelated_reflection_like_method_names_are_ignored) ... ok
+test_unsupported_parameter_retains_only_independent_class_event (test_frontend.JavaFrontendTests.test_unsupported_parameter_retains_only_independent_class_event) ... ok
+test_boolean_necessity_index_is_not_integer (test_journal.JournalValidationTests.test_boolean_necessity_index_is_not_integer) ... ok
+test_extra_source_bridge_controls_run_and_reject (test_journal.JournalValidationTests.test_extra_source_bridge_controls_run_and_reject) ... ok
+test_false_sufficiency_is_rejected (test_journal.JournalValidationTests.test_false_sufficiency_is_rejected) ... ok
+test_membership_oracle_exhaustive_up_to_two_bits (test_journal.JournalValidationTests.test_membership_oracle_exhaustive_up_to_two_bits) ... ok
+test_nonhashable_coordinate_is_cleanly_rejected (test_journal.JournalValidationTests.test_nonhashable_coordinate_is_cleanly_rejected) ... ok
+test_transport_gzip_is_deterministic (test_journal.JournalValidationTests.test_transport_gzip_is_deterministic) ... ok
+test_witness_checker_does_not_call_producer_retention (test_journal.JournalValidationTests.test_witness_checker_does_not_call_producer_retention) ... ok
+test_witness_checker_imports_only_schema (test_journal.JournalValidationTests.test_witness_checker_imports_only_schema) ... ok
+test_current_counts_are_measured_and_reported_separately (test_journal_comparison.JournalComparisonTests.test_current_counts_are_measured_and_reported_separately) ... ok
+test_default_still_requires_frozen_source_counts (test_journal_comparison.JournalComparisonTests.test_default_still_requires_frozen_source_counts) ... ok
+test_other_csv_difference_is_still_rejected (test_journal_comparison.JournalComparisonTests.test_other_csv_difference_is_still_rejected) ... ok
+test_scientific_summary_difference_is_still_rejected (test_journal_comparison.JournalComparisonTests.test_scientific_summary_difference_is_still_rejected) ... ok
+test_wrong_current_csv_counts_are_rejected (test_journal_comparison.JournalComparisonTests.test_wrong_current_csv_counts_are_rejected) ... ok
+test_wrong_current_summary_counts_are_rejected (test_journal_comparison.JournalComparisonTests.test_wrong_current_summary_counts_are_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 96 tests in 58.021s
+
+OK
+{"authored_fixtures": 24, "bibliography_entries": 66, "bibliography_unique_dois": 60, "frontend_bridge_risk_rejected_events": 7, "frontend_bridge_risk_runtime_executions": 9, "frontend_direct_call_checks": 12, "frontend_gold_matches": 29, "frontend_rejection_controls": 7, "frontend_runtime_identity_checks": 8, "frontend_source_files": 9, "generated_cases": 600, "manual_public_projections": 11, "public_cases": 40, "public_source_apps": 13, "source_extracted_public_cases": 29, "status": "matched"}
+{"audit_rows": 66, "cited_keys": 66, "entries": 66, "minimum_required": 55, "no_doi_records": 6, "status": "matched", "unique_dois": 60}
+{
+  "alternative_witness_pairs": 346,
+  "assignments": 32139,
+  "authored_fixtures": 24,
+  "bibliography": {
+    "audit_rows": 66,
+    "cited_keys": 66,
+    "entries": 66,
+    "minimum_required": 55,
+    "no_doi_records": 6,
+    "status": "matched",
+    "unique_dois": 60
+  },
+  "bibliography_audit_rows": 66,
+  "bibliography_entries": 66,
+  "bibliography_no_doi_records": 6,
+  "bibliography_unique_dois": 60,
+  "case_count": 664,
+  "compression_ratio_geometric_mean": 1.9586206767759522,
+  "compression_ratio_max": 27.324073769413005,
+  "compression_ratio_median": 1.7942427320166718,
+  "compression_ratio_p10": 0.7710348787475758,
+  "compression_ratio_p90": 5.4448866065644275,
+  "constant_extra_targets": 3976,
+  "cpu_seconds": 32.028433,
+  "dispatch_bytes_total": 1389323,
+  "dispatch_diagram_steps": 619989,
+  "dispatch_infeasible": 16433,
+  "dispatch_invocations": 49891,
+  "dispatch_lookup_errors": 3019,
+  "dispatch_nodes_max": 66,
+  "dispatch_nodes_total": 11019,
+  "dispatch_semantic_steps": 1133371,
+  "dispatch_skipped": 9362,
+  "dispatch_trace_events": 78705,
+  "factor_bytes_total": 3329807,
+  "factor_diagram_steps": 4223861,
+  "factor_larger_cases": 153,
+  "factor_semantic_steps": 1212076,
+  "factor_smaller_cases": 511,
+  "flat_bytes_total": 14279992,
+  "flat_checker_steps": 1195643,
+  "frontend": {
+    "accepted_public_events": 29,
+    "bridge_risk_rejected_events": 7,
+    "bridge_risk_runtime_executions": 9,
+    "bridge_risk_sources": 4,
+    "direct_call_assignments": 4,
+    "direct_call_invocation_checks": 12,
+    "gold_matches": 29,
+    "rejected_public_events": 0,
+    "rejection_controls": 7,
+    "runtime_assignments": 4,
+    "runtime_identity_checks": 8
+  },
+  "frontend_bridge_risk_rejected_events": 7,
+  "frontend_bridge_risk_runtime_executions": 9,
+  "frontend_bridge_risk_sources": 4,
+  "frontend_direct_call_assignments": 4,
+  "frontend_direct_call_invocation_checks": 12,
+  "frontend_gold_matches": 29,
+  "frontend_rejection_controls": 7,
+  "frontend_runtime_assignments": 4,
+  "frontend_runtime_identity_checks": 8,
+  "frontend_supported_assignment_checks": 8,
+  "generated_cases": 600,
+  "largest_factor_bytes": 121568,
+  "largest_flat_bytes": 3321733,
+  "manual_public_projections": 11,
+  "missing_target_witnesses": 1826,
+  "negative_controls": {
+    "certificate_byte_cap": 16777216,
+    "direct_dispatch_bytes": 5599,
+    "direct_dispatch_checker_assignments": 4096,
+    "factorized_bytes": 456563,
+    "factorized_checker_assignments": 4096,
+    "flat_quoted_string_lower_bound": 19456000,
+    "invoke_all_counterexample": true,
+    "minimum_cardinality_counterexample": {
+      "base": 0,
+      "format": "rrc-witness-cardinality-counterexample-v1",
+      "forward_order": [
+        0,
+        1,
+        2
+      ],
+      "forward_selected": [
+        1,
+        2
+      ],
+      "forward_witness": {
+        "base": 0,
+        "claimed_targets": [],
+        "necessity": [
+          {
+            "removed": 1,
+            "world": 6
+          },
+          {
+            "removed": 2,
+            "world": 5
+          }
+        ],
+        "selected": [
+          1,
+          2
+        ],
+        "site": 0,
+        "target": [
+          "L",
+          "A",
+          "f",
+          "()"
+        ]
+      },
+      "minimum_cardinality": 1,
+      "retention_minimal_sets": [
+        [
+          0
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "reverse_order": [
+        2,
+        1,
+        0
+      ],
+      "reverse_selected": [
+        0
+      ],
+      "reverse_witness": {
+        "base": 0,
+        "claimed_targets": [],
+        "necessity": [
+          {
+            "removed": 0,
+            "world": 5
+          }
+        ],
+        "selected": [
+          0
+        ],
+        "site": 0,
+        "target": [
+          "L",
+          "A",
+          "f",
+          "()"
+        ]
+      },
+      "target": [
+        "L",
+        "A",
+        "f",
+        "()"
+      ],
+      "target_absent_worlds": [
+        5,
+        6
+      ]
+    },
+    "seeded_faults_rejected": {
+      "dispatch_source_binding": true,
+      "dispatch_terminal_action": true,
+      "necessity_omission": true,
+      "source_binding": true,
+      "terminal_value": true
+    }
+  },
+  "oracle": {
+    "anchors": 36992,
+    "greedy_orders": 213952,
+    "mismatches": 0,
+    "models": 7186,
+    "multiple_minima": 13696,
+    "no_least_observation": 13696,
+    "nonempty_models": 7184,
+    "one_minimal_not_subset_minimal": 2432
+  },
+  "peak_rss_kib": 127388,
+  "public_cases": 40,
+  "public_source_apps": 13,
+  "public_witness_records": 80,
+  "public_witness_unique_within_case": 40,
+  "redistributed_source_files": 9,
+  "source_extracted_public_cases": 29,
+  "status": "complete",
+  "string_set_extra_targets": 1105,
+  "wall_seconds": 27.373398859999995,
+  "witness_duplicate_records": 567,
+  "witness_selected_max": 5,
+  "witness_selected_total": 3555,
+  "witness_target_base_pairs": 913,
+  "witness_unique_within_case": 1259
+}
+{"certificate_bundles": 664, "status": "matched"}
+{"status": "matched", "cases": 664, "sharing": {"full_tree_slots": 2470187, "per_root_reduced_nodes": 47973, "shared_nodes": 29056, "cross_root_node_reduction": 0.3943259750276197}, "gzip_ratio": 1.452580524599076, "target_presence": 6654}
+{"current_source_surface": [{"component": "shared schema and JSON admission", "files": 1, "python_ast_nodes": 1548, "role": "trusted shared syntax/limits", "significant_source_lines": 129}, {"component": "flat reference checker", "files": 1, "python_ast_nodes": 1581, "role": "trusted finite reference acceptance", "significant_source_lines": 104}, {"component": "factorized certificate checker", "files": 1, "python_ast_nodes": 2048, "role": "trusted finite certificate acceptance", "significant_source_lines": 173}, {"component": "direct-dispatch checker", "files": 1, "python_ast_nodes": 1879, "role": "trusted finite action replay", "significant_source_lines": 177}, {"component": "missing-target witness checker", "files": 1, "python_ast_nodes": 747, "role": "trusted retention/minimality acceptance", "significant_source_lines": 61}, {"component": "untrusted producers and lowerers", "files": 4, "python_ast_nodes": 5021, "role": "outside the trusted base", "significant_source_lines": 445}, {"component": "Python source-bridge adapter and controls", "files": 2, "python_ast_nodes": 6613, "role": "optional frontend trust boundary", "significant_source_lines": 802}, {"component": "javac AST extractor", "files": 1, "python_ast_nodes": "", "role": "optional frontend trust boundary", "significant_source_lines": 1162}], "environment_sensitive": ["stage-costs.csv", "summary.json:stage_costs"], "journal_files": 15, "source_surface_baseline_changed": true, "status": "matched"}

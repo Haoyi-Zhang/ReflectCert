@@ -1,0 +1,1 @@
+{"status": "matched", "cases": 664, "sharing": {"full_tree_slots": 2470187, "per_root_reduced_nodes": 47973, "shared_nodes": 29056, "cross_root_node_reduction": 0.3943259750276197}, "gzip_ratio": 1.452580524599076, "target_presence": 6654}

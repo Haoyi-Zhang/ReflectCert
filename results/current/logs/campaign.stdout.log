@@ -1,0 +1,198 @@
+{
+  "alternative_witness_pairs": 346,
+  "assignments": 32139,
+  "authored_fixtures": 24,
+  "bibliography": {
+    "audit_rows": 66,
+    "cited_keys": 66,
+    "entries": 66,
+    "minimum_required": 55,
+    "no_doi_records": 6,
+    "status": "matched",
+    "unique_dois": 60
+  },
+  "bibliography_audit_rows": 66,
+  "bibliography_entries": 66,
+  "bibliography_no_doi_records": 6,
+  "bibliography_unique_dois": 60,
+  "case_count": 664,
+  "compression_ratio_geometric_mean": 1.9586206767759522,
+  "compression_ratio_max": 27.324073769413005,
+  "compression_ratio_median": 1.7942427320166718,
+  "compression_ratio_p10": 0.7710348787475758,
+  "compression_ratio_p90": 5.4448866065644275,
+  "constant_extra_targets": 3976,
+  "cpu_seconds": 32.028433,
+  "dispatch_bytes_total": 1389323,
+  "dispatch_diagram_steps": 619989,
+  "dispatch_infeasible": 16433,
+  "dispatch_invocations": 49891,
+  "dispatch_lookup_errors": 3019,
+  "dispatch_nodes_max": 66,
+  "dispatch_nodes_total": 11019,
+  "dispatch_semantic_steps": 1133371,
+  "dispatch_skipped": 9362,
+  "dispatch_trace_events": 78705,
+  "factor_bytes_total": 3329807,
+  "factor_diagram_steps": 4223861,
+  "factor_larger_cases": 153,
+  "factor_semantic_steps": 1212076,
+  "factor_smaller_cases": 511,
+  "flat_bytes_total": 14279992,
+  "flat_checker_steps": 1195643,
+  "frontend": {
+    "accepted_public_events": 29,
+    "bridge_risk_rejected_events": 7,
+    "bridge_risk_runtime_executions": 9,
+    "bridge_risk_sources": 4,
+    "direct_call_assignments": 4,
+    "direct_call_invocation_checks": 12,
+    "gold_matches": 29,
+    "rejected_public_events": 0,
+    "rejection_controls": 7,
+    "runtime_assignments": 4,
+    "runtime_identity_checks": 8
+  },
+  "frontend_bridge_risk_rejected_events": 7,
+  "frontend_bridge_risk_runtime_executions": 9,
+  "frontend_bridge_risk_sources": 4,
+  "frontend_direct_call_assignments": 4,
+  "frontend_direct_call_invocation_checks": 12,
+  "frontend_gold_matches": 29,
+  "frontend_rejection_controls": 7,
+  "frontend_runtime_assignments": 4,
+  "frontend_runtime_identity_checks": 8,
+  "frontend_supported_assignment_checks": 8,
+  "generated_cases": 600,
+  "largest_factor_bytes": 121568,
+  "largest_flat_bytes": 3321733,
+  "manual_public_projections": 11,
+  "missing_target_witnesses": 1826,
+  "negative_controls": {
+    "certificate_byte_cap": 16777216,
+    "direct_dispatch_bytes": 5599,
+    "direct_dispatch_checker_assignments": 4096,
+    "factorized_bytes": 456563,
+    "factorized_checker_assignments": 4096,
+    "flat_quoted_string_lower_bound": 19456000,
+    "invoke_all_counterexample": true,
+    "minimum_cardinality_counterexample": {
+      "base": 0,
+      "format": "rrc-witness-cardinality-counterexample-v1",
+      "forward_order": [
+        0,
+        1,
+        2
+      ],
+      "forward_selected": [
+        1,
+        2
+      ],
+      "forward_witness": {
+        "base": 0,
+        "claimed_targets": [],
+        "necessity": [
+          {
+            "removed": 1,
+            "world": 6
+          },
+          {
+            "removed": 2,
+            "world": 5
+          }
+        ],
+        "selected": [
+          1,
+          2
+        ],
+        "site": 0,
+        "target": [
+          "L",
+          "A",
+          "f",
+          "()"
+        ]
+      },
+      "minimum_cardinality": 1,
+      "retention_minimal_sets": [
+        [
+          0
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "reverse_order": [
+        2,
+        1,
+        0
+      ],
+      "reverse_selected": [
+        0
+      ],
+      "reverse_witness": {
+        "base": 0,
+        "claimed_targets": [],
+        "necessity": [
+          {
+            "removed": 0,
+            "world": 5
+          }
+        ],
+        "selected": [
+          0
+        ],
+        "site": 0,
+        "target": [
+          "L",
+          "A",
+          "f",
+          "()"
+        ]
+      },
+      "target": [
+        "L",
+        "A",
+        "f",
+        "()"
+      ],
+      "target_absent_worlds": [
+        5,
+        6
+      ]
+    },
+    "seeded_faults_rejected": {
+      "dispatch_source_binding": true,
+      "dispatch_terminal_action": true,
+      "necessity_omission": true,
+      "source_binding": true,
+      "terminal_value": true
+    }
+  },
+  "oracle": {
+    "anchors": 36992,
+    "greedy_orders": 213952,
+    "mismatches": 0,
+    "models": 7186,
+    "multiple_minima": 13696,
+    "no_least_observation": 13696,
+    "nonempty_models": 7184,
+    "one_minimal_not_subset_minimal": 2432
+  },
+  "peak_rss_kib": 127388,
+  "public_cases": 40,
+  "public_source_apps": 13,
+  "public_witness_records": 80,
+  "public_witness_unique_within_case": 40,
+  "redistributed_source_files": 9,
+  "source_extracted_public_cases": 29,
+  "status": "complete",
+  "string_set_extra_targets": 1105,
+  "wall_seconds": 27.373398859999995,
+  "witness_duplicate_records": 567,
+  "witness_selected_max": 5,
+  "witness_selected_total": 3555,
+  "witness_target_base_pairs": 913,
+  "witness_unique_within_case": 1259
+}
