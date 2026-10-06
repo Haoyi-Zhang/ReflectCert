@@ -35,7 +35,8 @@ the fragment.
 
 Finite string expressions are literals, simple straight-line local aliases, `+`, `String.concat`,
 and `condition ? left : right`. Conditions are Boolean literals, Boolean method parameters,
-straight-line Boolean aliases, `!`, `&&`, `||`, and primitive-boolean `==`/`!=`. Java `String ==` and `!=`
+straight-line Boolean aliases, `!`, `&&`, `||`, and primitive-boolean `==`. Primitive-boolean
+`!=` is outside the accepted fragment. Java `String ==` and `!=`
 are reference comparisons and are **not** translated to finite content equality. A recognized use is
 rejected as `unsupported_string_reference_equality`.
 
