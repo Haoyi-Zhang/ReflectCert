@@ -42,6 +42,9 @@ def text(value: Any, where: str) -> None:
 
 def strict_equal(a: Any, b: Any) -> bool:
     """Unlike Python equality, do not equate a JSON boolean with a number."""
+    if type(a) is type(b) and (type(a) is bool or
+                              (type(a) is str and a.isascii() and b.isascii())):
+        return a == b
     return json.dumps(a, sort_keys=True, separators=(",", ":"), allow_nan=False) == json.dumps(
         b, sort_keys=True, separators=(",", ":"), allow_nan=False)
 

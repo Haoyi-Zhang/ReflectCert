@@ -47,6 +47,8 @@ existence result is conditional on a representation fitting those limits.
 
 `results/journal/trust-surface.csv` counts nonblank, non-comment source lines for the shared schema,
 flat/factorized/direct/witness acceptance paths, untrusted producer/lowerer paths, and the optional
-Java bridge. The shared schema plus four finite acceptance paths total 644 significant source
-lines. This inventory is intended to make the partition inspectable; it is not a proof that the
+Java bridge. The retained inventory totals 644 significant source lines for the shared schema
+plus four finite acceptance paths. The current scalar fast path adds three occupied lines in
+the schema, giving 647 for these five files; the retained inventory and timing records are unchanged.
+This inventory is intended to make the partition inspectable; it is not a proof that the
 code is correct, minimal, easy to review, or free of parser/runtime defects.

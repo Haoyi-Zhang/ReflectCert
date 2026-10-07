@@ -43,7 +43,7 @@ The finite results are:
 - 7,186 exhaustive oracle tables, 36,992 feasible anchors, 213,952 deletion orders, and zero
   disagreement with the independent characterization;
 - five seeded certificate/dispatch/witness faults rejected, plus an invoke-all counterexample;
-- the current Linux/JDK run passes 96 unit-test methods without skips; the earlier
+- the retained Linux/JDK run passes 96 unit-test methods without skips; the earlier
   68-test result remains a historical record. Current outputs are in `results/current/`.
 
 The Java bridge adds bounded source evidence:
@@ -74,6 +74,20 @@ receiver/argument evaluation, initialization, access, exceptions, side effects, 
 No network, GPU, external solver, model API, Android SDK, device, service, or private input is
 required. Exact reproduction compares scientific outputs, not interpreter/JDK version strings or
 host timing.
+
+The portable equality regression can be run separately:
+
+```sh
+python -B -m unittest discover -s tests -p test_strict_equal.py -v
+```
+
+Its six owned finite tests compare strict equality with the canonical-JSON definition,
+including mixed types, subclasses, non-finite values and serialization errors. Exact
+built-in Booleans and same-type ASCII strings use direct comparison; other values retain
+canonical serialization. Non-ASCII strings stay on that path because an astral character
+and its explicit surrogate pair can have the same JSON encoding. The tests also exercise
+an owned source, independent expected rows, and certificate/dispatch/witness mutations.
+They do not run Java or the complete campaign and establish no measured speedup.
 
 ## Reproduce the complete campaign
 
