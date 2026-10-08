@@ -267,7 +267,7 @@ Run the additional deterministic analyses after reproducing the main campaign:
 
 ```sh
 python journal_analysis.py --measured results/reproduced --output results/journal-reproduced
-python compare_journal.py results/journal results/journal-reproduced
+python compare_journal.py results/journal results/journal-reproduced --current-source-surface
 ```
 
 This checks 6,654 target-presence tables separately from the inherited 7,186 complete-label

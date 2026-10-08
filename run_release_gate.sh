@@ -39,6 +39,6 @@ fi
 
 python compare_results.py results/measured results/reproduced
 python journal_analysis.py --measured results/reproduced --output results/journal-reproduced
-python compare_journal.py results/journal results/journal-reproduced
+python compare_journal.py results/journal results/journal-reproduced --current-source-surface
 clean_python_caches
 python release_gate.py --artifact-root .
