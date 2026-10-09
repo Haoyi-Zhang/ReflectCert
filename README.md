@@ -126,7 +126,7 @@ fresh scientific check on Ubuntu with Python 3.12 and Temurin 21. It copies
 unit suite, input and bibliography checks, and regenerates all 664 bundles without
 `--resume`. It retains generated results and each stage's stdout/stderr as a
 workflow artifact, including available partial outputs on failure, with a
-30-minute job timeout. The workflow is prepared, not evidence of a completed run.
+30-minute job timeout.
 The entire scientific stage sequence shares a 20-minute timeout, with TERM followed
 by KILL after at most 30 seconds and a 22-minute step guard. Logs are initialized
 before tool setup; the combined raw experiment output and actual pipeline exit
