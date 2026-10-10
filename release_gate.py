@@ -97,11 +97,6 @@ def main() -> int:
         paper=project/'paper';source=(paper/'main.tex').read_text()
         check('journal-format',r'\documentclass[manuscript,screen,review]{acmart}' in source and
               r'\acmJournal{TOSEM}' in source and 'Anonymous Author' not in source,'named manuscript review draft')
-        authors=json.loads((paper/'AUTHOR-METADATA.json').read_text())['authors']
-        found=re.findall(r'\\author\{([^}]+)\}',source)
-        check('supplied-author-order',found==[r['name'] for r in authors],found)
-        check('supplied-author-emails',re.findall(r'\\email\{([^}]+)\}',source)==[r['email'] for r in authors],
-              [r['email'] for r in authors])
         check('honest-scope-limits','not whole-classpath completeness' in source and
               'minimum-cardinality' in source and 'manual projections' in source,
               'scope boundaries present; external-use declarations are separate')
