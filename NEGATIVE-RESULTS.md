@@ -5,6 +5,10 @@ Negative outcomes are retained because they determine how the system may be used
 - Factorization is not uniformly smaller. Raw per-case records retain all 153 instances where serialization grows.
 - Generic compression removes much of the raw aggregate gap: under deterministic gzip-9, only 371 factorized objects are smaller, 292 are larger, and one ties; the aggregate ratio falls from 4.29 to 1.45 and the median to 1.03.
 - Every one-assignment public case expands in both raw and gzip-compressed form. The public corpus therefore supports provenance and bridge checks, not a practical compression benefit.
+- Adaptive gzip selects flat for these public cases; it does not make their factorized
+  payloads beneficial. On the complete finite comparison, adaptive total source-plus-wire
+  bytes are lower than flat gzip, but constructing both candidates raises the observed
+  stage-accounted total wall time from 2.395 to 5.437 seconds. No end-to-end speedup is claimed.
 - Cross-root sharing is not the whole compression effect; the ablation measures it separately from per-root reduction.
 - Inclusion-minimal explanations can be non-unique; the checked greedy orders can return valid minima of cardinalities one and two on the explicit three-coordinate counterexample.
 - Different executions can resolve to different target identities while preserving the same may-target set; target-set equality is not trace equality.

@@ -118,6 +118,52 @@ evidence bundles. The retained uninterrupted measured run used 37.21 cumulative 
 seconds for the driver and completed Java children, 26.40 wall seconds, and 140,884 KiB maximum
 resident set.
 
+## Adaptive transport and same-information comparison
+
+The optional transport accepts either complete certificate format, choosing by actual
+gzip-9 frame length rather than assuming diagrams are smaller. The five-byte frame,
+bounded decompression, and existing semantic checkers are specified in `docs/model.md`.
+Assignment-local diagram reuse retains all root comparisons and source checks; it does
+not skip assignments or trust production. The historical checker mode remains unchanged.
+
+```sh
+python -B -m unittest discover -s tests -p test_transport.py -v
+python -B -m rrc.transport produce --source inputs/F06.json --wire results/f06.rrc
+python -B -m rrc.transport check --source inputs/F06.json --wire results/f06.rrc
+python -B transport_benchmark.py --output results/transport-reproduced.json --repeats 3
+```
+
+`transport_benchmark.py` uses the fixed 664 finite inputs and their retained expected
+outcomes without running Java. It checks all 32,139 assignments and both traversal modes.
+The task includes all expression values, feasibility, complete outcomes and aggregation;
+outcome-only dispatch is not substituted for the richer certificate. Total bytes count
+the separately supplied compact program once, the complete source-bound certificate,
+and five framing bytes per case. Test gold, network protocol overhead and disk I/O are
+excluded. Timings measure construction once per case and use three encode/receive
+repetitions with rotated receiver order. Reported totals sum per-case medians plus actual
+construction costs; they are stage-accounted local observations, not network latency.
+
+The CPython 3.12.14 Windows result in `results/transport-local-current-20261012.json` is:
+
+| Complete evidence path | Total bytes | Receiver wall s | Accounted total wall s |
+|---|---:|---:|---:|
+| Flat JSON | 15,021,818 | 1.525 | 2.029 |
+| Flat gzip | 1,596,873 | 1.535 | 2.395 |
+| Factorized JSON | 4,071,633 | 1.934 | 4.631 |
+| Factorized gzip | 1,330,466 | 1.946 | 4.683 |
+| Factorized gzip, node reuse | 1,330,466 | 1.877 | 4.614 |
+| Adaptive gzip, node reuse | 1,306,393 | 1.850 | 5.437 |
+
+Adaptive selection uses flat for 293 cases and factorized for 371, including flat for all
+40 public one-world cases. Its 567,887 wire bytes plus 738,506 separately supplied source
+bytes save 18.2% against flat gzip total bytes, but its total wall observation is higher
+because it builds both representations. Assignment-local reuse reduces fresh node
+evaluations from 4,223,861 to 1,888,566, with unchanged source work. The small observed
+timing difference is not a controlled or statistically established speedup; Windows
+process CPU observations are coarse for small cases. These results preserve the original
+negative finding: factorized public payloads still expand after gzip. This comparison
+does not rerun the Java bridge or establish analyzer bugs, novelty, or application benefit.
+
 ## Inspect the Java-source bridge
 
 The project-level `../.github/workflows/scientific-checks.yml` prepares a manual,

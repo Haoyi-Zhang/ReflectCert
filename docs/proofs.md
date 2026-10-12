@@ -70,6 +70,29 @@ at every modeled assignment. This argument does not depend on diagram reduction;
 reduction is a format/canonicality condition that prevents gratuitous duplicates and dead
 structure.
 
+## P1b. Assignment-local reuse and adaptive transport
+
+After unchanged structural validation, fix one assignment `a`. Following a node's
+selected child under `a` ends at one terminal. Every node on that path denotes that
+same value at `a`, so caching it under the node identifier is sound. If a later root
+reaches a cached node, its remaining traversal has the cached value. The cache is
+discarded before the next assignment. All expression, feasibility, outcome and summary
+comparisons remain mandatory; this is computation reuse, not assignment sampling.
+Memory for this cache is bounded by the admitted diagram node count. With `K` roots,
+diagram work per assignment is bounded by `K` root requests plus the number of distinct
+selected-path nodes, rather than the sum of all root-path lengths. Source work is unchanged.
+
+The transport frame selects one existing acceptance path after bounded JSON decoding.
+Gzip decoding enforces the decoded byte cap and requires one complete CRC-checked
+member, with no trailing data. The flat and factorized checkers retain their source
+binding, pointwise and aggregation obligations. Therefore accepting either representation
+establishes the same finite information, with infeasible flat rows interpreted by the
+existing convention. Choosing the smaller encoded candidate proves no semantics by itself.
+Among two admitted gzip candidates with equal five-byte framing, the chosen wire length
+is their minimum; ties select flat. This is a local selection property, not a compression
+theorem against arbitrary codecs. The producer constructs both candidates, so smaller
+transfer does not imply less total construction/checking time.
+
 ## P2. Exact aggregation
 
 External bits precede internal choice bits, and feasibility cannot depend on internal

@@ -235,6 +235,8 @@ def trust_surface() -> list[dict[str, Any]]:
         ("factorized certificate checker", ["rrc/factor_checker.py"], "trusted finite certificate acceptance"),
         ("direct-dispatch checker", ["rrc/dispatch_checker.py"], "trusted finite action replay"),
         ("missing-target witness checker", ["rrc/witness_checker.py"], "trusted retention/minimality acceptance"),
+        ("optional adaptive certificate transport", ["rrc/transport.py"],
+         "trusted decoding/acceptance dispatch; untrusted encoding/selection"),
         (
             "untrusted producers and lowerers",
             ["rrc/producer.py", "rrc/factor.py", "rrc/dispatch.py", "rrc/missing_witness.py"],

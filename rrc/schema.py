@@ -132,6 +132,12 @@ def load_json(path: str | Path, max_bytes: int) -> Any:
     """Bound input bytes before JSON parsing, and reject duplicate object keys."""
     with Path(path).open("rb") as stream:
         raw = stream.read(max_bytes + 1)
+    return parse_json_bytes(raw, max_bytes)
+
+
+def parse_json_bytes(raw: bytes, max_bytes: int) -> Any:
+    """Use the same bounded, duplicate-key-rejecting parser for a wire payload."""
+    require(type(raw) is bytes, "JSON bytes required")
     require(len(raw) <= max_bytes, "input byte bound")
     def pairs(items: list[tuple[str, Any]]) -> dict[str, Any]:
         out: dict[str, Any] = {}

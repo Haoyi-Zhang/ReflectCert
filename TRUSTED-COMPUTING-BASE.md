@@ -19,6 +19,12 @@ tables, and client omission claims are not evidence of correctness by themselves
 source equality is not a cryptographic attestation, and no release-hash mechanism is claimed.
 Independence means implementation/dependency separation, not independent authorship or Coq proof.
 
+The optional `rrc/transport.py` decoder and acceptance dispatcher add JSON/gzip framing
+admission to that boundary. They retain CRC checking, decoded/wire byte bounds, duplicate
+key rejection and existing semantic acceptance. The format chooser and transport producers
+are untrusted. The per-assignment node cache in the factorized checker is trusted code;
+it is discarded between assignments and never replaces a root/source comparison.
+
 ## Optional Java bridge
 
 The bridge additionally trusts javac parsing, the extractor, a related normal query-entry state,
@@ -48,7 +54,10 @@ existence result is conditional on a representation fitting those limits.
 `results/journal/trust-surface.csv` counts nonblank, non-comment source lines for the shared schema,
 flat/factorized/direct/witness acceptance paths, untrusted producer/lowerer paths, and the optional
 Java bridge. The retained inventory totals 644 significant source lines for the shared schema
-plus four finite acceptance paths. The current scalar fast path adds three occupied lines in
-the schema, giving 647 for these five files; the retained inventory and timing records are unchanged.
+plus four finite acceptance paths. The current scalar fast path, in-memory JSON admission,
+and optional assignment-local reuse give 675 lines for these five files. The optional
+transport module has 107 significant lines combining trusted decoding/dispatch with untrusted
+encoding/selection. The retained inventory and timing records are unchanged; current counts
+are computed separately by `journal_analysis.trust_surface()`.
 This inventory is intended to make the partition inspectable; it is not a proof that the
 code is correct, minimal, easy to review, or free of parser/runtime defects.

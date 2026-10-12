@@ -81,7 +81,13 @@ def _diagram_value(nodes: list[dict[str, Any]], root: int, bits: list[bool]) -> 
         node_id = node["high"] if bits[node["var"]] else node["low"]
 
 
-def check_factorized(program: dict[str, Any], certificate: Any) -> dict[str, Any]:
+def check_factorized(program: dict[str, Any], certificate: Any, *,
+                     reuse_diagram: bool = False) -> dict[str, Any]:
+    """Optionally reuse node denotations within one fixed assignment, never across it.
+
+    Structural admission and every root/source comparison remain unchanged. The default
+    retains the original traversal and counters for deterministic campaign comparison.
+    """
     validate(program)
     exact_keys(certificate, {"format", "program", "bit_order", "diagram", "roots", "summary"},
                "factorized certificate")
@@ -109,6 +115,27 @@ def check_factorized(program: dict[str, Any], certificate: Any) -> dict[str, Any
     for number in range(1 << width):
         bits = decode(number, width)
         cache: dict[int, Any] = {}
+        diagram_cache: dict[int, Any] = {}
+
+        def represented(root: int) -> tuple[Any, int]:
+            if not reuse_diagram:
+                return _diagram_value(nodes, root, bits)
+            # DAG topology and all root ranges have already been checked. For this
+            # assignment a node has a single value regardless of the requesting root.
+            path = []
+            node_id = root
+            while node_id not in diagram_cache:
+                path.append(node_id)
+                node = nodes[node_id]
+                if node["kind"] == "terminal":
+                    value = node["value"]
+                    break
+                node_id = node["high"] if bits[node["var"]] else node["low"]
+            else:
+                value = diagram_cache[node_id]
+            for visited in path:
+                diagram_cache[visited] = value
+            return value, len(path)
 
         def visit(node_id: int) -> Any:
             nonlocal semantic_steps
@@ -143,11 +170,11 @@ def check_factorized(program: dict[str, Any], certificate: Any) -> dict[str, Any
 
         expected_values = [visit(node_id) for node_id in range(len(program["nodes"]))]
         for root, expected in zip(roots["values"], expected_values):
-            actual, visits = _diagram_value(nodes, root, bits)
+            actual, visits = represented(root)
             diagram_steps += visits
             require(strict_equal(actual, expected), "factorized node derivation")
         feasible = visit(program["feasible"])
-        actual_feasible, visits = _diagram_value(nodes, roots["feasible"], bits)
+        actual_feasible, visits = represented(roots["feasible"])
         diagram_steps += visits
         require(type(actual_feasible) is bool and actual_feasible is feasible, "factorized feasibility")
 
@@ -155,7 +182,7 @@ def check_factorized(program: dict[str, Any], certificate: Any) -> dict[str, Any
         if feasible and world_index not in sets:
             sets[world_index] = [set() for _ in program["sites"]]
         for site_no, site in enumerate(program["sites"]):
-            actual, visits = _diagram_value(nodes, roots["outcomes"][site_no], bits)
+            actual, visits = represented(roots["outcomes"][site_no])
             diagram_steps += visits
             semantic_steps += 1
             if not feasible:

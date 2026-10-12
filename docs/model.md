@@ -135,3 +135,22 @@ position, an operation kind, and an explicit reason. The expression AST uses the
 finite operators as the JSON source but refers to Boolean inputs by name until
 `rrc/java_frontend.py` assigns deterministic external-coordinate indices. The complete
 accepted grammar, relation, and rejection table are in `docs/frontend.md`.
+
+## Optional adaptive certificate transport
+
+`python -m rrc.transport` transports a complete flat or factorized certificate, not
+the CLI dispatch/witness bundle. A five-byte frame is `RRC1` followed by `f` (flat
+JSON), `d` (factorized JSON), `F` (flat gzip-9), or `D` (factorized gzip-9). The
+consumer supplies its source separately. Decoded JSON is capped at 16 MiB, retains
+duplicate-key and non-finite-value rejection, and is passed to the corresponding
+existing semantic checker. The wire cap is 16 MiB + 65,536 + 5 bytes; it allows
+gzip overhead without enlarging decoded evidence admission. A compressed object
+must contain one complete gzip member with no trailing bytes or additional members.
+
+The adaptive producer chooses the shorter admitted compressed frame, choosing flat
+on a tie. A JSON object exceeding the decoded cap remains inadmissible even if it
+compresses well. Both candidates are constructed; this is bounded representation
+selection, not a streaming producer. Factorized acceptance can reuse selected-path
+node values across roots within one assignment. It discards that cache before the
+next assignment and still compares every root and reconstructs the complete summary.
+The historical checker mode remains the default for the original campaign.
