@@ -1,0 +1,14 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.28000-SP0",
+  "processor": {
+    "Name": "12th Gen Intel(R) Core(TM) i7-12700KF",
+    "NumberOfCores": 12,
+    "NumberOfLogicalProcessors": 20
+  },
+  "memory_metric": "On Windows the raw peak_rss_bytes field is PeakWorkingSetSize; traced allocations are measured separately.",
+  "environment_observation": "Sampled on the experiment host during integration; not recovered historical Linux telemetry.",
+  "construction_command": "python -B factor_construction_benchmark.py --output <fresh-output> --repeats 3",
+  "transport_command": "python -B transport_benchmark.py --output results/construction-resources/transport.json --repeats 3",
+  "measurements": "Complete construction case/pass records and current token-builder transport; historical records are retained separately."
+}

@@ -143,16 +143,17 @@ excluded. Timings measure construction once per case and use three encode/receiv
 repetitions with rotated receiver order. Reported totals sum per-case medians plus actual
 construction costs; they are stage-accounted local observations, not network latency.
 
-The CPython 3.12.14 Windows result in `results/transport-local-current-20261012.json` is:
+The current token-builder observations on CPython 3.12.14 under Windows are in
+`results/construction-resources/transport.json`:
 
 | Complete evidence path | Total bytes | Receiver wall s | Accounted total wall s |
 |---|---:|---:|---:|
-| Flat JSON | 15,021,818 | 1.525 | 2.029 |
-| Flat gzip | 1,596,873 | 1.535 | 2.395 |
-| Factorized JSON | 4,071,633 | 1.934 | 4.631 |
-| Factorized gzip | 1,330,466 | 1.946 | 4.683 |
-| Factorized gzip, node reuse | 1,330,466 | 1.877 | 4.614 |
-| Adaptive gzip, node reuse | 1,306,393 | 1.850 | 5.437 |
+| Flat JSON | 15,021,818 | 1.491 | 1.972 |
+| Flat gzip | 1,596,873 | 1.500 | 2.324 |
+| Factorized JSON | 4,071,633 | 1.907 | 3.439 |
+| Factorized gzip | 1,330,466 | 1.924 | 3.495 |
+| Factorized gzip, node reuse | 1,330,466 | 1.840 | 3.410 |
+| Adaptive gzip, node reuse | 1,306,393 | 1.802 | 4.186 |
 
 Adaptive selection uses flat for 293 cases and factorized for 371, including flat for all
 40 public one-world cases. Its 567,887 wire bytes plus 738,506 separately supplied source
@@ -160,9 +161,56 @@ bytes save 18.2% against flat gzip total bytes, but its total wall observation i
 because it builds both representations. Assignment-local reuse reduces fresh node
 evaluations from 4,223,861 to 1,888,566, with unchanged source work. The small observed
 timing difference is not a controlled or statistically established speedup; Windows
-process CPU observations are coarse for small cases. These results preserve the original
-negative finding: factorized public payloads still expand after gzip. This comparison
-does not rerun the Java bridge or establish analyzer bugs, novelty, or application benefit.
+process CPU observations are coarse for small cases. Factorized public payloads still expand
+after gzip, so adaptive transport selects flat evidence for them. Historical Windows transport
+observations remain separately stored; this finite transport run executes no Java bridge.
+
+## Token-vector construction and isolated resource comparison
+
+`rrc/factor.py` canonicalizes each root-vector cell once and memoizes recursive
+subvectors as construction-only integer tokens. It preserves the original terminal/branch
+allocation order and complete certificate bytes; checkers and wire formats are unchanged.
+Distinct token values are snapshotted, and eager vectors plus exponential memo storage remain.
+The argument is in `docs/proofs.md` P1c.
+
+```sh
+python -B -m unittest discover -s tests -p test_factor_tokens.py -v
+python -B factor_construction_benchmark.py --output results/factor-construction-reproduced.json --repeats 3
+```
+
+The benchmark compares the pre-token builder, current builder, and flat gzip with one
+complete-evidence path live per process. It checks all 664 retained complete certificate and
+direct-dispatch objects for byte identity, validates independent expected rows and all 32,139
+assignments, replays 78,705 actions and checks 1,826 retained witnesses. The 6 construction tests
+also enumerate every ternary value vector at widths 0--3, compare with recursive construction,
+and cover strict canonical equality, caller mutation, nonzero starting variables and bounds.
+
+The local summary is `results/factor-construction-20261014-summary.json`, and complete case/pass
+records are retained in `results/construction-resources/construction.json.gz`.
+A reproduction writes these full records to its fresh output. It uses CPython 3.12.14 on Windows and three rotated
+fresh-process timing passes per path, plus one separate allocation-profiled pass. Pipeline stages
+include input-record read/parse (including test gold where present), construction, source and
+certificate serialization, gzip/framing, decoding and full acceptance with node reuse. Source
+transfer excludes test gold. Stage totals exclude orchestration, process startup and network;
+disk read is included. On Windows the raw `peak_rss_bytes` field records peak working set,
+including interpreter/imports/native allocations; tracing starts after imports and measures Python
+allocations. Allocation-profiled times are not used for speed comparisons.
+
+| Complete path | Total bytes | Pipeline wall s | Pipeline CPU s | Peak working set MiB | Traced peak MiB |
+|---|---:|---:|---:|---:|---:|
+| Flat gzip | 1,596,873 | 2.445 | 2.422 | 52.42 | 23.19 |
+| Factor gzip, string memo | 1,330,466 | 4.768 | 4.766 | 59.63 | 28.33 |
+| Factor gzip, token memo | 1,330,466 | 3.540 | 3.500 | 43.45 | 14.24 |
+
+Construction-only canonical calls fall from 2,375,230 to 1,244,215, and encoded characters
+from 19,069,997 to 8,425,746. Construction wall totals are 2.684 and 1.490 s; source/certificate
+serialization plus gzip totals are 0.106 and 0.103 s. Per-case median construction time increases
+in 9 cases and complete-path time in 21. Token construction still uses more total CPU than
+flat gzip. These are bounded single-host observations, not guaranteed savings or new Java/native
+analyzer validation. The 4.29 raw and 1.45 gzip representation ratios, all public-case expansions,
+and historical Linux/Windows records are retained separately. The current adaptive measurements
+above use the token builder and their own accounting protocol. Host metadata and the memory-field
+interpretation are in `results/construction-resources/environment.json`.
 
 ## Inspect the Java-source bridge
 

@@ -1,0 +1,127 @@
+{
+  "accounting": "source read/parse, creation, source/certificate serialization, gzip/frame, decode/full acceptance; disk read included, network and process startup excluded from stage totals; OS peak includes interpreter/imports/native allocations; traced peak excludes pre-imports and does not equal RSS; profiled times are not used for speed comparisons",
+  "allocation_processes": 3,
+  "case_wall_comparisons_tokens_vs_legacy": {
+    "construction": {
+      "equal": 0,
+      "larger": 9,
+      "smaller": 655
+    },
+    "pipeline": {
+      "equal": 0,
+      "larger": 21,
+      "smaller": 643
+    }
+  },
+  "platform": "Windows-11-10.0.28000-SP0",
+  "protocol": "3 rotated fresh-process timing passes by default; separate allocation pass; one path live",
+  "python": "3.12.14",
+  "record_load_note": "Source read/parse includes the frozen input record and its test gold where present; transferred source excludes gold. Verification, orchestration and process startup are outside pipeline stages.",
+  "repeats": 3,
+  "scope": "complete finite evidence; no new Java or native-analyzer validation",
+  "timing_processes": 9,
+  "totals": {
+    "factor_legacy_gzip": {
+      "certificate_raw_bytes": 3329807,
+      "peak_rss_bytes_max": 62525440,
+      "peak_traced_bytes": 29708645,
+      "pipeline_cpu_seconds": 4.765625,
+      "pipeline_wall_seconds": 4.767831201403169,
+      "source_bytes": 738506,
+      "stage_median_totals": {
+        "construction": {
+          "cpu_seconds": 2.703125,
+          "wall_seconds": 2.683687400567578
+        },
+        "decode_accept": {
+          "cpu_seconds": 1.859375,
+          "wall_seconds": 1.8864079004561063
+        },
+        "source_certificate_serialization_gzip": {
+          "cpu_seconds": 0.15625,
+          "wall_seconds": 0.10633649973897263
+        },
+        "source_read_parse": {
+          "cpu_seconds": 0.078125,
+          "wall_seconds": 0.0922010000795126
+        }
+      },
+      "total_bytes": 1330466,
+      "wire_bytes": 591960
+    },
+    "factor_tokens_gzip": {
+      "certificate_raw_bytes": 3329807,
+      "peak_rss_bytes_max": 45555712,
+      "peak_traced_bytes": 14930421,
+      "pipeline_cpu_seconds": 3.5,
+      "pipeline_wall_seconds": 3.5403754006547388,
+      "source_bytes": 738506,
+      "stage_median_totals": {
+        "construction": {
+          "cpu_seconds": 1.5625,
+          "wall_seconds": 1.4898589004005771
+        },
+        "decode_accept": {
+          "cpu_seconds": 1.71875,
+          "wall_seconds": 1.8611940000555478
+        },
+        "source_certificate_serialization_gzip": {
+          "cpu_seconds": 0.125,
+          "wall_seconds": 0.1033247995947022
+        },
+        "source_read_parse": {
+          "cpu_seconds": 0.078125,
+          "wall_seconds": 0.08633030010969378
+        }
+      },
+      "total_bytes": 1330466,
+      "wire_bytes": 591960
+    },
+    "flat_gzip": {
+      "certificate_raw_bytes": 14279992,
+      "peak_rss_bytes_max": 54964224,
+      "peak_traced_bytes": 24320158,
+      "pipeline_cpu_seconds": 2.421875,
+      "pipeline_wall_seconds": 2.444855600129813,
+      "source_bytes": 738506,
+      "stage_median_totals": {
+        "construction": {
+          "cpu_seconds": 0.359375,
+          "wall_seconds": 0.34224959986750036
+        },
+        "decode_accept": {
+          "cpu_seconds": 1.46875,
+          "wall_seconds": 1.5358719002106227
+        },
+        "source_certificate_serialization_gzip": {
+          "cpu_seconds": 0.484375,
+          "wall_seconds": 0.4793206002213992
+        },
+        "source_read_parse": {
+          "cpu_seconds": 0.09375,
+          "wall_seconds": 0.08879119978519157
+        }
+      },
+      "total_bytes": 1596873,
+      "wire_bytes": 858367
+    }
+  },
+  "verification": {
+    "assignments": 32139,
+    "byte_identical_certificates": 664,
+    "byte_identical_direct_objects": 664,
+    "cases": 664,
+    "trace_events": 78705,
+    "witnesses": 1826,
+    "work": {
+      "legacy": {
+        "canonical_calls": 2375230,
+        "canonical_characters": 19069997
+      },
+      "tokens": {
+        "canonical_calls": 1244215,
+        "canonical_characters": 8425746
+      }
+    }
+  }
+}

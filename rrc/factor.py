@@ -32,10 +32,18 @@ class SharedMTBDD:
         self.nodes: list[dict[str, Any]] = []
         self._terminal_ids: dict[str, int] = {}
         self._branch_ids: dict[tuple[int, int, int], int] = {}
-        self._memo: dict[tuple[int, tuple[str, ...]], int] = {}
+        self._memo: dict[tuple[int, tuple[int, ...]], int] = {}
+        # Tokens are construction-only: output node identifiers are still allocated
+        # by the original low-before-high recursion, not by vector encounter order.
+        self._value_tokens: dict[str, int] = {}
+        self._token_keys: list[str] = []
+        self._token_values: list[Any] = []
 
     def terminal(self, value: Any) -> int:
         key = _canonical(value)
+        return self._terminal(key, value)
+
+    def _terminal(self, key: str, value: Any) -> int:
         found = self._terminal_ids.get(key)
         if found is not None:
             return found
@@ -57,21 +65,39 @@ class SharedMTBDD:
         return node_id
 
     def build(self, values: list[Any], var: int = 0) -> int:
+        if not 0 <= var <= self.width:
+            raise ValueError("diagram variable range")
         expected = 1 << (self.width - var)
         if len(values) != expected:
             raise ValueError("diagram vector width")
-        enc = tuple(_canonical(v) for v in values)
+        tokens = []
+        for value in values:
+            key = _canonical(value)
+            token = self._value_tokens.get(key)
+            if token is None:
+                token = len(self._token_values)
+                self._value_tokens[key] = token
+                self._token_keys.append(key)
+                # A later caller may mutate its vector. Internal representatives
+                # must keep the contents associated with their canonical key.
+                self._token_values.append(copy.deepcopy(value))
+            tokens.append(token)
+        return self._build_tokens(tuple(tokens), var)
+
+    def _build_tokens(self, enc: tuple[int, ...], var: int) -> int:
         memo_key = (var, enc)
         found = self._memo.get(memo_key)
         if found is not None:
             return found
         if all(x == enc[0] for x in enc[1:]):
-            root = self.terminal(values[0])
+            token = enc[0]
+            root = self._terminal(self._token_keys[token], self._token_values[token])
         else:
             if var >= self.width:
                 raise AssertionError("different values without a decision variable")
-            half = len(values) // 2
-            root = self.branch(var, self.build(values[:half], var + 1), self.build(values[half:], var + 1))
+            half = len(enc) // 2
+            root = self.branch(var, self._build_tokens(enc[:half], var + 1),
+                               self._build_tokens(enc[half:], var + 1))
         self._memo[memo_key] = root
         return root
 

@@ -77,6 +77,13 @@ root value. It then reconstructs `summary` rather than trusting the producer's a
 The maximum accepted serialized evidence document is 16 MiB and the diagram limit is
 131,072 nodes.
 
+The producer uses construction-only integer tokens for canonical JSON values. Each root
+vector is canonicalized once; recursive memo keys contain token tuples. Output nodes are
+still allocated by low-before-high recursion, preserving the previous complete serialized
+object and node numbering. The token pool snapshots distinct values to avoid dependence
+on later caller mutation. It changes neither the schema nor acceptance. Eager truth-table
+vectors and exponential memo storage remain; the construction proof is in `docs/proofs.md` P1c.
+
 ## Certificate-guided direct dispatch
 
 A direct-dispatch object has exactly:

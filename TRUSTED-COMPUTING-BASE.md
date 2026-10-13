@@ -59,5 +59,9 @@ and optional assignment-local reuse give 675 lines for these five files. The opt
 transport module has 107 significant lines combining trusted decoding/dispatch with untrusted
 encoding/selection. The retained inventory and timing records are unchanged; current counts
 are computed separately by `journal_analysis.trust_surface()`.
+The four producer/lowerer files now have 465 significant lines after construction-only
+token interning (the preceding version had 445). Token construction is outside acceptance;
+it adds no trusted checker or source-bridge code. The optional resource-comparison driver
+is evaluation code, not part of the trusted acceptance inventory.
 This inventory is intended to make the partition inspectable; it is not a proof that the
 code is correct, minimal, easy to review, or free of parser/runtime defects.

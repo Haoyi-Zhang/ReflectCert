@@ -93,6 +93,30 @@ is their minimum; ties select flat. This is a local selection property, not a co
 theorem against arbitrary codecs. The producer constructs both candidates, so smaller
 transfer does not imply less total construction/checking time.
 
+## P1c. Construction-only token vectors
+
+Assign one integer token to each distinct canonical JSON value encountered by a builder.
+Token equality is therefore equivalent to canonical-value equality, including distinctions
+such as Boolean false versus integer zero. At the root, encode each cell once. Recursion
+splits token tuples at the same midpoint and uses `(variable, token tuple)` as the memo key.
+For any subvector, the memo-hit and constant-vector conditions are exactly those of the
+string-key construction. Induct on its remaining width: a constant subvector returns the
+same first-value terminal; a nonconstant subvector recursively returns the same low and
+high children, then the same reduced branch. With the same low-before-high root order,
+the unique tables allocate output identifiers in the same order. Tokens are not output
+node identifiers. The complete compact JSON certificate is unchanged, not just its target set.
+
+Distinct representative values are deep-copied at interning, so later mutation of caller
+objects cannot invalidate token contents. This adds a distinct-value pool rather than an
+acceptance assumption. With `K` roots and width `w`, builder canonicalization has `K*2^w`
+calls. Memoization can still retain `O(K*(w+1)*2^w)` token slots, plus distinct canonical
+keys and representative payloads. Eager expression/outcome vectors also remain live during
+construction. Thus this removes repeated recursive JSON work and storage, not exponential
+producer space or the checker's exhaustive acceptance obligations.
+
+The independent recursive construction controls and 664 complete byte comparisons test
+this implementation argument. The flat/factorized/direct/witness checkers are unchanged.
+
 ## P2. Exact aggregation
 
 External bits precede internal choice bits, and feasibility cannot depend on internal
