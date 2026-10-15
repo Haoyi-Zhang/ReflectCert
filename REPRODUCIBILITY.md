@@ -11,7 +11,7 @@ filesystem ordering, PDF timestamps, and temporary compiler paths are not equali
 3. **Full regeneration:** regenerate every bundle and compare it with `results/measured`.
 4. **Journal analysis:** recompute stratum, sharing, sensitivity, generic-compression,
    trust-surface, and retained stage-cost reports.
-5. **Paper audit:** rebuild both PDF views and verify references, fonts, warnings, numerical claims,
+5. **Paper audit:** rebuild the single current manuscript PDF and verify references, fonts, warnings, numerical claims,
    and rendered-page integrity.
 
 The retained release wrapper is:

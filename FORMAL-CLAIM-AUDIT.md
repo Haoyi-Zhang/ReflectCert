@@ -23,6 +23,6 @@ is no general unique least witness or minimum-cardinality guarantee.
 6. **Complexity:** Checking enumerates 2^(external+internal) assignments. Table search and decision
 walk costs remain explicit. Sharing reduces representation, not worst-case enumeration.
 
-Executable evidence includes 68 unit tests, the fixed 664-case campaign, independent fixture
+Executable evidence includes the historical 68-test record and current discovered regressions, the fixed 664-case campaign, independent fixture
 expectations, two separately described oracle investigations, and JVM controls. These do not
 replace the specification, prove the host runtime, or eliminate construction bias.

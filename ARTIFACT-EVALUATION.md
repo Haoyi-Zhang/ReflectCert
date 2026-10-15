@@ -13,7 +13,7 @@ python verify_inputs.py
 python reproduce.py --output results/reproduced
 python compare_results.py results/measured results/reproduced
 python journal_analysis.py --measured results/reproduced --output results/journal-reproduced
-python compare_journal.py results/journal results/journal-reproduced
+python compare_journal.py results/journal results/journal-reproduced --current-source-surface
 python release_gate.py --artifact-root .
 ```
 
@@ -42,5 +42,5 @@ For an interrupted full run, repeat `reproduce.py` with `--resume`. Deterministi
 
 The exact runtime depends on the host JVM, Python, filesystem, and CPU. The frozen run metadata are evidence about one environment, not a performance guarantee. The largest finite case enumerates 4,096 full external/internal assignments and is intentionally retained as a boundary test.
 
-The 68 tests and both comparison commands assess executable consistency. Mechanical acceptance
+The historical 68-test record, current discovered regressions, and both comparison commands assess executable consistency. Mechanical acceptance
 does not certify author approval, current portal-rule confirmation, external archiving, or peer review.

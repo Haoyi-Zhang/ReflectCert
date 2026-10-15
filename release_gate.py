@@ -10,6 +10,12 @@ from pathlib import Path
 from verify_bibliography import verify
 
 
+def project_layout_matches(project: Path, artifact: Path) -> bool:
+    """Check consumed directories, not an exact packaging/UI file inventory."""
+    return ((project / 'paper').is_dir() and artifact.is_dir()
+            and (project / 'artifact').resolve() == artifact.resolve())
+
+
 def main() -> int:
     p=argparse.ArgumentParser();p.add_argument('--artifact-root',default='.')
     p.add_argument('--project-root');a=p.parse_args()
@@ -92,7 +98,7 @@ def main() -> int:
         check('public-expansions-retained',sum(x['larger'] for x in public)==40,public)
     except Exception as e:check('journal-evidence',False,str(e))
     if project:
-        check('project-root-contract',{x.name for x in project.iterdir()}=={'paper','artifact','README.md'},
+        check('project-root-contract',project_layout_matches(project, root),
               sorted(x.name for x in project.iterdir()))
         paper=project/'paper';source=(paper/'main.tex').read_text()
         check('journal-format',r'\documentclass[manuscript,screen,review]{acmart}' in source and
