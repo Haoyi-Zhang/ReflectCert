@@ -382,3 +382,13 @@ premises. Simplified type tokens and enumeration markers do not prove JVM member
 Read `docs/journal-method.md`, `docs/frontend.md`, and `TRUSTED-COMPUTING-BASE.md` before treating
 an accepted finite object as evidence about a concrete program. The publication checklist is
 separate from executable scientific validation; no author approval or submission is asserted.
+
+## Manuscript diagrams
+
+The model and protocol schematics are drawn directly in Python as vector PDFs
+with embedded STIX fonts. They encode the stated relationships, not measured
+performance. To regenerate them with Python 3.9+ and Matplotlib:
+
+```sh
+python -B figures/draw_schematics.py --output figures
+```
