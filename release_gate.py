@@ -143,7 +143,7 @@ def main() -> int:
     report={'mechanical_status':'pass' if success else 'fail','overall_status':'pass' if success else 'fail',
             'submission_ready':False,
             'publication_conditions':'current portal rules, author/affiliation confirmations, correspondence and artifact deposit remain unconfirmed',
-            'metadata_warnings':['institution-level cities were sourced from official public pages but still require author confirmation; corresponding author, consent, overlap declarations, and artifact URL remain unset'],
+            'metadata_warnings':['This mechanical gate does not attest author approval, correspondence consent, overlap declarations, or current submission-backend fields. Existing manuscript author and repository fields are not classified as missing by this warning.'],
             'checks':checks}
     (root/'results/release-audit.json').write_text(json.dumps(report,indent=2,ensure_ascii=False)+'\n')
     print(json.dumps({'mechanical_status':report['mechanical_status'],'checks':len(checks),
