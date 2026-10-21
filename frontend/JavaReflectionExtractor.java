@@ -2,6 +2,7 @@ import com.sun.source.tree.TryTree;
 import com.sun.source.tree.CatchTree;
 import com.sun.source.tree.LambdaExpressionTree;
 import com.sun.source.tree.ArrayAccessTree;
+import com.sun.source.tree.AssertTree;
 import com.sun.source.tree.AssignmentTree;
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.BlockTree;
@@ -597,6 +598,15 @@ public final class JavaReflectionExtractor {
                 scanControlled(branch, env);
             }
             env.invalidate(assignedNames(node), "unsupported_switch_state_merge");
+            return null;
+        }
+
+        @Override
+        public Void visitAssert(AssertTree node, Env env) {
+            // Either expression may be skipped by the JVM's assertion mode.
+            scanControlled(node.getCondition(), env);
+            scanControlled(node.getDetail(), env);
+            env.invalidate(assignedNames(node), "unsupported_assert_state_merge");
             return null;
         }
 

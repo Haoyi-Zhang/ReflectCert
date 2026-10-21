@@ -25,8 +25,8 @@ execution, runs the discovered unit suite, verifies all inputs, reproduces and c
 bundles, recomputes all journal analyses, compares every deterministic field, checks the six-stage timing
 inventory without requiring host-identical CPU values, and finally runs the structural release gate. Cache cleanup prevents a successful test run from making a later package-hygiene check fail.
 
-For a fresh post-repair scientific run, use the project-level
-`../.github/workflows/scientific-checks.yml`. Unlike the retained wrapper, it
+For a fresh scientific run, use the repository's
+`.github/workflows/scientific-checks.yml`. Unlike the retained wrapper, it
 does not resume an existing campaign. It uses isolated `RUNNER_TEMP` output,
 preserves stdout/stderr and partial results, and separates measured current source
 counts from historical journal outcomes. The paper build and release packaging

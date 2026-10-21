@@ -214,9 +214,9 @@ interpretation are in `results/construction-resources/environment.json`.
 
 ## Inspect the Java-source bridge
 
-The project-level `../.github/workflows/scientific-checks.yml` prepares a manual,
-fresh scientific check on Ubuntu with Python 3.12 and Temurin 21. It copies
-`artifact/` into an isolated `RUNNER_TEMP` work area, runs the full
+The repository's `.github/workflows/scientific-checks.yml` runs a fresh
+scientific check on pushes or manual dispatch on Ubuntu with Python 3.12 and
+Temurin 21. It copies the artifact repository into an isolated `RUNNER_TEMP` work area, runs the full
 unit suite, input and bibliography checks, and regenerates all 664 bundles without
 `--resume`. It retains generated results and each stage's stdout/stderr as a
 workflow artifact, including available partial outputs on failure, with a

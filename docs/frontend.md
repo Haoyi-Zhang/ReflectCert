@@ -54,6 +54,12 @@ explicit empty class array. javac may fold constant string expressions in its pa
 `"setIme" + "i"` may be emitted as the literal `"setImei"`; this is compiler-AST normalization,
 not a post-hoc value guess.
 
+Assertion conditions and detail expressions are scanned as controlled regions: the JVM may
+skip them when assertions are disabled. Their writes invalidate affected bindings before a
+later query (`unsupported_assert_state_merge`), and reflection inside either expression is
+rejected as `unsupported_control_context`. The benign `tests/test_assert_scope.py` controls
+execute both assertion modes and also retain support for unmodified or subsequently rebound locals.
+
 Local bindings follow the block and `for` declaration scopes in
 [JLS 6.3](https://docs.oracle.com/javase/specs/jls/se21/html/jls-6.html#jls-6.3).
 A block-local declaration expires on leaving its declaring block; a basic-`for`
@@ -82,6 +88,7 @@ from a later field read.
 | binding written by `switch`/switch expression | `unsupported_switch_state_merge` |
 | conditional / short-circuit expression writes | `unsupported_expression_state_merge` |
 | try/catch/finally writes used after the join | `unsupported_exception_state_merge` |
+| assertion condition/detail writes used by a later query | `unsupported_assert_state_merge` |
 | lexical `java` shadow before qualified API | `shadowed_qualified_class_api_receiver` |
 | custom loader variable | `unsupported_loader_receiver` |
 | arbitrary/custom loader getter | `unaudited_loader_getter` or `shadowed_application_loader_getter` |

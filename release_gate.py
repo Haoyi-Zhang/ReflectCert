@@ -16,6 +16,21 @@ def project_layout_matches(project: Path, artifact: Path) -> bool:
             and (project / 'artifact').resolve() == artifact.resolve())
 
 
+def scope_limits_present(source: str) -> bool:
+    """Recognize the manuscript's current finite-source scope, not retired prose."""
+    text=' '.join(source.split())
+    return ('not Android data flow, whole-app execution, or classpath completeness' in text
+            and 'minimum-cardinality' in text and 'manual projections' in text)
+
+
+def pdf_page_count(path: Path) -> int:
+    # Localized date metadata need not be decoded to read this ASCII field.
+    info=subprocess.check_output(['pdfinfo',str(path)])
+    match=re.search(rb'^Pages:\s+(\d+)',info,re.M)
+    if not match:raise ValueError('cannot determine PDF page count')
+    return int(match.group(1))
+
+
 def main() -> int:
     p=argparse.ArgumentParser();p.add_argument('--artifact-root',default='.')
     p.add_argument('--project-root');a=p.parse_args()
@@ -103,14 +118,12 @@ def main() -> int:
         paper=project/'paper';source=(paper/'main.tex').read_text()
         check('journal-format',r'\documentclass[manuscript,screen,review]{acmart}' in source and
               r'\acmJournal{TOSEM}' in source and 'Anonymous Author' not in source,'named manuscript review draft')
-        check('honest-scope-limits','not whole-classpath completeness' in source and
-              'minimum-cardinality' in source and 'manual projections' in source,
+        check('honest-scope-limits',scope_limits_present(source),
               'scope boundaries present; external-use declarations are separate')
         for fname in ['stratum-ratios.csv','sharing-stages.csv']:
             check('plot-data:'+fname,(paper/'data'/fname).read_bytes()==(root/'results/journal'/fname).read_bytes(),fname)
         if (paper/'main.pdf').exists():
-            info=subprocess.check_output(['pdfinfo',str(paper/'main.pdf')],text=True)
-            pages=int(re.search(r'^Pages:\s+(\d+)',info,re.M).group(1))
+            pages=pdf_page_count(paper/'main.pdf')
             check('conservative-page-budget',0<pages<=45,{'physical_pages':pages,
                  'basis':'internal conservative budget; current TOSEM limit not independently confirmed'})
             fonts=subprocess.check_output(['pdffonts',str(paper/'main.pdf')],text=True).splitlines()[2:]
