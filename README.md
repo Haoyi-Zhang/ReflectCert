@@ -65,6 +65,34 @@ These are bounded results. They do not prove that the finite table covers a JVM 
 arbitrary Java/Android reflection is handled, or that direct-call replacement generally preserves
 receiver/argument evaluation, initialization, access, exceptions, side effects, and returns.
 
+## Import separately supplied client results
+
+`python -B -m rrc.client_audit --source INPUT --certificate CERTIFICATE --claim CLAIM`
+accepts a standalone factorized certificate and a separate finite client claim.
+The claim has fields `format` (`reflection-client-claim`), `program` (the exact separately
+supplied finite program), and `sites` (one sorted, duplicate-free list of four-string
+target identities per site, including empty lists). The importer checks the certificate,
+reports every omitted exact target and every claimed identity outside the exact finite set,
+and independently checks a retention/minimality witness for each omission. Extra identities
+remain in the report; the witness uses their exact-domain projection. These are finite-domain
+comparisons, not JVM soundness verdicts. Exit codes are 0 for coverage, 1 for an omission,
+and 2 for invalid inputs.
+
+```sh
+python -B -m unittest discover -s tests/client -v
+python -O -B -m unittest discover -s tests/client -v
+python -B client_handoff.py --output results/handoff-reproduced.json --compare results/client-handoff.json
+```
+
+The last command actually compiles and executes the owned `RuntimeFinite.java` pilot over
+its four Boolean worlds. Its class/member outputs supply the client claims: after one,
+two, three and four observed worlds, respectively, two, two, one and zero finite targets
+remain unobserved. Repeating a world that supplies the same identity does not improve target
+coverage. No target is deleted from the exact may set to construct these claims. This small
+dynamic-observation handoff is separate from the original 913 constructed target/base pairs;
+it is not an independent analyzer bug, a new public multi-configuration application, or a
+representative reflection workload. The 40 public one-world cases and their expansions remain.
+
 ## Requirements
 
 - Python 3.11 or newer, using only the standard library;

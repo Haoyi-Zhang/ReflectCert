@@ -1,0 +1,1011 @@
+{
+  "population": "one owned two-coordinate Java pilot; not a public application or third-party analyzer",
+  "worlds": 4,
+  "identity_checks": 8,
+  "exact_targets": 3,
+  "runtime": {
+    "format": "rrc-java-runtime-probe-v1",
+    "source": "frontend/fixtures/RuntimeFinite.java",
+    "events": 2,
+    "assignments": 4,
+    "identity_checks": 8,
+    "rows": [
+      {
+        "assignment": [
+          false,
+          false
+        ],
+        "class": "RuntimeFinite$B",
+        "member": "stop",
+        "parameter": "java.lang.String",
+        "matched": true
+      },
+      {
+        "assignment": [
+          false,
+          true
+        ],
+        "class": "RuntimeFinite$B",
+        "member": "stop",
+        "parameter": "java.lang.String",
+        "matched": true
+      },
+      {
+        "assignment": [
+          true,
+          false
+        ],
+        "class": "RuntimeFinite$A",
+        "member": "run",
+        "parameter": "java.lang.String",
+        "matched": true
+      },
+      {
+        "assignment": [
+          true,
+          true
+        ],
+        "class": "RuntimeFinite$B",
+        "member": "run",
+        "parameter": "java.lang.String",
+        "matched": true
+      }
+    ]
+  },
+  "prefix_audits": [
+    {
+      "sampled_worlds": 1,
+      "claim": {
+        "format": "reflection-client-claim",
+        "program": {
+          "external": [
+            "h",
+            "k"
+          ],
+          "choices": [],
+          "nodes": [
+            {
+              "op": "input",
+              "index": 0
+            },
+            {
+              "op": "input",
+              "index": 1
+            },
+            {
+              "op": "lit",
+              "value": true
+            },
+            {
+              "op": "lit",
+              "value": "default"
+            },
+            {
+              "op": "lit",
+              "value": "RuntimeFinite$"
+            },
+            {
+              "op": "not",
+              "args": [
+                1
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                0,
+                5
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "A"
+            },
+            {
+              "op": "lit",
+              "value": "B"
+            },
+            {
+              "op": "ite",
+              "args": [
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "op": "cat",
+              "args": [
+                4,
+                9
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "run"
+            },
+            {
+              "op": "lit",
+              "value": "stop"
+            },
+            {
+              "op": "ite",
+              "args": [
+                0,
+                11,
+                12
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "(String)"
+            }
+          ],
+          "feasible": 2,
+          "table": [
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$A",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop$decoy",
+              "(String)"
+            ]
+          ],
+          "sites": [
+            {
+              "guard": 2,
+              "loader": 3,
+              "class": 10,
+              "method": 13,
+              "signature": 14
+            }
+          ]
+        },
+        "sites": [
+          [
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ]
+          ]
+        ]
+      },
+      "audit": {
+        "status": "omissions",
+        "scope": "separately supplied finite program and target table",
+        "omitted_targets": 2,
+        "outside_exact_targets": 0,
+        "sites": [
+          {
+            "site": 0,
+            "supplied_targets": [
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "exact_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "outside_exact_targets": [],
+            "omitted_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ]
+            ],
+            "checked_witnesses": [
+              {
+                "site": 0,
+                "claimed_targets": [
+                  [
+                    "default",
+                    "RuntimeFinite$B",
+                    "stop",
+                    "(String)"
+                  ]
+                ],
+                "target": [
+                  "default",
+                  "RuntimeFinite$A",
+                  "run",
+                  "(String)"
+                ],
+                "base": 2,
+                "selected": [
+                  0,
+                  1
+                ],
+                "necessity": [
+                  {
+                    "removed": 0,
+                    "world": 0
+                  },
+                  {
+                    "removed": 1,
+                    "world": 3
+                  }
+                ]
+              },
+              {
+                "site": 0,
+                "claimed_targets": [
+                  [
+                    "default",
+                    "RuntimeFinite$B",
+                    "stop",
+                    "(String)"
+                  ]
+                ],
+                "target": [
+                  "default",
+                  "RuntimeFinite$B",
+                  "run",
+                  "(String)"
+                ],
+                "base": 3,
+                "selected": [
+                  0,
+                  1
+                ],
+                "necessity": [
+                  {
+                    "removed": 0,
+                    "world": 1
+                  },
+                  {
+                    "removed": 1,
+                    "world": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sampled_worlds": 2,
+      "claim": {
+        "format": "reflection-client-claim",
+        "program": {
+          "external": [
+            "h",
+            "k"
+          ],
+          "choices": [],
+          "nodes": [
+            {
+              "op": "input",
+              "index": 0
+            },
+            {
+              "op": "input",
+              "index": 1
+            },
+            {
+              "op": "lit",
+              "value": true
+            },
+            {
+              "op": "lit",
+              "value": "default"
+            },
+            {
+              "op": "lit",
+              "value": "RuntimeFinite$"
+            },
+            {
+              "op": "not",
+              "args": [
+                1
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                0,
+                5
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "A"
+            },
+            {
+              "op": "lit",
+              "value": "B"
+            },
+            {
+              "op": "ite",
+              "args": [
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "op": "cat",
+              "args": [
+                4,
+                9
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "run"
+            },
+            {
+              "op": "lit",
+              "value": "stop"
+            },
+            {
+              "op": "ite",
+              "args": [
+                0,
+                11,
+                12
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "(String)"
+            }
+          ],
+          "feasible": 2,
+          "table": [
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$A",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop$decoy",
+              "(String)"
+            ]
+          ],
+          "sites": [
+            {
+              "guard": 2,
+              "loader": 3,
+              "class": 10,
+              "method": 13,
+              "signature": 14
+            }
+          ]
+        },
+        "sites": [
+          [
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ]
+          ]
+        ]
+      },
+      "audit": {
+        "status": "omissions",
+        "scope": "separately supplied finite program and target table",
+        "omitted_targets": 2,
+        "outside_exact_targets": 0,
+        "sites": [
+          {
+            "site": 0,
+            "supplied_targets": [
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "exact_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "outside_exact_targets": [],
+            "omitted_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ]
+            ],
+            "checked_witnesses": [
+              {
+                "site": 0,
+                "claimed_targets": [
+                  [
+                    "default",
+                    "RuntimeFinite$B",
+                    "stop",
+                    "(String)"
+                  ]
+                ],
+                "target": [
+                  "default",
+                  "RuntimeFinite$A",
+                  "run",
+                  "(String)"
+                ],
+                "base": 2,
+                "selected": [
+                  0,
+                  1
+                ],
+                "necessity": [
+                  {
+                    "removed": 0,
+                    "world": 0
+                  },
+                  {
+                    "removed": 1,
+                    "world": 3
+                  }
+                ]
+              },
+              {
+                "site": 0,
+                "claimed_targets": [
+                  [
+                    "default",
+                    "RuntimeFinite$B",
+                    "stop",
+                    "(String)"
+                  ]
+                ],
+                "target": [
+                  "default",
+                  "RuntimeFinite$B",
+                  "run",
+                  "(String)"
+                ],
+                "base": 3,
+                "selected": [
+                  0,
+                  1
+                ],
+                "necessity": [
+                  {
+                    "removed": 0,
+                    "world": 1
+                  },
+                  {
+                    "removed": 1,
+                    "world": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sampled_worlds": 3,
+      "claim": {
+        "format": "reflection-client-claim",
+        "program": {
+          "external": [
+            "h",
+            "k"
+          ],
+          "choices": [],
+          "nodes": [
+            {
+              "op": "input",
+              "index": 0
+            },
+            {
+              "op": "input",
+              "index": 1
+            },
+            {
+              "op": "lit",
+              "value": true
+            },
+            {
+              "op": "lit",
+              "value": "default"
+            },
+            {
+              "op": "lit",
+              "value": "RuntimeFinite$"
+            },
+            {
+              "op": "not",
+              "args": [
+                1
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                0,
+                5
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "A"
+            },
+            {
+              "op": "lit",
+              "value": "B"
+            },
+            {
+              "op": "ite",
+              "args": [
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "op": "cat",
+              "args": [
+                4,
+                9
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "run"
+            },
+            {
+              "op": "lit",
+              "value": "stop"
+            },
+            {
+              "op": "ite",
+              "args": [
+                0,
+                11,
+                12
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "(String)"
+            }
+          ],
+          "feasible": 2,
+          "table": [
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$A",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop$decoy",
+              "(String)"
+            ]
+          ],
+          "sites": [
+            {
+              "guard": 2,
+              "loader": 3,
+              "class": 10,
+              "method": 13,
+              "signature": 14
+            }
+          ]
+        },
+        "sites": [
+          [
+            [
+              "default",
+              "RuntimeFinite$A",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ]
+          ]
+        ]
+      },
+      "audit": {
+        "status": "omissions",
+        "scope": "separately supplied finite program and target table",
+        "omitted_targets": 1,
+        "outside_exact_targets": 0,
+        "sites": [
+          {
+            "site": 0,
+            "supplied_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "exact_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "outside_exact_targets": [],
+            "omitted_targets": [
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ]
+            ],
+            "checked_witnesses": [
+              {
+                "site": 0,
+                "claimed_targets": [
+                  [
+                    "default",
+                    "RuntimeFinite$A",
+                    "run",
+                    "(String)"
+                  ],
+                  [
+                    "default",
+                    "RuntimeFinite$B",
+                    "stop",
+                    "(String)"
+                  ]
+                ],
+                "target": [
+                  "default",
+                  "RuntimeFinite$B",
+                  "run",
+                  "(String)"
+                ],
+                "base": 3,
+                "selected": [
+                  0,
+                  1
+                ],
+                "necessity": [
+                  {
+                    "removed": 0,
+                    "world": 1
+                  },
+                  {
+                    "removed": 1,
+                    "world": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sampled_worlds": 4,
+      "claim": {
+        "format": "reflection-client-claim",
+        "program": {
+          "external": [
+            "h",
+            "k"
+          ],
+          "choices": [],
+          "nodes": [
+            {
+              "op": "input",
+              "index": 0
+            },
+            {
+              "op": "input",
+              "index": 1
+            },
+            {
+              "op": "lit",
+              "value": true
+            },
+            {
+              "op": "lit",
+              "value": "default"
+            },
+            {
+              "op": "lit",
+              "value": "RuntimeFinite$"
+            },
+            {
+              "op": "not",
+              "args": [
+                1
+              ]
+            },
+            {
+              "op": "and",
+              "args": [
+                0,
+                5
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "A"
+            },
+            {
+              "op": "lit",
+              "value": "B"
+            },
+            {
+              "op": "ite",
+              "args": [
+                6,
+                7,
+                8
+              ]
+            },
+            {
+              "op": "cat",
+              "args": [
+                4,
+                9
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "run"
+            },
+            {
+              "op": "lit",
+              "value": "stop"
+            },
+            {
+              "op": "ite",
+              "args": [
+                0,
+                11,
+                12
+              ]
+            },
+            {
+              "op": "lit",
+              "value": "(String)"
+            }
+          ],
+          "feasible": 2,
+          "table": [
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$A",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop$decoy",
+              "(String)"
+            ]
+          ],
+          "sites": [
+            {
+              "guard": 2,
+              "loader": 3,
+              "class": 10,
+              "method": 13,
+              "signature": 14
+            }
+          ]
+        },
+        "sites": [
+          [
+            [
+              "default",
+              "RuntimeFinite$A",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "run",
+              "(String)"
+            ],
+            [
+              "default",
+              "RuntimeFinite$B",
+              "stop",
+              "(String)"
+            ]
+          ]
+        ]
+      },
+      "audit": {
+        "status": "covers_finite_targets",
+        "scope": "separately supplied finite program and target table",
+        "omitted_targets": 0,
+        "outside_exact_targets": 0,
+        "sites": [
+          {
+            "site": 0,
+            "supplied_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "exact_targets": [
+              [
+                "default",
+                "RuntimeFinite$A",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "run",
+                "(String)"
+              ],
+              [
+                "default",
+                "RuntimeFinite$B",
+                "stop",
+                "(String)"
+              ]
+            ],
+            "outside_exact_targets": [],
+            "omitted_targets": [],
+            "checked_witnesses": []
+          }
+        ]
+      }
+    }
+  ]
+}

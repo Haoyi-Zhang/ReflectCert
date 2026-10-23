@@ -74,6 +74,9 @@ jobs:
           run_logged campaign-comparison python -B compare_results.py results/measured "$fresh/campaign"
           run_logged journal python -B journal_analysis.py --measured "$fresh/campaign" --output "$fresh/journal"
           run_logged journal-comparison python -B compare_journal.py results/journal "$fresh/journal" --current-source-surface
+          run_logged client-tests python -B -m unittest discover -s tests/client -v
+          run_logged client-tests-optimized python -O -B -m unittest discover -s tests/client -v
+          run_logged client-handoff python -B client_handoff.py --output "$fresh/client-handoff.json" --compare results/client-handoff.json
           SCIENTIFIC
           statuses=("${PIPESTATUS[@]}")
           set -e
