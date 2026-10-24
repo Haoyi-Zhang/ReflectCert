@@ -10,7 +10,7 @@ the official Java SE 21 language specification, Seneca (2024), and DLCDroid (202
 DroidRA journal paper and SOLAR treatment of assumptions. Per-entry metadata and the use of each
 reference are recorded in bibliography-audit.csv and literature.csv.
 
-All 66 BibTeX keys are actually cited and compile in both PDF views. There are 60 distinct DOI values and six no-DOI records. The preprint is explicitly labeled as such; the language
+All 66 BibTeX keys are actually cited in the single current manuscript. There are 60 distinct DOI values and six no-DOI records. The preprint is explicitly labeled as such; the language
 specification is a normative document. Metadata/citation checks do not constitute external peer
 review or prove the truth of every claim in a cited paper. No inaccessible web request is counted
 as successful retrieval.
